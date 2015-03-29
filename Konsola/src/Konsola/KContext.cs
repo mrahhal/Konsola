@@ -11,37 +11,54 @@ using System.Reflection;
 
 namespace Konsola
 {
-	public static class KContext
+	public class KContext
 	{
+		private string[] _args;
+		private TypeInfo _type;
+		private object _context;
+		private KClassAttribute _classAttribute;
+		private PropertyInfo[] _props;
+
+		private KContext(string[] args)
+		{
+			_args = args;
+		}
+
 		public static T Parse<T>(string[] args) where T : class
 		{
-			var type = typeof(T).GetTypeInfo();
-			_ValidateType(type);
+			return new KContext(args).InternalParse<T>();
+		}
 
-			var context = (T)Activator.CreateInstance(type);
-			var classAttribute = (KClassAttribute)type.GetCustomAttribute(typeof(KClassAttribute));
-			
-			var props = type
+		private T InternalParse<T>()
+		{
+			_type = typeof(T).GetTypeInfo();
+			_ValidateType(_type);
+
+			_context = (T)Activator.CreateInstance(_type);
+			_classAttribute = (KClassAttribute)_type.GetCustomAttribute(typeof(KClassAttribute));
+
+			_props = _type
 				.DeclaredProperties
 				.Where(prop => prop.CustomAttributes.Any(att => att.AttributeType == typeof(KParameterAttribute)))
 				.ToArray();
 
-			var tokens = _ParseTokens(args);
-			_ProcessTokens(tokens, context, props, classAttribute);
+			var tokens = _ParseTokens(_args);
+			_ProcessTokens(tokens);
 
-			var onParsedMethod = type
+			var onParsedMethod = _type
 				.DeclaredMethods
 				.Where(mi => mi.CustomAttributes.Any(att => att.AttributeType == typeof(OnParsedAttribute)))
 				.Where(mi => mi.GetParameters().Length == 0)
 				.FirstOrDefault();
 
 			if (onParsedMethod != null)
-				onParsedMethod.Invoke(context, null);
+				onParsedMethod.Invoke(_context, null);
 
-			return context;
+			var context = _context;
+			return (T)context;
 		}
 
-		private static void _ValidateType(Type type)
+		private void _ValidateType(Type type)
 		{
 			var atts = type.CustomAttributes;
 			if (!atts.Where(att => att.AttributeType == typeof(KClassAttribute)).Any())
@@ -50,7 +67,7 @@ namespace Konsola
 			}
 		}
 
-		private static Token[] _ParseTokens(string[] args)
+		private Token[] _ParseTokens(string[] args)
 		{
 			var tokens = new List<Token>();
 			var lastToken = default(Token);
@@ -78,9 +95,9 @@ namespace Konsola
 			return tokens.ToArray();
 		}
 
-		private static void _ProcessTokens(Token[] tokens, object context, PropertyInfo[] props, KClassAttribute classAttribute)
+		private void _ProcessTokens(Token[] tokens)
 		{
-			var setProps = new List<PropertyInfo>(props.Length);
+			var setProps = new List<PropertyInfo>(_props.Length);
 
 			for (int i = 0; i < tokens.Length; i++)
 			{
@@ -91,7 +108,7 @@ namespace Konsola
 				}
 				if (token.Kind == TokenKind.Param)
 				{
-					var prop = props.Where(pi => pi.GetKAttribute().Parameters.Contains(token.Value)).FirstOrDefault();
+					var prop = _props.Where(pi => pi.GetKAttribute().Parameters.Contains(token.Value)).FirstOrDefault();
 					if (prop == null)
 					{
 						throw new ParsingException(ExceptionKind.IncorrectParameter, token.Value);
@@ -102,7 +119,7 @@ namespace Konsola
 						case ParameterKind.String:
 							{
 								var dataToken = tokens[++i];
-								prop.SetValue(context, dataToken.Value);
+								prop.SetValue(_context, dataToken.Value);
 								setProps.Add(prop);
 							}
 							break;
@@ -115,14 +132,14 @@ namespace Konsola
 								{
 									throw new ParsingException(ExceptionKind.IncorrectData, dataToken.Value);
 								}
-								prop.SetValue(context, data);
+								prop.SetValue(_context, data);
 								setProps.Add(prop);
 							}
 							break;
 
 						case ParameterKind.Switch:
 							{
-								prop.SetValue(context, true);
+								prop.SetValue(_context, true);
 								setProps.Add(prop);
 							}
 							break;
@@ -130,12 +147,20 @@ namespace Konsola
 				}
 			}
 
-			var missingProp = props.FirstOrDefault(prop => prop.GetKAttribute().IsMandantory && !setProps.Contains(prop));
+			var missingProp = _props.FirstOrDefault(prop => prop.GetKAttribute().IsMandantory && !setProps.Contains(prop));
 			if (missingProp != null)
 				throw new ParsingException(ExceptionKind.MissingParameter, missingProp.GetKAttribute().Parameters);
 		}
 
-		private static KParameterAttribute GetKAttribute(this PropertyInfo pi)
+		private PropertyInfo FindPropWithParamName(string name)
+		{
+			return _props.Where(pi => pi.GetKAttribute().Parameters.Contains(name)).FirstOrDefault();
+		}
+	}
+
+	internal static partial class Mixin
+	{
+		public static KParameterAttribute GetKAttribute(this PropertyInfo pi)
 		{
 			return (KParameterAttribute)pi.GetCustomAttribute(typeof(KParameterAttribute));
 		}
