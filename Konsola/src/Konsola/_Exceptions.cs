@@ -17,6 +17,19 @@ namespace Konsola
 	}
 
 	[Serializable]
+	public class ContextException : Exception
+	{
+		public ContextException()
+		{
+		}
+
+		public ContextException(string message)
+			: base(message)
+		{
+		}
+	}
+
+	[Serializable]
 	public class ParsingException : Exception
 	{
 		public ParsingException(ExceptionKind kind, string name)

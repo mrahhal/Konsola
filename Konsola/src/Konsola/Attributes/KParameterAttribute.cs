@@ -14,9 +14,26 @@ namespace Konsola.Attributes
 			Parameters = parameters;
 			Kind = kind;
 			IsMandantory = isMandantory;
+			_Validate();
+			_Initialize();
+		}
+
+		private void _Validate()
+		{
+			if (Parameters.Contains(" ") || Parameters.Contains("-"))
+			{
+				throw new ContextException("Parameters contains invalid characters.");
+			}
+		}
+
+		private void _Initialize()
+		{
+			InternalParameters = Parameters.Split(';');
 		}
 
 		public string Parameters { get; set; }
+
+		internal string[] InternalParameters { get; set; }
 
 		public ParameterKind Kind { get; set; }
 
