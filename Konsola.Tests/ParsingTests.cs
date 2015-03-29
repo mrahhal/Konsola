@@ -15,21 +15,25 @@ namespace Konsola.Tests
 		public void TestMethod1()
 		{
 			var args = "-my some -int 3 --sw".Split(' ');
+
 			var context = KContext.Parse<Context>(args);
+
 			Assert.IsTrue(context.MyProperty1 == "some");
+			Assert.IsTrue(context.SomeInt1 == 3);
+			Assert.IsTrue(context.SomeBool1 == true);
 		}
 	}
 
 	[KClass]
 	public class Context
 	{
-		[KParameter("-my", ParameterKind.String)]
+		[KParameter("my", ParameterKind.String)]
 		public string MyProperty1 { get; set; }
 
-		[KParameter("-int", ParameterKind.Int, true)]
+		[KParameter("int", ParameterKind.Int, IsMandantory = true)]
 		public int SomeInt1 { get; set; }
 
-		[KParameter("--sw", ParameterKind.Switch)]
+		[KParameter("sw", ParameterKind.Switch)]
 		public bool SomeBool1 { get; set; }
 	}
 }

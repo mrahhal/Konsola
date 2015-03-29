@@ -15,6 +15,7 @@ namespace Konsola.Internal
 
 		public Token(string value, TokenKind kind, Token previous)
 		{
+			Debug.Assert(!value.StartsWith("-") && !value.StartsWith("--"));
 			_value = value;
 			Previous = previous;
 			Kind = kind;

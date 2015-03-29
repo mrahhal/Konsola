@@ -30,7 +30,7 @@ namespace Konsola
 			_ProcessTokens(tokens, context, props, classAttribute);
 
 			var onParsedMethod = type
-				.GetMethods(BindingFlags.NonPublic | BindingFlags.Public)
+				.DeclaredMethods
 				.Where(mi => mi.CustomAttributes.Any(att => att.AttributeType == typeof(OnParsedAttribute)))
 				.Where(mi => mi.GetParameters().Length == 0)
 				.FirstOrDefault();
@@ -62,6 +62,7 @@ namespace Konsola
 				var kind = default(TokenKind);
 				if (arg.StartsWith("-") || arg.StartsWith("--"))
 				{
+					arg = arg.TrimStart('-');
 					kind = TokenKind.Param;
 				} else
 				{
