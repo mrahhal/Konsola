@@ -153,6 +153,7 @@ namespace Konsola
 						case ParameterKind.String:
 							{
 								var dataToken = tokens[++i];
+								_ValidateForParamToken(dataToken);
 								prop.SetValue(_context, dataToken.Value);
 								setProps.Add(prop);
 							}
@@ -161,6 +162,7 @@ namespace Konsola
 						case ParameterKind.Int:
 							{
 								var dataToken = tokens[++i];
+								_ValidateForParamToken(dataToken);
 								int data;
 								if (!int.TryParse(dataToken.Value, out data))
 								{
@@ -184,6 +186,14 @@ namespace Konsola
 			var missingProp = _props.FirstOrDefault(prop => GetKAttribute(prop).IsMandantory && !setProps.Contains(prop));
 			if (missingProp != null)
 				throw new ParsingException(ExceptionKind.MissingParameter, GetKAttribute(missingProp).Parameters);
+		}
+
+		private void _ValidateForParamToken(Token dataToken)
+		{
+			if (dataToken.Kind == TokenKind.Param)
+			{
+				throw new ParsingException(ExceptionKind.MissingData, dataToken.Previous.Value);
+			}
 		}
 
 		private KParameterAttribute GetKAttribute(PropertyInfo pi)
