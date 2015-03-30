@@ -43,7 +43,20 @@ namespace Konsola
 				.ToArray();
 
 			var tokens = _ParseTokens(_args);
-			_ProcessTokens(tokens);
+			try
+			{
+				_ProcessTokens(tokens);
+			}
+			catch (ParsingException ex)
+			{
+				if (!_classAttribute.ExitOnException)
+				{
+					throw;
+				}
+
+				Console.WriteLine(ex.Message);
+				Environment.Exit(1);
+			}
 
 			var onParsedMethod = _type
 				.DeclaredMethods
