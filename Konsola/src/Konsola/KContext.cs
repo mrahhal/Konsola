@@ -18,6 +18,7 @@ namespace Konsola
 		private object _context;
 		private KClassAttribute _classAttribute;
 		private PropertyInfo[] _props;
+		private Dictionary<PropertyInfo, KParameterAttribute> _propToParamAtt = new Dictionary<PropertyInfo, KParameterAttribute>();
 
 		private KContext(string[] args)
 		{
@@ -26,21 +27,41 @@ namespace Konsola
 
 		public static T Parse<T>(string[] args) where T : class
 		{
-			return new KContext(args).InternalParse<T>();
+			return new KContext(args)._InternalParse<T>();
 		}
 
-		private T InternalParse<T>()
+		private T _InternalParse<T>()
 		{
 			_type = typeof(T).GetTypeInfo();
 			_ValidateType(_type);
 
 			_context = (T)Activator.CreateInstance(_type);
-			_classAttribute = (KClassAttribute)_type.GetCustomAttribute(typeof(KClassAttribute));
+			_classAttribute = (KClassAttribute)_type.GetCustomAttribute<KClassAttribute>();
 
 			_props = _type
 				.DeclaredProperties
 				.Where(prop => prop.CustomAttributes.Any(att => att.AttributeType == typeof(KParameterAttribute)))
 				.ToArray();
+
+			foreach (var prop in _props)
+			{
+				var att = GetKAttribute(prop);
+				var type = prop.PropertyType;
+				
+				if (type == typeof(string))
+				{
+					att.Kind = ParameterKind.String;
+				} else if (type == typeof(int))
+				{
+					att.Kind = ParameterKind.Int;
+				} else if (type == typeof(bool))
+				{
+					att.Kind = ParameterKind.Switch;
+				} else
+				{
+					throw new ContextException("Invalid type in a KParameter property.");
+				}
+			}
 
 			var tokens = _ParseTokens(_args);
 			try
@@ -121,12 +142,12 @@ namespace Konsola
 				}
 				if (token.Kind == TokenKind.Param)
 				{
-					var prop = _props.Where(pi => pi.GetKAttribute().Parameters.Contains(token.Value)).FirstOrDefault();
+					var prop = _props.Where(pi => GetKAttribute(pi).Parameters.Contains(token.Value)).FirstOrDefault();
 					if (prop == null)
 					{
 						throw new ParsingException(ExceptionKind.IncorrectParameter, token.Value);
 					}
-					var pa = prop.GetKAttribute();
+					var pa = GetKAttribute(prop);
 					switch (pa.Kind)
 					{
 						case ParameterKind.String:
@@ -160,22 +181,22 @@ namespace Konsola
 				}
 			}
 
-			var missingProp = _props.FirstOrDefault(prop => prop.GetKAttribute().IsMandantory && !setProps.Contains(prop));
+			var missingProp = _props.FirstOrDefault(prop => GetKAttribute(prop).IsMandantory && !setProps.Contains(prop));
 			if (missingProp != null)
-				throw new ParsingException(ExceptionKind.MissingParameter, missingProp.GetKAttribute().Parameters);
+				throw new ParsingException(ExceptionKind.MissingParameter, GetKAttribute(missingProp).Parameters);
 		}
 
-		private PropertyInfo FindPropWithParamName(string name)
+		private KParameterAttribute GetKAttribute(PropertyInfo pi)
 		{
-			return _props.Where(pi => pi.GetKAttribute().Parameters.Contains(name)).FirstOrDefault();
-		}
-	}
+			var att = default(KParameterAttribute);
+			if (_propToParamAtt.TryGetValue(pi, out att))
+			{
+				return att;
+			}
 
-	internal static partial class Mixin
-	{
-		public static KParameterAttribute GetKAttribute(this PropertyInfo pi)
-		{
-			return (KParameterAttribute)pi.GetCustomAttribute(typeof(KParameterAttribute));
+			att = pi.GetCustomAttribute<KParameterAttribute>();
+			_propToParamAtt.Add(pi, att);
+			return att;
 		}
 	}
 }

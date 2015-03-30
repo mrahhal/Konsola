@@ -9,10 +9,9 @@ namespace Konsola.Attributes
 	[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
 	public sealed class KParameterAttribute : Attribute
 	{
-		public KParameterAttribute(string parameters, ParameterKind kind, bool isMandantory = false)
+		public KParameterAttribute(string parameters, bool isMandantory = false)
 		{
 			Parameters = parameters;
-			Kind = kind;
 			IsMandantory = isMandantory;
 			_Validate();
 			_Initialize();
@@ -35,7 +34,7 @@ namespace Konsola.Attributes
 
 		internal string[] InternalParameters { get; set; }
 
-		public ParameterKind Kind { get; set; }
+		internal ParameterKind Kind { get; set; }
 
 		public bool IsMandantory { get; set; }
 	}

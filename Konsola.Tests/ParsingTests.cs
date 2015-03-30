@@ -27,13 +27,13 @@ namespace Konsola.Tests
 	[KClass]
 	public class Context
 	{
-		[KParameter("my", ParameterKind.String)]
+		[KParameter("my")]
 		public string MyProperty1 { get; set; }
 
-		[KParameter("int", ParameterKind.Int, IsMandantory = true)]
+		[KParameter("int", IsMandantory = true)]
 		public int SomeInt1 { get; set; }
 
-		[KParameter("sw", ParameterKind.Switch)]
+		[KParameter("sw")]
 		public bool SomeBool1 { get; set; }
 	}
 }
