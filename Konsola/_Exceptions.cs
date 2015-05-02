@@ -8,12 +8,25 @@ namespace Konsola
 {
 	public enum ExceptionKind
 	{
+		/// <summary>
+		/// A mandatory parameter is missing.
+		/// </summary>
 		MissingParameter,
-		IncorrectParameter,
-		MissingData,
-		IncorrectData,
 
-		FaultyData,
+		/// <summary>
+		/// Usage of the parameter is invalid.
+		/// </summary>
+		InvalidParameter,
+
+		/// <summary>
+		/// A value is missing.
+		/// </summary>
+		MissingValue,
+
+		/// <summary>
+		/// A value is invalid.
+		/// </summary>
+		InvalidValue,
 	}
 
 	[Serializable]
@@ -53,17 +66,18 @@ namespace Konsola
 					Message = "Missing parameter: ";
 					break;
 
-				case ExceptionKind.IncorrectData:
-					Message = "Incorrect data: ";
+				case ExceptionKind.InvalidParameter:
+					Message = "Invalid parameter: ";
 					break;
 
-				case ExceptionKind.MissingData:
-					Message = "Missing data: ";
+				case ExceptionKind.MissingValue:
+					Message = "Missing value: ";
 					break;
 
-				case ExceptionKind.FaultyData:
-					Message = "Faulty data: ";
+				case ExceptionKind.InvalidValue:
+					Message = "Invalid value: ";
 					break;
+
 			}
 			Message += Name;
 		}

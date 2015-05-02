@@ -82,7 +82,7 @@ namespace Konsola.Tests
 			}
 			catch (ParsingException ex)
 			{
-				Assert.IsTrue(ex.Kind == ExceptionKind.MissingData && ex.Name == "-my");
+				Assert.IsTrue(ex.Kind == ExceptionKind.MissingValue && ex.Name == "-my");
 				throw;
 			}
 		}

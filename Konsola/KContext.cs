@@ -90,13 +90,13 @@ namespace Konsola
 				{
 					if (args.Length == i + 1)
 					{
-						throw new ParsingException(ExceptionKind.MissingData, arg);
+						throw new ParsingException(ExceptionKind.MissingValue, arg);
 					}
 
 					var nextArg = args[++i];
 					if (nextArg.StartsWith("-"))
 					{
-						throw new ParsingException(ExceptionKind.MissingData, arg);
+						throw new ParsingException(ExceptionKind.MissingValue, arg);
 					}
 
 					list.Add(new Token(arg.Substring(1), nextArg));
@@ -107,8 +107,7 @@ namespace Konsola
 					if (i != 0)
 					{
 						if (list[j - 1].Kind != TokenKind.Command)
-							// TODO: Make a better exception.
-							throw new ParsingException(ExceptionKind.IncorrectParameter, arg);
+							throw new ParsingException(ExceptionKind.InvalidParameter, arg);
 					}
 
 					list.Add(new Token(arg, true));
@@ -133,8 +132,7 @@ namespace Konsola
 
 				if (commandContext.IsEmpty)
 				{
-					// TODO: Make a better exception.
-					throw new ParsingException(ExceptionKind.IncorrectParameter, firstToken.Param);
+					throw new ParsingException(ExceptionKind.InvalidParameter, firstToken.Param);
 				}
 
 				var newContext = commandContext.Type.CreateInstance<KContextBase>();
@@ -176,7 +174,7 @@ namespace Konsola
 				var propContext = propContexts.FirstOrDefault(pc => pc.Attribute.InternalParameters.Contains(token.Param));
 				if (propContext.IsEmpty)
 				{
-					throw new ParsingException(ExceptionKind.IncorrectParameter, token.Param);
+					throw new ParsingException(ExceptionKind.InvalidParameter, token.Param);
 				}
 
 				if (token.Kind == TokenKind.Partial)
@@ -194,7 +192,7 @@ namespace Konsola
 							int parsed;
 							if (!int.TryParse(token.Value, out parsed))
 							{
-								throw new ParsingException(ExceptionKind.IncorrectData, token.Param);
+								throw new ParsingException(ExceptionKind.InvalidValue, token.Param);
 							}
 
 							propContext.Property.SetValue(context, parsed, null);
