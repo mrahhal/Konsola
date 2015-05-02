@@ -97,7 +97,7 @@ namespace Konsola.Tests
 		[KParameter("s1,s2")]
 		public string SomeString2 { get; set; }
 
-		[KParameter("int", isMandantory: true)]
+		[KParameter("int", isMandatory: true)]
 		public int SomeInt { get; set; }
 
 		[KParameter("sw")]

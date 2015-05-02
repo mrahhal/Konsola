@@ -12,10 +12,10 @@ namespace Konsola.Attributes
 	{
 		internal const string InvalidCharacters = " -/\\";
 
-		public KParameterAttribute(string parameters, bool isMandantory = false)
+		public KParameterAttribute(string parameters, bool isMandatory = false)
 		{
 			Parameters = parameters;
-			IsMandantory = isMandantory;
+			IsMandatory = isMandatory;
 			_Validate();
 			_Initialize();
 		}
@@ -35,7 +35,7 @@ namespace Konsola.Attributes
 
 		public string Parameters { get; private set; }
 
-		public bool IsMandantory { get; private set; }
+		public bool IsMandatory { get; private set; }
 
 		internal string[] InternalParameters { get; private set; }
 

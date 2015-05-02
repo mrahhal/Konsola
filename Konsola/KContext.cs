@@ -200,6 +200,14 @@ namespace Konsola
 							break;
 					}
 				}
+				propContext.Attribute.IsSet = true;
+			}
+
+			// Check for mandatory params that have not been set.
+			var unset = propContexts.FirstOrDefault(pc => pc.Attribute.IsMandatory && !pc.Attribute.IsSet);
+			if (!unset.IsEmpty)
+			{
+				throw new ParsingException(ExceptionKind.MissingParameter, unset.Attribute.InternalParameters[0]);
 			}
 		}
 
