@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Konsola</RootNamespace>
     <AssemblyName>Konsola</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -35,16 +38,21 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\KCommandAttribute.cs" />
+    <Compile Include="Internal\CommandContext.cs" />
+    <Compile Include="KContextBase.cs" />
+    <Compile Include="Internal\PropertyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Konsola\Attributes\KClassAttribute.cs" />
-    <Compile Include="src\Konsola\Attributes\KParameterAttribute.cs" />
-    <Compile Include="src\Konsola\Attributes\OnParsedAttribute.cs" />
-    <Compile Include="src\Konsola\Attributes\ParameterKind.cs" />
-    <Compile Include="src\Konsola\Internal\Token.cs" />
-    <Compile Include="src\Konsola\Internal\TokenKind.cs" />
-    <Compile Include="src\Konsola\KContext.cs" />
-    <Compile Include="src\Konsola\Utils.cs" />
-    <Compile Include="src\Konsola\_Exceptions.cs" />
+    <Compile Include="Attributes\KContextOptionsAttribute.cs" />
+    <Compile Include="Attributes\KParameterAttribute.cs" />
+    <Compile Include="Attributes\OnParsedAttribute.cs" />
+    <Compile Include="Attributes\ParameterKind.cs" />
+    <Compile Include="Internal\Token.cs" />
+    <Compile Include="Internal\TokenKind.cs" />
+    <Compile Include="KContext.cs" />
+    <Compile Include="Internal\ReflectionExtensions.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="_Exceptions.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

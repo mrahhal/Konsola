@@ -6,9 +6,24 @@ using System;
 
 namespace Konsola.Internal
 {
+	/// <summary>
+	/// Represents the token kind.
+	/// </summary>
 	internal enum TokenKind
 	{
-		Param,
-		Data,
+		/// <summary>
+		/// A command token.
+		/// </summary>
+		Command,
+
+		/// <summary>
+		/// A param-value token.
+		/// </summary>
+		Full,
+
+		/// <summary>
+		/// A switch param token.
+		/// </summary>
+		Partial,
 	}
 }

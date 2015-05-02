@@ -3,12 +3,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 
 namespace Konsola.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
 	public sealed class KParameterAttribute : Attribute
 	{
+		internal const string InvalidCharacters = " -/\\";
+
 		public KParameterAttribute(string parameters, bool isMandantory = false)
 		{
 			Parameters = parameters;
@@ -19,7 +22,7 @@ namespace Konsola.Attributes
 
 		private void _Validate()
 		{
-			if (Parameters.Contains(" ") || Parameters.Contains("-"))
+			if (Parameters.Any((c) => InvalidCharacters.Contains(c)))
 			{
 				throw new ContextException("Parameters contains invalid characters.");
 			}
@@ -27,15 +30,17 @@ namespace Konsola.Attributes
 
 		private void _Initialize()
 		{
-			InternalParameters = Parameters.Split(';');
+			InternalParameters = Parameters.Split(',');
 		}
 
-		public string Parameters { get; set; }
+		public string Parameters { get; private set; }
 
-		internal string[] InternalParameters { get; set; }
+		public bool IsMandantory { get; private set; }
+
+		internal string[] InternalParameters { get; private set; }
+
+		internal bool IsSet { get; set; }
 
 		internal ParameterKind Kind { get; set; }
-
-		public bool IsMandantory { get; set; }
 	}
 }

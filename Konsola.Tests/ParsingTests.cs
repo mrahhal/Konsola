@@ -32,10 +32,19 @@ namespace Konsola.Tests
 
 			var context = KContext.Parse<Context>(args);
 
+			Assert.IsTrue(context.InnerContext == null);
 			Assert.IsTrue(context.SomeString == "some");
 			Assert.IsTrue(context.SomeString2 == "something");
 			Assert.IsTrue(context.SomeInt == 3);
 			Assert.IsTrue(context.SomeBool == true);
+
+			args = "restore --an".SplitCommandLineArgs();
+
+			context = KContext.Parse<Context>(args);
+
+			Assert.IsTrue(context.InnerContext != null);
+			Assert.IsTrue(context.InnerContext is Context.RestoreContext);
+			Assert.IsTrue(((Context.RestoreContext)context.InnerContext).Another == true);
 		}
 
 		[TestMethod, ExpectedException(typeof(ContextException))]
@@ -73,30 +82,37 @@ namespace Konsola.Tests
 			}
 			catch (ParsingException ex)
 			{
-				Assert.IsTrue(ex.Kind == ExceptionKind.MissingData && ex.Name == "my");
+				Assert.IsTrue(ex.Kind == ExceptionKind.MissingData && ex.Name == "-my");
 				throw;
 			}
 		}
 	}
 
-	[KClass]
-	public class Context
+	[KContextOptions]
+	public class Context : KContextBase
 	{
 		[KParameter("my")]
 		public string SomeString { get; set; }
 
-		[KParameter("s1;s2")]
+		[KParameter("s1,s2")]
 		public string SomeString2 { get; set; }
 
-		[KParameter("int", IsMandantory = true)]
+		[KParameter("int", isMandantory: true)]
 		public int SomeInt { get; set; }
 
 		[KParameter("sw")]
 		public bool SomeBool { get; set; }
+
+		[KCommand("restore")]
+		public class RestoreContext : KContextBase
+		{
+			[KParameter("an")]
+			public bool Another { get; set; }
+		}
 	}
 
-	[KClass]
-	public class FaultyContext
+	[KContextOptions]
+	public class FaultyContext : KContextBase
 	{
 		[KParameter("my not")]
 		public string SomeString { get; set; }
