@@ -13,6 +13,8 @@ namespace Konsola
 {
 	public class KContext
 	{
+		private readonly object _boxedTrue = (object)true;
+
 		private Type _typeOfString = typeof(string);
 		private Type _typeOfInt    = typeof(int);
 		private Type _typeOfBool   = typeof(bool);
@@ -179,8 +181,7 @@ namespace Konsola
 
 				if (token.Kind == TokenKind.Partial)
 				{
-					// TODO: Optimize boxing.
-					propContext.Property.SetValue(context, true, null);
+					propContext.Property.SetValue(context, _boxedTrue, null);
 				}
 				else // TokenKind.Full
 				{
