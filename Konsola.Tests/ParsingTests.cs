@@ -38,22 +38,15 @@ namespace Konsola.Tests
 			Assert.IsTrue(context.SomeBool == true);
 		}
 
-		[TestMethod]
+		[TestMethod, ExpectedException(typeof(ContextException))]
 		public void ShouldThrowIfContextNotValid()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
-			try
-			{
-				var context = KContext.Parse<FaultyContext>(args);
-				Assert.Fail();
-			}
-			catch (ContextException)
-			{
-			}
+			var context = KContext.Parse<FaultyContext>(args);
 		}
 
-		[TestMethod]
+		[TestMethod, ExpectedException(typeof(ParsingException))]
 		public void ShouldThrowIfMandantoryParamIsMissing()
 		{
 			var args = "-my some".SplitCommandLineArgs();
@@ -61,15 +54,15 @@ namespace Konsola.Tests
 			try
 			{
 				var context = KContext.Parse<Context>(args);
-				Assert.Fail();
 			}
 			catch (ParsingException ex)
 			{
 				Assert.IsTrue(ex.Kind == ExceptionKind.MissingParameter);
+				throw;
 			}
 		}
 
-		[TestMethod]
+		[TestMethod, ExpectedException(typeof(ParsingException))]
 		public void ShouldThrowIfDataIsMissing()
 		{
 			var args = "-my -s2 something -int 3 --sw".SplitCommandLineArgs();
@@ -81,6 +74,7 @@ namespace Konsola.Tests
 			catch (ParsingException ex)
 			{
 				Assert.IsTrue(ex.Kind == ExceptionKind.MissingData && ex.Name == "my");
+				throw;
 			}
 		}
 	}
