@@ -51,7 +51,7 @@
     <Compile Include="Internal\TokenKind.cs" />
     <Compile Include="KContext.cs" />
     <Compile Include="Internal\ReflectionExtensions.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="KUtils.cs" />
     <Compile Include="_Exceptions.cs" />
   </ItemGroup>
   <ItemGroup />

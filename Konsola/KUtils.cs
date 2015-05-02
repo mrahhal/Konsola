@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Konsola
 {
-	public static class Utils
+	public static class KUtils
 	{
 		public static IEnumerable<string> SplitCommandLineArgs(string args)
 		{
