@@ -43,6 +43,7 @@
     <Compile Include="src\Konsola\Internal\Token.cs" />
     <Compile Include="src\Konsola\Internal\TokenKind.cs" />
     <Compile Include="src\Konsola\KContext.cs" />
+    <Compile Include="src\Konsola\Utils.cs" />
     <Compile Include="src\Konsola\_Exceptions.cs" />
   </ItemGroup>
   <ItemGroup />
