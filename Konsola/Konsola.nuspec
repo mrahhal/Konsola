@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
+    <id>Konsola</id>
+    <version>0.2.0</version>
+    <title>Konsola</title>
     <authors>Mohammad Rahhal</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Contains services for command line tools.</description>
     <copyright>Copyright 2015</copyright>
   </metadata>
+  <files>
+    <file src="bin\Release\Konsola.dll" target="lib\net4" />
+    <file src="bin\Release\Konsola.xml" target="lib\net4" />
+  </files>
 </package>
