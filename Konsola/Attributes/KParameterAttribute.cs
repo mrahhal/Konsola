@@ -42,5 +42,9 @@ namespace Konsola.Attributes
 		internal bool IsSet { get; set; }
 
 		internal ParameterKind Kind { get; set; }
+
+		public bool IsFlags { get; set; }
+
+		public string[] ValidValues { get; set; }
 	}
 }

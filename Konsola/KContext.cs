@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Konsola
 {
@@ -161,6 +162,23 @@ namespace Konsola
 				else if (propType == _typeOfBool)
 				{
 					att.Kind = ParameterKind.Switch;
+				} else if (propType.IsEnum)
+				{
+					att.Kind = ParameterKind.Enum;
+					if (propType.GetCustomAttribute<FlagsAttribute>() != null)
+					{
+						att.IsFlags = true;
+					}
+					var sb = new StringBuilder();
+					foreach (var fi in propType.GetFields())
+					{
+						if (fi.FieldType.BaseType.Name != "Enum")
+							continue;
+						if (sb.Length != 0)
+							sb.Append(',');
+						sb.Append(fi.Name);
+					}
+					att.ValidValues = sb.ToString().Split(',');
 				}
 				else
 				{
@@ -188,6 +206,7 @@ namespace Konsola
 						case ParameterKind.String:
 							propContext.Property.SetValue(context, token.Value, null);
 							break;
+
 						case ParameterKind.Int:
 							int parsed;
 							if (!int.TryParse(token.Value, out parsed))
@@ -196,6 +215,30 @@ namespace Konsola
 							}
 
 							propContext.Property.SetValue(context, parsed, null);
+							break;
+
+						case ParameterKind.Enum:
+							var att = propContext.Attribute;
+							var value = token.Value;
+							if (!att.IsFlags)
+							{
+								if (value.Contains(',') || !att.ValidValues.Contains(value, StringComparer.InvariantCultureIgnoreCase))
+									throw new ParsingException(ExceptionKind.InvalidValue, token.Param);
+								var e = Enum.Parse(propContext.Property.PropertyType, value, true);
+								propContext.Property.SetValue(context, e, null);
+							} else
+							{
+								var values = value.Split(',');
+								int crux = 0;
+								foreach (var v in values)
+								{
+									if (!att.ValidValues.Contains(v, StringComparer.InvariantCultureIgnoreCase))
+										throw new ParsingException(ExceptionKind.InvalidValue, token.Param);
+									var e = Enum.Parse(propContext.Property.PropertyType, v, true);
+									crux |= (int)e;
+								}
+								propContext.Property.SetValue(context, crux, null);
+							}
 							break;
 					}
 				}

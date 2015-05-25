@@ -37,14 +37,75 @@ namespace Konsola.Tests
 			Assert.IsTrue(context.SomeString2 == "something");
 			Assert.IsTrue(context.SomeInt == 3);
 			Assert.IsTrue(context.SomeBool == true);
+		}
 
-			args = "restore --an".SplitCommandLineArgs();
+		[TestMethod]
+		public void CommandBasicTest()
+		{
+			var args = "restore --an".SplitCommandLineArgs();
 
-			context = KContext.Parse<Context>(args);
+			var context = KContext.Parse<Context>(args);
 
 			Assert.IsTrue(context.InnerContext != null);
 			Assert.IsTrue(context.InnerContext is Context.RestoreContext);
 			Assert.IsTrue(((Context.RestoreContext)context.InnerContext).Another == true);
+		}
+
+		[TestMethod]
+		public void EnumTest()
+		{
+			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
+
+			var context = KContext.Parse<Context>(args);
+
+			Assert.IsTrue(context.Platform == Platform.Windows);
+		}
+
+		[TestMethod, ExpectedException(typeof(ParsingException))]
+		public void InvalidEnumValueShouldFail()
+		{
+			var args = "-my some -p some -int 3".SplitCommandLineArgs();
+
+			var context = KContext.Parse<Context>(args);
+		}
+
+		[TestMethod, ExpectedException(typeof(ParsingException))]
+		public void MultipleEnumValuesWithEnumShouldFail()
+		{
+			var args = "-my some -p windows,unix -int 3".SplitCommandLineArgs();
+
+			var context = KContext.Parse<Context>(args);
+		}
+
+		[TestMethod]
+		public void FlagsEnumTest()
+		{
+			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
+
+			var context = KContext.Parse<Context>(args);
+
+			Assert.IsTrue((context.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
+				&& (context.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
+		}
+
+		[TestMethod]
+		public void EnumInsideCommandTest()
+		{
+			var args = "restore -p linux".SplitCommandLineArgs();
+
+			var context = KContext.Parse<Context>(args);
+
+			Assert.IsTrue(context.InnerContext != null);
+			Assert.IsTrue(context.InnerContext is Context.RestoreContext);
+			Assert.IsTrue(((Context.RestoreContext)context.InnerContext).Plaform == Platform.Linux);
+		}
+
+		[TestMethod, ExpectedException(typeof(ParsingException))]
+		public void InvalidFlagsEnumValueShouldFail()
+		{
+			var args = "-my some -fp windows,some -int 3".SplitCommandLineArgs();
+
+			var context = KContext.Parse<Context>(args);
 		}
 
 		[TestMethod, ExpectedException(typeof(ContextException))]
@@ -88,6 +149,23 @@ namespace Konsola.Tests
 		}
 	}
 
+	public enum Platform
+	{
+		None,
+		Windows,
+		Unix,
+		Linux,
+	}
+
+	[Flags]
+	public enum FlagsPlatform
+	{
+		None = 0,
+		Windows = 1,
+		Unix = 2,
+		Linux = 4,
+	}
+
 	[KContextOptions]
 	public class Context : KContextBase
 	{
@@ -103,11 +181,20 @@ namespace Konsola.Tests
 		[KParameter("sw")]
 		public bool SomeBool { get; set; }
 
+		[KParameter("p")]
+		public Platform Platform { get; set; }
+
+		[KParameter("fp")]
+		public FlagsPlatform FlagsPlatform { get; set; }
+
 		[KCommand("restore")]
 		public class RestoreContext : KContextBase
 		{
 			[KParameter("an")]
 			public bool Another { get; set; }
+
+			[KParameter("p")]
+			public Platform Plaform { get; set; }
 		}
 	}
 

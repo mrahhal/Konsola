@@ -11,5 +11,6 @@ namespace Konsola.Attributes
 		String,
 		Int,
 		Switch,
+		Enum,
 	}
 }
