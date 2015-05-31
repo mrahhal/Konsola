@@ -2,18 +2,18 @@
 // Copyright (c) 2015, Mohammad Rahhal @mrahhal
 //------------------------------------------------------------------------------
 
-using Konsola.Attributes;
 using System;
 using System.Reflection;
+using Konsola.Attributes;
 
 namespace Konsola.Internal
 {
 	internal struct PropertyContext
 	{
-		private PropertyInfo        _pi;
-		private KParameterAttribute _attribute;
+		private PropertyInfo _pi;
+		private ParameterAttribute _attribute;
 
-		public PropertyContext(PropertyInfo pi, KParameterAttribute attribute)
+		public PropertyContext(PropertyInfo pi, ParameterAttribute attribute)
 		{
 			_pi = pi;
 			_attribute = attribute;
@@ -29,6 +29,6 @@ namespace Konsola.Internal
 
 		public PropertyInfo Property { get { return _pi; } }
 
-		public KParameterAttribute Attribute { get { return _attribute; } }
+		public ParameterAttribute Attribute { get { return _attribute; } }
 	}
 }

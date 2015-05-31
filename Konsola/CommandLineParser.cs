@@ -2,50 +2,50 @@
 // Copyright (c) 2015, Mohammad Rahhal @mrahhal
 //------------------------------------------------------------------------------
 
-using Konsola.Attributes;
-using Konsola.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Konsola.Attributes;
+using Konsola.Internal;
 
 namespace Konsola
 {
-	public class KContext
+	public class CommandLineParser
 	{
 		private readonly object _boxedTrue = (object)true;
 
 		private Type _typeOfString = typeof(string);
-		private Type _typeOfInt    = typeof(int);
-		private Type _typeOfBool   = typeof(bool);
+		private Type _typeOfInt = typeof(int);
+		private Type _typeOfBool = typeof(bool);
 
-		private KContextBase             _context;
-		private string[]                 _args;
-		private Type                     _type;
-		private KContextOptionsAttribute _options;
+		private ContextBase _context;
+		private string[] _args;
+		private Type _type;
+		private ContextOptionsAttribute _options;
 
-		private KContext(KContextBase context, string[] args)
+		private CommandLineParser(ContextBase context, string[] args)
 		{
 			_context = context;
 			_args = args;
 		}
 
 		public static T Parse<T>(string[] args)
-			where T : KContextBase
+			where T : ContextBase
 		{
-			var context = typeof(T).CreateInstance<KContextBase>();
-			return new KContext(context, args)._InternalParse<T>();
+			var context = typeof(T).CreateInstance<ContextBase>();
+			return new CommandLineParser(context, args)._InternalParse<T>();
 		}
 
 		private T _InternalParse<T>()
-			where T : KContextBase
+			where T : ContextBase
 		{
 			_type = typeof(T);
-			_options = _type.GetCustomAttribute<KContextOptionsAttribute>() ?? new KContextOptionsAttribute();
+			_options = _type.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
 
 			_InternalWork();
-			_InvokeOnParsedMethod();
+			_InvokeOnParsedMethod(); // TODO: Invoke only with an option in ContextOptionsAttribute?
 
 			return (T)_context;
 		}
@@ -58,7 +58,7 @@ namespace Konsola
 			try
 			{
 #endif
-				_Parse(tokens, 0, _context);
+			_Parse(tokens, 0, _context);
 #if !DEBUG
 			}
 			catch (ParsingException ex)
@@ -87,17 +87,18 @@ namespace Konsola
 				{
 					list.Add(new Token(arg.Substring(2), false));
 					j++;
-				} else if (arg.StartsWith("-"))
+				}
+				else if (arg.StartsWith("-"))
 				{
 					if (args.Length == i + 1)
 					{
-						throw new ParsingException(ExceptionKind.MissingValue, arg);
+						throw new CommandLineException(CommandLineExceptionKind.MissingValue, arg);
 					}
 
 					var nextArg = args[++i];
 					if (nextArg.StartsWith("-"))
 					{
-						throw new ParsingException(ExceptionKind.MissingValue, arg);
+						throw new CommandLineException(CommandLineExceptionKind.MissingValue, arg);
 					}
 
 					list.Add(new Token(arg.Substring(1), nextArg));
@@ -108,7 +109,7 @@ namespace Konsola
 					if (i != 0)
 					{
 						if (list[j - 1].Kind != TokenKind.Command)
-							throw new ParsingException(ExceptionKind.InvalidParameter, arg);
+							throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
 					}
 
 					list.Add(new Token(arg, true));
@@ -119,7 +120,7 @@ namespace Konsola
 			return list.ToArray();
 		}
 
-		private void _Parse(Token[] tokens, int offset, KContextBase context)
+		private void _Parse(Token[] tokens, int offset, ContextBase context)
 		{
 			var type = context == _context ? _type : context.GetType();
 
@@ -128,15 +129,16 @@ namespace Konsola
 			{
 				++offset;
 				var commandContext = type
-					.GetCommandContext(firstToken.Param)
+					.GetCommandContexts(firstToken.Param)
 					.FirstOrDefault();
 
 				if (commandContext.IsEmpty)
 				{
-					throw new ParsingException(ExceptionKind.InvalidParameter, firstToken.Param);
+					// TODO: + CLEK.InvalidCommand?
+					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, firstToken.Param);
 				}
 
-				var newContext = commandContext.Type.CreateInstance<KContextBase>();
+				var newContext = commandContext.Type.CreateInstance<ContextBase>();
 				context.InnerContext = newContext;
 				_Parse(tokens, offset, newContext);
 				return;
@@ -162,7 +164,8 @@ namespace Konsola
 				else if (propType == _typeOfBool)
 				{
 					att.Kind = ParameterKind.Switch;
-				} else if (propType.IsEnum)
+				}
+				else if (propType.IsEnum)
 				{
 					att.Kind = ParameterKind.Enum;
 					if (propType.GetCustomAttribute<FlagsAttribute>() != null)
@@ -186,13 +189,25 @@ namespace Konsola
 				}
 			}
 
+			_BindContext(tokens, offset, context, propContexts);
+
+			// Check for mandatory params that have not been set.
+			var unset = propContexts.FirstOrDefault(pc => pc.Attribute.IsMandatory && !pc.Attribute.IsSet);
+			if (!unset.IsEmpty)
+			{
+				throw new CommandLineException(CommandLineExceptionKind.MissingParameter, unset.Attribute.InternalParameters[0]);
+			}
+		}
+
+		private void _BindContext(Token[] tokens, int offset, ContextBase context, PropertyContext[] propContexts)
+		{
 			for (int i = offset; i < tokens.Length; i++)
 			{
 				var token = tokens[i];
 				var propContext = propContexts.FirstOrDefault(pc => pc.Attribute.InternalParameters.Contains(token.Param));
 				if (propContext.IsEmpty)
 				{
-					throw new ParsingException(ExceptionKind.InvalidParameter, token.Param);
+					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, token.Param);
 				}
 
 				if (token.Kind == TokenKind.Partial)
@@ -211,9 +226,8 @@ namespace Konsola
 							int parsed;
 							if (!int.TryParse(token.Value, out parsed))
 							{
-								throw new ParsingException(ExceptionKind.InvalidValue, token.Param);
+								throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 							}
-
 							propContext.Property.SetValue(context, parsed, null);
 							break;
 
@@ -223,17 +237,18 @@ namespace Konsola
 							if (!att.IsFlags)
 							{
 								if (value.Contains(',') || !att.ValidValues.Contains(value, StringComparer.InvariantCultureIgnoreCase))
-									throw new ParsingException(ExceptionKind.InvalidValue, token.Param);
+									throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 								var e = Enum.Parse(propContext.Property.PropertyType, value, true);
 								propContext.Property.SetValue(context, e, null);
-							} else
+							}
+							else
 							{
 								var values = value.Split(',');
 								int crux = 0;
 								foreach (var v in values)
 								{
 									if (!att.ValidValues.Contains(v, StringComparer.InvariantCultureIgnoreCase))
-										throw new ParsingException(ExceptionKind.InvalidValue, token.Param);
+										throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 									var e = Enum.Parse(propContext.Property.PropertyType, v, true);
 									crux |= (int)e;
 								}
@@ -243,13 +258,6 @@ namespace Konsola
 					}
 				}
 				propContext.Attribute.IsSet = true;
-			}
-
-			// Check for mandatory params that have not been set.
-			var unset = propContexts.FirstOrDefault(pc => pc.Attribute.IsMandatory && !pc.Attribute.IsSet);
-			if (!unset.IsEmpty)
-			{
-				throw new ParsingException(ExceptionKind.MissingParameter, unset.Attribute.InternalParameters[0]);
 			}
 		}
 

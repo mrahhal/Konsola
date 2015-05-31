@@ -2,17 +2,17 @@
 // Copyright (c) 2015, Mohammad Rahhal @mrahhal
 //------------------------------------------------------------------------------
 
-using Konsola.Attributes;
 using System;
+using Konsola.Attributes;
 
 namespace Konsola.Internal
 {
 	internal struct CommandContext
 	{
-		private Type              _type;
-		private KCommandAttribute _attribute;
+		private Type _type;
+		private CommandAttribute _attribute;
 
-		public CommandContext(Type type, KCommandAttribute attribute)
+		public CommandContext(Type type, CommandAttribute attribute)
 		{
 			_type = type;
 			_attribute = attribute;
@@ -28,6 +28,6 @@ namespace Konsola.Internal
 
 		public Type Type { get { return _type; } }
 
-		public KCommandAttribute Attribute { get { return _attribute; } }
+		public CommandAttribute Attribute { get { return _attribute; } }
 	}
 }

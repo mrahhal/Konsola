@@ -6,7 +6,7 @@ using System;
 
 namespace Konsola
 {
-	public enum ExceptionKind
+	public enum CommandLineExceptionKind
 	{
 		/// <summary>
 		/// A mandatory parameter is missing.
@@ -43,16 +43,16 @@ namespace Konsola
 	}
 
 	[Serializable]
-	public class ParsingException : Exception
+	public class CommandLineException : Exception
 	{
-		public ParsingException(ExceptionKind kind, string name)
+		public CommandLineException(CommandLineExceptionKind kind, string name)
 		{
 			Kind = kind;
 			Name = name;
 			_Initialize();
 		}
 
-		public ExceptionKind Kind { get; set; }
+		public CommandLineExceptionKind Kind { get; set; }
 
 		public string Name { get; set; }
 
@@ -62,19 +62,19 @@ namespace Konsola
 		{
 			switch (Kind)
 			{
-				case ExceptionKind.MissingParameter:
+				case CommandLineExceptionKind.MissingParameter:
 					Message = "Missing parameter: ";
 					break;
 
-				case ExceptionKind.InvalidParameter:
+				case CommandLineExceptionKind.InvalidParameter:
 					Message = "Invalid parameter: ";
 					break;
 
-				case ExceptionKind.MissingValue:
+				case CommandLineExceptionKind.MissingValue:
 					Message = "Missing value: ";
 					break;
 
-				case ExceptionKind.InvalidValue:
+				case CommandLineExceptionKind.InvalidValue:
 					Message = "Invalid value: ";
 					break;
 

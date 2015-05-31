@@ -18,15 +18,15 @@ namespace Konsola.Internal
 		{
 			return @this
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-				.Select(prop => new PropertyContext(prop, prop.GetCustomAttribute<KParameterAttribute>()))
+				.Select(prop => new PropertyContext(prop, prop.GetCustomAttribute<ParameterAttribute>()))
 				.Where(propc => propc.Attribute != null);
 		}
 
-		public static IEnumerable<CommandContext> GetCommandContext(this Type @this, string commandName)
+		public static IEnumerable<CommandContext> GetCommandContexts(this Type @this, string commandName)
 		{
 			return @this
 				.GetNestedTypes(BindingFlags.DeclaredOnly | BindingFlags.Public)
-				.Select(t => new CommandContext(t, t.GetCustomAttribute<KCommandAttribute>()))
+				.Select(t => new CommandContext(t, t.GetCustomAttribute<CommandAttribute>()))
 				.Where(cc => cc.Attribute != null && cc.Attribute.Name == commandName);
 		}
 

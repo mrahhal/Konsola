@@ -8,9 +8,9 @@ using System.Linq;
 namespace Konsola.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-	public sealed class KCommandAttribute : Attribute
+	public sealed class CommandAttribute : Attribute
 	{
-		public KCommandAttribute(string name)
+		public CommandAttribute(string name)
 		{
 			Name = name;
 			_Validate();
@@ -20,7 +20,7 @@ namespace Konsola.Attributes
 
 		private void _Validate()
 		{
-			if (string.IsNullOrWhiteSpace(Name) || Name.Any(c => KParameterAttribute.InvalidCharacters.Contains(c)))
+			if (string.IsNullOrWhiteSpace(Name) || Name.Any(c => ParameterAttribute.InvalidCharacters.Contains(c)))
 			{
 				throw new ContextException("Command name is invalid.");
 			}

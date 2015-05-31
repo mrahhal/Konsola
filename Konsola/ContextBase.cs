@@ -6,12 +6,12 @@ using System;
 
 namespace Konsola
 {
-	public abstract class KContextBase
+	public abstract class ContextBase
 	{
-		public KContextBase()
-		{
-		}
+		public ContextBase InnerContext { get; internal set; }
+	}
 
-		public KContextBase InnerContext { get; internal set; }
+	public abstract class CommandBase : ContextBase
+	{
 	}
 }

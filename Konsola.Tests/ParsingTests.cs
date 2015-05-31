@@ -29,7 +29,7 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -s2 something -int 3 --sw".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext == null);
 			Assert.True(context.SomeString == "some");
@@ -43,7 +43,7 @@ namespace Konsola.Tests
 		{
 			var args = "restore --an".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext != null);
 			Assert.True(context.InnerContext is Context.RestoreContext);
@@ -55,7 +55,7 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.Platform == Platform.Windows);
 		}
@@ -65,9 +65,9 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -p some -int 3".SplitCommandLineArgs();
 
-			Assert.Throws<ParsingException>(() =>
+			Assert.Throws<CommandLineException>(() =>
 				{
-					KContext.Parse<Context>(args);
+					CommandLineParser.Parse<Context>(args);
 				});
 		}
 
@@ -76,9 +76,9 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -p windows,unix -int 3".SplitCommandLineArgs();
 
-			Assert.Throws<ParsingException>(() =>
+			Assert.Throws<CommandLineException>(() =>
 				{
-					KContext.Parse<Context>(args);
+					CommandLineParser.Parse<Context>(args);
 				});
 		}
 
@@ -87,7 +87,7 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True((context.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
 				&& (context.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
@@ -98,7 +98,7 @@ namespace Konsola.Tests
 		{
 			var args = "restore -p linux".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext != null);
 			Assert.True(context.InnerContext is Context.RestoreContext);
@@ -110,9 +110,9 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -fp windows,some -int 3".SplitCommandLineArgs();
 
-			Assert.Throws<ParsingException>(() =>
+			Assert.Throws<CommandLineException>(() =>
 			{
-				KContext.Parse<Context>(args);
+				CommandLineParser.Parse<Context>(args);
 			});
 		}
 
@@ -123,7 +123,7 @@ namespace Konsola.Tests
 
 			Assert.Throws<ContextException>(() =>
 			{
-				KContext.Parse<FaultyContext>(args);
+				CommandLineParser.Parse<FaultyContext>(args);
 			});
 		}
 
@@ -132,12 +132,12 @@ namespace Konsola.Tests
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
-			var ex = Assert.Throws<ParsingException>(() =>
+			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				KContext.Parse<Context>(args);
+				CommandLineParser.Parse<Context>(args);
 			});
 
-			Assert.True(ex.Kind == ExceptionKind.MissingParameter);
+			Assert.True(ex.Kind == CommandLineExceptionKind.MissingParameter);
 		}
 
 		[Fact(DisplayName = "Should throw if data is missing")]
@@ -145,12 +145,12 @@ namespace Konsola.Tests
 		{
 			var args = "-my -s2 something -int 3 --sw".SplitCommandLineArgs();
 
-			var ex = Assert.Throws<ParsingException>(() =>
+			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				KContext.Parse<Context>(args);
+				CommandLineParser.Parse<Context>(args);
 			});
 
-			Assert.True(ex.Kind == ExceptionKind.MissingValue && ex.Name == "-my");
+			Assert.True(ex.Kind == CommandLineExceptionKind.MissingValue && ex.Name == "-my");
 		}
 	}
 
@@ -171,42 +171,42 @@ namespace Konsola.Tests
 		Linux = 4,
 	}
 
-	[KContextOptions]
-	public class Context : KContextBase
+	[ContextOptions]
+	public class Context : ContextBase
 	{
-		[KParameter("my")]
+		[Parameter("my")]
 		public string SomeString { get; set; }
 
-		[KParameter("s1,s2")]
+		[Parameter("s1,s2")]
 		public string SomeString2 { get; set; }
 
-		[KParameter("int", isMandatory: true)]
+		[Parameter("int", IsMandatory=true)]
 		public int SomeInt { get; set; }
 
-		[KParameter("sw")]
+		[Parameter("sw")]
 		public bool SomeBool { get; set; }
 
-		[KParameter("p")]
+		[Parameter("p")]
 		public Platform Platform { get; set; }
 
-		[KParameter("fp")]
+		[Parameter("fp")]
 		public FlagsPlatform FlagsPlatform { get; set; }
 
-		[KCommand("restore")]
-		public class RestoreContext : KContextBase
+		[Command("restore")]
+		public class RestoreContext : CommandBase
 		{
-			[KParameter("an")]
+			[Parameter("an")]
 			public bool Another { get; set; }
 
-			[KParameter("p")]
+			[Parameter("p")]
 			public Platform Plaform { get; set; }
 		}
 	}
 
-	[KContextOptions]
-	public class FaultyContext : KContextBase
+	[ContextOptions]
+	public class FaultyContext : ContextBase
 	{
-		[KParameter("my not")]
+		[Parameter("my not")]
 		public string SomeString { get; set; }
 	}
 

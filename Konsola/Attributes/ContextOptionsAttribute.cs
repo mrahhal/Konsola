@@ -7,13 +7,13 @@ using System;
 namespace Konsola.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-	public sealed class KContextOptionsAttribute : Attribute
+	public sealed class ContextOptionsAttribute : Attribute
 	{
-		public KContextOptionsAttribute()
+		public ContextOptionsAttribute()
 		{
 		}
 
-		public KContextOptionsAttribute(bool exitOnException)
+		public ContextOptionsAttribute(bool exitOnException)
 		{
 			ExitOnException = exitOnException;
 		}

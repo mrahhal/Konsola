@@ -4,38 +4,25 @@
 
 using System;
 using System.Linq;
+using Konsola.Internal;
 
 namespace Konsola.Attributes
 {
 	[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-	public sealed class KParameterAttribute : Attribute
+	public sealed class ParameterAttribute : Attribute
 	{
 		internal const string InvalidCharacters = " -/\\";
 
-		public KParameterAttribute(string parameters, bool isMandatory = false)
+		public ParameterAttribute(string parameters)
 		{
 			Parameters = parameters;
-			IsMandatory = isMandatory;
 			_Validate();
 			_Initialize();
 		}
 
-		private void _Validate()
-		{
-			if (Parameters.Any((c) => InvalidCharacters.Contains(c)))
-			{
-				throw new ContextException("Parameters contains invalid characters.");
-			}
-		}
+		public bool IsMandatory { get; set; }
 
-		private void _Initialize()
-		{
-			InternalParameters = Parameters.Split(',');
-		}
-
-		public string Parameters { get; private set; }
-
-		public bool IsMandatory { get; private set; }
+		internal string Parameters { get; private set; }
 
 		internal string[] InternalParameters { get; private set; }
 
@@ -43,8 +30,21 @@ namespace Konsola.Attributes
 
 		internal ParameterKind Kind { get; set; }
 
-		public bool IsFlags { get; set; }
+		internal bool IsFlags { get; set; }
 
-		public string[] ValidValues { get; set; }
+		internal string[] ValidValues { get; set; }
+
+		private void _Validate()
+		{
+			if (Parameters.Any((c) => InvalidCharacters.Contains(c)))
+			{
+				throw new ContextException("Parameters contain invalid characters.");
+			}
+		}
+
+		private void _Initialize()
+		{
+			InternalParameters = Parameters.Split(',');
+		}
 	}
 }

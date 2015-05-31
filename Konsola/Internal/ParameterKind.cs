@@ -4,9 +4,9 @@
 
 using System;
 
-namespace Konsola.Attributes
+namespace Konsola.Internal
 {
-	public enum ParameterKind
+	internal enum ParameterKind
 	{
 		String,
 		Int,
