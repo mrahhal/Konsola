@@ -132,8 +132,7 @@ namespace Konsola
 
 				if (commandContext.IsEmpty)
 				{
-					// TODO: + CLEK.InvalidCommand?
-					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, firstToken.Param);
+					throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, firstToken.Param);
 				}
 
 				var newContext = commandContext.Type.CreateInstance<ContextBase>();

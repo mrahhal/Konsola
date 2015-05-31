@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Konsola.Tests
 {
-	public class ParsingTests
+	public class CommandLineParserTests
 	{
 		[Fact(DisplayName = "Split command line args")]
 		public void SplitCommandLineArgsTest()
@@ -48,6 +48,19 @@ namespace Konsola.Tests
 			Assert.True(context.InnerContext != null);
 			Assert.True(context.InnerContext is Context.RestoreContext);
 			Assert.True(((Context.RestoreContext)context.InnerContext).Another == true);
+		}
+
+		[Fact(DisplayName = "Invalid command should fail")]
+		public void InvalidCommandShouldFail()
+		{
+			var args = "invalidcommand --an".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+			{
+				CommandLineParser.Parse<Context>(args);
+			});
+
+			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidCommand);
 		}
 
 		[Fact(DisplayName = "Enum")]
@@ -180,7 +193,7 @@ namespace Konsola.Tests
 		[Parameter("s1,s2")]
 		public string SomeString2 { get; set; }
 
-		[Parameter("int", IsMandatory=true)]
+		[Parameter("int", IsMandatory = true)]
 		public int SomeInt { get; set; }
 
 		[Parameter("sw")]

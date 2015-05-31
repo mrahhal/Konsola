@@ -9,6 +9,11 @@ namespace Konsola
 	public enum CommandLineExceptionKind
 	{
 		/// <summary>
+		/// A command is invalid.
+		/// </summary>
+		InvalidCommand,
+
+		/// <summary>
 		/// A mandatory parameter is missing.
 		/// </summary>
 		MissingParameter,
@@ -62,6 +67,10 @@ namespace Konsola
 		{
 			switch (Kind)
 			{
+				case CommandLineExceptionKind.InvalidCommand:
+					Message = "Invalid command: ";
+					break;
+
 				case CommandLineExceptionKind.MissingParameter:
 					Message = "Missing parameter: ";
 					break;
