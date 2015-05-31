@@ -2,150 +2,155 @@
 // Copyright (c) 2015, Mohammad Rahhal @mrahhal
 //------------------------------------------------------------------------------
 
-using Konsola.Attributes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using Konsola.Attributes;
+using Xunit;
 
 namespace Konsola.Tests
 {
-	[TestClass]
 	public class ParsingTests
 	{
-		[TestMethod]
+		[Fact(DisplayName = "Split command line args")]
 		public void SplitCommandLineArgsTest()
 		{
 			var args = "-my some -s2 \"something -int 3\" --sw".SplitCommandLineArgs();
 
-			Assert.IsTrue(args.Length == 5);
-			Assert.IsTrue(args[0] == "-my");
-			Assert.IsTrue(args[1] == "some");
-			Assert.IsTrue(args[2] == "-s2");
-			Assert.IsTrue(args[3] == "something -int 3");
-			Assert.IsTrue(args[4] == "--sw");
+			Assert.True(args.Length == 5);
+			Assert.True(args[0] == "-my");
+			Assert.True(args[1] == "some");
+			Assert.True(args[2] == "-s2");
+			Assert.True(args[3] == "something -int 3");
+			Assert.True(args[4] == "--sw");
 		}
 
-		[TestMethod]
+		[Fact(DisplayName= "Basic")]
 		public void BasicTest()
 		{
 			var args = "-my some -s2 something -int 3 --sw".SplitCommandLineArgs();
 
 			var context = KContext.Parse<Context>(args);
 
-			Assert.IsTrue(context.InnerContext == null);
-			Assert.IsTrue(context.SomeString == "some");
-			Assert.IsTrue(context.SomeString2 == "something");
-			Assert.IsTrue(context.SomeInt == 3);
-			Assert.IsTrue(context.SomeBool == true);
+			Assert.True(context.InnerContext == null);
+			Assert.True(context.SomeString == "some");
+			Assert.True(context.SomeString2 == "something");
+			Assert.True(context.SomeInt == 3);
+			Assert.True(context.SomeBool == true);
 		}
 
-		[TestMethod]
+		[Fact(DisplayName = "Command basic")]
 		public void CommandBasicTest()
 		{
 			var args = "restore --an".SplitCommandLineArgs();
 
 			var context = KContext.Parse<Context>(args);
 
-			Assert.IsTrue(context.InnerContext != null);
-			Assert.IsTrue(context.InnerContext is Context.RestoreContext);
-			Assert.IsTrue(((Context.RestoreContext)context.InnerContext).Another == true);
+			Assert.True(context.InnerContext != null);
+			Assert.True(context.InnerContext is Context.RestoreContext);
+			Assert.True(((Context.RestoreContext)context.InnerContext).Another == true);
 		}
 
-		[TestMethod]
+		[Fact(DisplayName = "Enum")]
 		public void EnumTest()
 		{
 			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
 
 			var context = KContext.Parse<Context>(args);
 
-			Assert.IsTrue(context.Platform == Platform.Windows);
+			Assert.True(context.Platform == Platform.Windows);
 		}
 
-		[TestMethod, ExpectedException(typeof(ParsingException))]
+		[Fact(DisplayName = "Invalid enum value should fail")]
 		public void InvalidEnumValueShouldFail()
 		{
 			var args = "-my some -p some -int 3".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			Assert.Throws<ParsingException>(() =>
+				{
+					KContext.Parse<Context>(args);
+				});
 		}
 
-		[TestMethod, ExpectedException(typeof(ParsingException))]
+		[Fact(DisplayName = "Multiple enum values with enum should fail")]
 		public void MultipleEnumValuesWithEnumShouldFail()
 		{
 			var args = "-my some -p windows,unix -int 3".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			Assert.Throws<ParsingException>(() =>
+				{
+					KContext.Parse<Context>(args);
+				});
 		}
 
-		[TestMethod]
+		[Fact(DisplayName = "Flags enum")]
 		public void FlagsEnumTest()
 		{
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
 
 			var context = KContext.Parse<Context>(args);
 
-			Assert.IsTrue((context.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
+			Assert.True((context.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
 				&& (context.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
 		}
 
-		[TestMethod]
+		[Fact(DisplayName = "Enum inside command")]
 		public void EnumInsideCommandTest()
 		{
 			var args = "restore -p linux".SplitCommandLineArgs();
 
 			var context = KContext.Parse<Context>(args);
 
-			Assert.IsTrue(context.InnerContext != null);
-			Assert.IsTrue(context.InnerContext is Context.RestoreContext);
-			Assert.IsTrue(((Context.RestoreContext)context.InnerContext).Plaform == Platform.Linux);
+			Assert.True(context.InnerContext != null);
+			Assert.True(context.InnerContext is Context.RestoreContext);
+			Assert.True(((Context.RestoreContext)context.InnerContext).Plaform == Platform.Linux);
 		}
 
-		[TestMethod, ExpectedException(typeof(ParsingException))]
+		[Fact(DisplayName = "Invalid flags enum value should fail")]
 		public void InvalidFlagsEnumValueShouldFail()
 		{
 			var args = "-my some -fp windows,some -int 3".SplitCommandLineArgs();
 
-			var context = KContext.Parse<Context>(args);
+			Assert.Throws<ParsingException>(() =>
+			{
+				KContext.Parse<Context>(args);
+			});
 		}
 
-		[TestMethod, ExpectedException(typeof(ContextException))]
+		[Fact(DisplayName = "Should throw if context not valid")]
 		public void ShouldThrowIfContextNotValid()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
-			var context = KContext.Parse<FaultyContext>(args);
+			Assert.Throws<ContextException>(() =>
+			{
+				KContext.Parse<FaultyContext>(args);
+			});
 		}
 
-		[TestMethod, ExpectedException(typeof(ParsingException))]
+		[Fact(DisplayName = "Should throw if mandatory param is missing")]
 		public void ShouldThrowIfMandantoryParamIsMissing()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
-			try
+			var ex = Assert.Throws<ParsingException>(() =>
 			{
-				var context = KContext.Parse<Context>(args);
-			}
-			catch (ParsingException ex)
-			{
-				Assert.IsTrue(ex.Kind == ExceptionKind.MissingParameter);
-				throw;
-			}
+				KContext.Parse<Context>(args);
+			});
+
+			Assert.True(ex.Kind == ExceptionKind.MissingParameter);
 		}
 
-		[TestMethod, ExpectedException(typeof(ParsingException))]
+		[Fact(DisplayName = "Should throw if data is missing")]
 		public void ShouldThrowIfDataIsMissing()
 		{
 			var args = "-my -s2 something -int 3 --sw".SplitCommandLineArgs();
 
-			try
+			var ex = Assert.Throws<ParsingException>(() =>
 			{
-				var context = KContext.Parse<Context>(args);
-			}
-			catch (ParsingException ex)
-			{
-				Assert.IsTrue(ex.Kind == ExceptionKind.MissingValue && ex.Name == "-my");
-				throw;
-			}
+				KContext.Parse<Context>(args);
+			});
+
+			Assert.True(ex.Kind == ExceptionKind.MissingValue && ex.Name == "-my");
 		}
 	}
 
