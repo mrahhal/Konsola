@@ -24,8 +24,8 @@ namespace Konsola.Tests
 			Assert.True(args[4] == "--sw");
 		}
 
-		[Fact(DisplayName= "Basic")]
-		public void BasicTest()
+		[Fact(DisplayName= "Parsing basic")]
+		public void BasicParsing()
 		{
 			var args = "-my some -s2 something -int 3 --sw".SplitCommandLineArgs();
 
@@ -38,8 +38,8 @@ namespace Konsola.Tests
 			Assert.True(context.SomeBool == true);
 		}
 
-		[Fact(DisplayName = "Command basic")]
-		public void CommandBasicTest()
+		[Fact(DisplayName = "Parsing command")]
+		public void ParsingCommand()
 		{
 			var args = "restore --an".SplitCommandLineArgs();
 
@@ -50,8 +50,8 @@ namespace Konsola.Tests
 			Assert.True(((Context.RestoreContext)context.InnerContext).Another == true);
 		}
 
-		[Fact(DisplayName = "Invalid command should fail")]
-		public void InvalidCommandShouldFail()
+		[Fact(DisplayName = "Parsing invalid command throws")]
+		public void ParsingInvalidCommandThrows()
 		{
 			var args = "invalidcommand --an".SplitCommandLineArgs();
 
@@ -63,8 +63,8 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidCommand);
 		}
 
-		[Fact(DisplayName = "Enum")]
-		public void EnumTest()
+		[Fact(DisplayName = "Parsing enum")]
+		public void ParsingEnum()
 		{
 			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
 
@@ -73,8 +73,8 @@ namespace Konsola.Tests
 			Assert.True(context.Platform == Platform.Windows);
 		}
 
-		[Fact(DisplayName = "Invalid enum value should fail")]
-		public void InvalidEnumValueShouldFail()
+		[Fact(DisplayName = "Parsing invalid enum value throws")]
+		public void ParsingInvalidEnumValueThrows()
 		{
 			var args = "-my some -p some -int 3".SplitCommandLineArgs();
 
@@ -84,8 +84,8 @@ namespace Konsola.Tests
 				});
 		}
 
-		[Fact(DisplayName = "Multiple enum values with enum should fail")]
-		public void MultipleEnumValuesWithEnumShouldFail()
+		[Fact(DisplayName = "Parsing multiple enum values with enum throws")]
+		public void ParsingMultipleEnumValuesWithEnumThrows()
 		{
 			var args = "-my some -p windows,unix -int 3".SplitCommandLineArgs();
 
@@ -95,8 +95,8 @@ namespace Konsola.Tests
 				});
 		}
 
-		[Fact(DisplayName = "Flags enum")]
-		public void FlagsEnumTest()
+		[Fact(DisplayName = "Parsing flags enum")]
+		public void ParsingFlagsEnum()
 		{
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
 
@@ -106,8 +106,8 @@ namespace Konsola.Tests
 				&& (context.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
 		}
 
-		[Fact(DisplayName = "Enum inside command")]
-		public void EnumInsideCommandTest()
+		[Fact(DisplayName = "Parsing enum inside command")]
+		public void ParsingEnumInsideCommand()
 		{
 			var args = "restore -p linux".SplitCommandLineArgs();
 
@@ -118,8 +118,8 @@ namespace Konsola.Tests
 			Assert.True(((Context.RestoreContext)context.InnerContext).Plaform == Platform.Linux);
 		}
 
-		[Fact(DisplayName = "Invalid flags enum value should fail")]
-		public void InvalidFlagsEnumValueShouldFail()
+		[Fact(DisplayName = "Parsing invalid flags enum value throws")]
+		public void ParsingInvalidFlagsEnumValueThrows()
 		{
 			var args = "-my some -fp windows,some -int 3".SplitCommandLineArgs();
 
@@ -129,8 +129,8 @@ namespace Konsola.Tests
 			});
 		}
 
-		[Fact(DisplayName = "Should throw if context not valid")]
-		public void ShouldThrowIfContextNotValid()
+		[Fact(DisplayName = "Parsing with invalid context throws")]
+		public void ParsingWithInvalidContextThrows()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
@@ -140,8 +140,8 @@ namespace Konsola.Tests
 			});
 		}
 
-		[Fact(DisplayName = "Should throw if mandatory param is missing")]
-		public void ShouldThrowIfMandantoryParamIsMissing()
+		[Fact(DisplayName = "Parsing with missing mandatory param throws")]
+		public void ParsingWithMissingMandatoryParamThrows()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
@@ -153,8 +153,8 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.MissingParameter);
 		}
 
-		[Fact(DisplayName = "Should throw if data is missing")]
-		public void ShouldThrowIfDataIsMissing()
+		[Fact(DisplayName = "Parsing with missing data throws")]
+		public void ParsingWithMissingDataThrows()
 		{
 			var args = "-my -s2 something -int 3 --sw".SplitCommandLineArgs();
 
