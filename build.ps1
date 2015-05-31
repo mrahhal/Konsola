@@ -1,7 +1,7 @@
 $konsola_dir = "Konsola"
 $konsola_csproj = Join-Path $konsola_dir "/Konsola.csproj"
 $konsola_nuspec = Join-Path $konsola_dir "/Konsola.nuspec"
-$nugetDir = ".nuget"
+$nugetDir = "_nupkgs"
 
 Function mkdirb($path)
 {
