@@ -45,7 +45,10 @@ namespace Konsola
 			_options = _type.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
 
 			_InternalWork();
-			_InvokeOnParsedMethod(); // TODO: Invoke only with an option in ContextOptionsAttribute?
+			if (_options.InvokeMethods)
+			{
+				_InvokeOnParsedMethod();
+			}
 
 			return (T)_context;
 		}

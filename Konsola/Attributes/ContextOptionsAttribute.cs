@@ -13,11 +13,8 @@ namespace Konsola.Attributes
 		{
 		}
 
-		public ContextOptionsAttribute(bool exitOnException)
-		{
-			ExitOnException = exitOnException;
-		}
+		public bool ExitOnException { get; set; }
 
-		public bool ExitOnException { get; private set; }
+		public bool InvokeMethods { get; set; }
 	}
 }
