@@ -52,16 +52,12 @@ namespace Konsola
 
 		private void _InternalWork()
 		{
-			var tokens = _ParseTokens(_args);
-
-#if !DEBUG
 			try
 			{
-#endif
-			_Parse(tokens, 0, _context);
-#if !DEBUG
+				var tokens = _ParseTokens(_args);
+				_ProcessTokens(tokens, 0, _context);
 			}
-			catch (ParsingException ex)
+			catch (CommandLineException ex)
 			{
 				if (!_options.ExitOnException)
 				{
@@ -71,7 +67,6 @@ namespace Konsola
 				Console.WriteLine(ex.Message);
 				Environment.Exit(1);
 			}
-#endif
 		}
 
 		private Token[] _ParseTokens(string[] args)
@@ -120,7 +115,7 @@ namespace Konsola
 			return list.ToArray();
 		}
 
-		private void _Parse(Token[] tokens, int offset, ContextBase context)
+		private void _ProcessTokens(Token[] tokens, int offset, ContextBase context)
 		{
 			var type = context == _context ? _type : context.GetType();
 
@@ -140,13 +135,24 @@ namespace Konsola
 
 				var newContext = commandContext.Type.CreateInstance<ContextBase>();
 				context.InnerContext = newContext;
-				_Parse(tokens, offset, newContext);
+				_ProcessTokens(tokens, offset, newContext);
 				return;
 			}
-
 			// We are at the end of the contexts.
+
 			var propContexts = type.GetPropertyContexts().ToArray();
 
+			_InitializePropertyAttributes(propContexts);
+
+			// Bind the context.
+			_BindContext(tokens, offset, context, propContexts);
+
+			// Check for mandatory params that have not been set.
+			_EnsureMandatoriesSet(propContexts);
+		}
+
+		private void _InitializePropertyAttributes(PropertyContext[] propContexts)
+		{
 			foreach (var propc in propContexts)
 			{
 				var att = propc.Attribute;
@@ -185,17 +191,8 @@ namespace Konsola
 				}
 				else
 				{
-					throw new ContextException("Invalid type in a KParameter property.");
+					throw new ContextException("Invalid type in a context property.");
 				}
-			}
-
-			_BindContext(tokens, offset, context, propContexts);
-
-			// Check for mandatory params that have not been set.
-			var unset = propContexts.FirstOrDefault(pc => pc.Attribute.IsMandatory && !pc.Attribute.IsSet);
-			if (!unset.IsEmpty)
-			{
-				throw new CommandLineException(CommandLineExceptionKind.MissingParameter, unset.Attribute.InternalParameters[0]);
 			}
 		}
 
@@ -258,6 +255,23 @@ namespace Konsola
 					}
 				}
 				propContext.Attribute.IsSet = true;
+			}
+		}
+
+		private static void _EnsureMandatoriesSet(PropertyContext[] propContexts)
+		{
+			var unset = default(PropertyContext);
+			for (int i = 0; i < propContexts.Length; i++)
+			{
+				if (propContexts[i].Attribute.IsMandatory && !propContexts[i].Attribute.IsSet)
+				{
+					unset = propContexts[i];
+					break;
+				}
+			}
+			if (!unset.IsEmpty)
+			{
+				throw new CommandLineException(CommandLineExceptionKind.MissingParameter, unset.Attribute.InternalParameters[0]);
 			}
 		}
 
