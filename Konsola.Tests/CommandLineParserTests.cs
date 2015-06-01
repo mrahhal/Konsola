@@ -50,6 +50,19 @@ namespace Konsola.Tests
 			Assert.True(((Context.RestoreContext)context.InnerContext).Another == true);
 		}
 
+		[Fact(DisplayName="Parsing with invalid int value throws")]
+		public void ParsingWithInvalidIntValueThrows()
+		{
+			var args = "-int some".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+				{
+					CommandLineParser.Parse<Context>(args);
+				});
+
+			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidValue);
+		}
+
 		[Fact(DisplayName = "Parsing invalid command throws")]
 		public void ParsingInvalidCommandThrows()
 		{
@@ -165,6 +178,19 @@ namespace Konsola.Tests
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.MissingValue && ex.Name == "-my");
 		}
+
+		[Fact(DisplayName = "Parsing string array")]
+		public void ParsingStringArray()
+		{
+			var args = "-sa some1,some2 -int 3".SplitCommandLineArgs();
+
+			var context = CommandLineParser.Parse<Context>(args);
+
+			Assert.True(context.StringArray != null);
+			Assert.True(context.StringArray.Length == 2);
+			Assert.True(context.StringArray[0] == "some1");
+			Assert.True(context.StringArray[1] == "some2");
+		}
 	}
 
 	public enum Platform
@@ -192,6 +218,9 @@ namespace Konsola.Tests
 
 		[Parameter("s1,s2")]
 		public string SomeString2 { get; set; }
+
+		[Parameter("sa")]
+		public string[] StringArray { get; set; }
 
 		[Parameter("int", IsMandatory = true)]
 		public int SomeInt { get; set; }

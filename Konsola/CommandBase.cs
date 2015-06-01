@@ -7,10 +7,9 @@ using System;
 namespace Konsola
 {
 	/// <summary>
-	/// Represents a context.
+	/// Represents a command context.
 	/// </summary>
-	public abstract class ContextBase
+	public abstract class CommandBase : ContextBase
 	{
-		public ContextBase InnerContext { get; internal set; }
 	}
 }

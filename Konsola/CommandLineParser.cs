@@ -12,11 +12,15 @@ using Konsola.Internal;
 
 namespace Konsola
 {
+	/// <summary>
+	/// A dynamic command line parser.
+	/// </summary>
 	public class CommandLineParser
 	{
-		private readonly object _boxedTrue = (object)true;
+		private readonly object _trueBox = (object)true;
 
 		private Type _typeOfString = typeof(string);
+		private Type _typeOfStringArray = typeof(string[]);
 		private Type _typeOfInt = typeof(int);
 		private Type _typeOfBool = typeof(bool);
 
@@ -31,6 +35,10 @@ namespace Konsola
 			_args = args;
 		}
 
+		/// <summary>
+		/// Parses the provided args into a new context instance of <typeparamref name="T"/>.
+		/// </summary>
+		/// <returns>The new context containing the parsed options.</returns>
 		public static T Parse<T>(string[] args)
 			where T : ContextBase, new()
 		{
@@ -107,7 +115,9 @@ namespace Konsola
 					if (i != 0)
 					{
 						if (list[j - 1].Kind != TokenKind.Command)
+						{
 							throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
+						}
 					}
 
 					list.Add(new Token(arg, true));
@@ -191,6 +201,10 @@ namespace Konsola
 					}
 					att.ValidValues = sb.ToString().Split(',');
 				}
+				else if (propType == _typeOfStringArray)
+				{
+					att.Kind = ParameterKind.StringArray;
+				}
 				else
 				{
 					throw new ContextException("Invalid type in a context property.");
@@ -211,47 +225,64 @@ namespace Konsola
 
 				if (token.Kind == TokenKind.Partial)
 				{
-					propContext.Property.SetValue(context, _boxedTrue, null);
+					propContext.Property.SetValue(context, _trueBox, null);
 				}
 				else // TokenKind.Full
 				{
 					switch (propContext.Attribute.Kind)
 					{
 						case ParameterKind.String:
-							propContext.Property.SetValue(context, token.Value, null);
+							{
+								propContext.Property.SetValue(context, token.Value, null);
+							}
 							break;
 
 						case ParameterKind.Int:
-							int parsed;
-							if (!int.TryParse(token.Value, out parsed))
 							{
-								throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
+								int parsed;
+								if (!int.TryParse(token.Value, out parsed))
+								{
+									throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
+								}
+								propContext.Property.SetValue(context, parsed, null);
 							}
-							propContext.Property.SetValue(context, parsed, null);
 							break;
 
 						case ParameterKind.Enum:
-							var att = propContext.Attribute;
-							var value = token.Value;
-							if (!att.IsFlags)
 							{
-								if (value.Contains(',') || !att.ValidValues.Contains(value, StringComparer.InvariantCultureIgnoreCase))
-									throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
-								var e = Enum.Parse(propContext.Property.PropertyType, value, true);
-								propContext.Property.SetValue(context, e, null);
-							}
-							else
-							{
-								var values = value.Split(',');
-								int crux = 0;
-								foreach (var v in values)
+								var att = propContext.Attribute;
+								var value = token.Value;
+								if (!att.IsFlags)
 								{
-									if (!att.ValidValues.Contains(v, StringComparer.InvariantCultureIgnoreCase))
+									if (value.Contains(',') || !att.ValidValues.Contains(value, StringComparer.InvariantCultureIgnoreCase))
+									{
 										throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
-									var e = Enum.Parse(propContext.Property.PropertyType, v, true);
-									crux |= (int)e;
+									}
+									var e = Enum.Parse(propContext.Property.PropertyType, value, true);
+									propContext.Property.SetValue(context, e, null);
 								}
-								propContext.Property.SetValue(context, crux, null);
+								else
+								{
+									var values = value.Split(',');
+									int crux = 0;
+									foreach (var v in values)
+									{
+										if (!att.ValidValues.Contains(v, StringComparer.InvariantCultureIgnoreCase))
+										{
+											throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
+										}
+										var e = Enum.Parse(propContext.Property.PropertyType, v, true);
+										crux |= (int)e;
+									}
+									propContext.Property.SetValue(context, crux, null);
+								}
+							}
+							break;
+
+						case ParameterKind.StringArray:
+							{
+								var values = token.Value.Split(',');
+								propContext.Property.SetValue(context, values, null);
 							}
 							break;
 					}
@@ -286,7 +317,9 @@ namespace Konsola
 						 .FirstOrDefault();
 
 			if (onParsedMethod != null)
+			{
 				onParsedMethod.Invoke(_context, null);
+			}
 		}
 	}
 }
