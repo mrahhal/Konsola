@@ -32,9 +32,9 @@ namespace Konsola
 		}
 
 		public static T Parse<T>(string[] args)
-			where T : ContextBase
+			where T : ContextBase, new()
 		{
-			var context = typeof(T).CreateInstance<ContextBase>();
+			var context = new T();
 			return new CommandLineParser(context, args)._InternalParse<T>();
 		}
 
