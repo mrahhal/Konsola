@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CommandAttribute.cs" />
+    <Compile Include="Attributes\IncludeCommandsAttribute.cs" />
     <Compile Include="CommandBase.cs" />
     <Compile Include="Internal\CommandContext.cs" />
     <Compile Include="ContextBase.cs" />

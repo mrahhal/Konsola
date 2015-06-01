@@ -9,6 +9,8 @@ namespace Konsola.Internal
 {
 	internal struct CommandContext
 	{
+		public static readonly CommandContext Empty = new CommandContext();
+
 		private Type _type;
 		private CommandAttribute _attribute;
 

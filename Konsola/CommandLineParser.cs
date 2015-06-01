@@ -136,9 +136,7 @@ namespace Konsola
 			if (firstToken.Kind == TokenKind.Command)
 			{
 				++offset;
-				var commandContext = type
-					.GetCommandContexts(firstToken.Param)
-					.FirstOrDefault();
+				var commandContext = type.GetCommandContextOrDefault(firstToken.Param);
 
 				if (commandContext.IsEmpty)
 				{

@@ -22,12 +22,19 @@ namespace Konsola.Internal
 				.Where(propc => propc.Attribute != null);
 		}
 
-		public static IEnumerable<CommandContext> GetCommandContexts(this Type @this, string commandName)
+		public static CommandContext GetCommandContextOrDefault(this Type @this, string commandName)
 		{
-			return @this
-				.GetNestedTypes(BindingFlags.DeclaredOnly | BindingFlags.Public)
+			var includeCommandsAttribute = @this.GetCustomAttribute<IncludeCommandsAttribute>();
+			if (includeCommandsAttribute == null)
+			{
+				return CommandContext.Empty;
+			}
+
+			return includeCommandsAttribute
+				.CommandTypes
 				.Select(t => new CommandContext(t, t.GetCustomAttribute<CommandAttribute>()))
-				.Where(cc => cc.Attribute != null && cc.Attribute.Name == commandName);
+				.Where(cc => cc.Attribute != null && cc.Attribute.Name == commandName)
+				.FirstOrDefault();
 		}
 
 		public static T CreateInstance<T>(this Type @this)

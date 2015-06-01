@@ -47,8 +47,8 @@ namespace Konsola.Tests
 			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext != null);
-			Assert.True(context.InnerContext is Context.RestoreCommand);
-			Assert.True(((Context.RestoreCommand)context.InnerContext).Another == true);
+			Assert.True(context.InnerContext is RestoreCommand);
+			Assert.True(((RestoreCommand)context.InnerContext).Another == true);
 		}
 
 		[Fact(DisplayName="Parsing with invalid int value throws")]
@@ -128,8 +128,8 @@ namespace Konsola.Tests
 			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext != null);
-			Assert.True(context.InnerContext is Context.RestoreCommand);
-			Assert.True(((Context.RestoreCommand)context.InnerContext).Plaform == Platform.Linux);
+			Assert.True(context.InnerContext is RestoreCommand);
+			Assert.True(((RestoreCommand)context.InnerContext).Plaform == Platform.Linux);
 		}
 
 		[Fact(DisplayName = "Parsing invalid flags enum value throws")]
@@ -203,6 +203,18 @@ namespace Konsola.Tests
 					CommandLineParser.Parse<ContextWithInvalidCharsForParams>(args);
 				});
 		}
+
+		[Fact(DisplayName = "Parsing nested command")]
+		public void ParsingNestedCommand()
+		{
+			var args = "restore restore-sub --some".SplitCommandLineArgs();
+
+			var context = CommandLineParser.Parse<Context>(args);
+
+			Assert.True(context.InnerContext is RestoreCommand);
+			Assert.True(context.InnerContext.InnerContext is RestoreSubCommand);
+			Assert.True((context.InnerContext.InnerContext as RestoreSubCommand).Some == true);
+		}
 	}
 
 	public enum Platform
@@ -223,6 +235,7 @@ namespace Konsola.Tests
 	}
 
 	[ContextOptions]
+	[IncludeCommands(typeof(RestoreCommand))]
 	public class Context : ContextBase
 	{
 		[Parameter("my")]
@@ -248,16 +261,24 @@ namespace Konsola.Tests
 
 		[Parameter("fp")]
 		public FlagsPlatform FlagsPlatform { get; set; }
+	}
 
-		[Command("restore")]
-		public class RestoreCommand : CommandBase
-		{
-			[Parameter("an")]
-			public bool Another { get; set; }
+	[Command("restore")]
+	[IncludeCommands(typeof(RestoreSubCommand))]
+	public class RestoreCommand : CommandBase
+	{
+		[Parameter("an")]
+		public bool Another { get; set; }
 
-			[Parameter("p")]
-			public Platform Plaform { get; set; }
-		}
+		[Parameter("p")]
+		public Platform Plaform { get; set; }
+	}
+
+	[Command("restore-sub")]
+	public class RestoreSubCommand : CommandBase
+	{
+		[Parameter("some")]
+		public bool Some { get; set; }
 	}
 
 	[ContextOptions]
