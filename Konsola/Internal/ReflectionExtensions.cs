@@ -17,7 +17,7 @@ namespace Konsola.Internal
 		public static IEnumerable<PropertyContext> GetPropertyContexts(this Type @this)
 		{
 			return @this
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Select(prop => new PropertyContext(prop, prop.GetCustomAttribute<ParameterAttribute>()))
 				.Where(propc => propc.Attribute != null);
 		}
