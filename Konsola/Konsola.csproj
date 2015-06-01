@@ -46,6 +46,8 @@
     <Compile Include="Attributes\DefaultCommandAttribute.cs" />
     <Compile Include="Attributes\IncludeCommandsAttribute.cs" />
     <Compile Include="CommandBase.cs" />
+    <Compile Include="Console.cs" />
+    <Compile Include="IConsole.cs" />
     <Compile Include="Internal\CommandContext.cs" />
     <Compile Include="ContextBase.cs" />
     <Compile Include="Internal\PropertyContext.cs" />

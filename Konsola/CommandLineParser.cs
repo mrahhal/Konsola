@@ -25,13 +25,15 @@ namespace Konsola
 		private Type _typeOfBool = typeof(bool);
 
 		private ContextBase _context;
+		private IConsole _console;
 		private string[] _args;
 		private Type _contextType;
 		private ContextOptionsAttribute _options;
 
-		private CommandLineParser(ContextBase context, string[] args)
+		private CommandLineParser(ContextBase context, IConsole console, string[] args)
 		{
 			_context = context;
+			_console = console;
 			_args = args;
 		}
 
@@ -45,11 +47,26 @@ namespace Konsola
 		public static T Parse<T>(string[] args)
 			where T : ContextBase, new()
 		{
+			return Parse<T>(args, null);
+		}
+
+		/// <summary>
+		/// Parses the provided args into a new context instance of <typeparamref name="T"/>.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="args"/> is null.</exception>
+		/// <exception cref="ContextException">The context is invalid.</exception>
+		/// <exception cref="CommandLineException">The args did not correctly match the expectations of the context.</exception>
+		/// <returns>The new context containing the parsed options.</returns>
+		public static T Parse<T>(string[] args, IConsole console)
+			where T : ContextBase, new()
+		{
 			if (args == null)
 				throw new ArgumentNullException("args");
+			if (console == null)
+				console = new Console();
 
 			var context = new T();
-			return new CommandLineParser(context, args)._InternalParse<T>();
+			return new CommandLineParser(context, console, args)._InternalParse<T>();
 		}
 
 		private T _InternalParse<T>()
@@ -78,7 +95,7 @@ namespace Konsola
 			{
 				if (_options.ExitOnException)
 				{
-					Console.WriteLine(ex.Message);
+					_console.WriteErrorLine(ex.Message);
 					Environment.Exit(1);
 				}
 
