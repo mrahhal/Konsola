@@ -27,13 +27,14 @@ namespace Konsola.Tests
 		[Fact(DisplayName= "Parsing basic")]
 		public void BasicParsing()
 		{
-			var args = "-my some -s2 something -int 3 --sw".SplitCommandLineArgs();
+			var args = "-my some -s2 something -int 3 --sw -set-something hello".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext == null);
 			Assert.True(context.SomeString == "some");
 			Assert.True(context.SomeString2 == "something");
+			Assert.True(context.SomeString3 == "hello");
 			Assert.True(context.SomeInt == 3);
 			Assert.True(context.SomeBool == true);
 		}
@@ -46,8 +47,8 @@ namespace Konsola.Tests
 			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext != null);
-			Assert.True(context.InnerContext is Context.RestoreContext);
-			Assert.True(((Context.RestoreContext)context.InnerContext).Another == true);
+			Assert.True(context.InnerContext is Context.RestoreCommand);
+			Assert.True(((Context.RestoreCommand)context.InnerContext).Another == true);
 		}
 
 		[Fact(DisplayName="Parsing with invalid int value throws")]
@@ -127,8 +128,8 @@ namespace Konsola.Tests
 			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.True(context.InnerContext != null);
-			Assert.True(context.InnerContext is Context.RestoreContext);
-			Assert.True(((Context.RestoreContext)context.InnerContext).Plaform == Platform.Linux);
+			Assert.True(context.InnerContext is Context.RestoreCommand);
+			Assert.True(((Context.RestoreCommand)context.InnerContext).Plaform == Platform.Linux);
 		}
 
 		[Fact(DisplayName = "Parsing invalid flags enum value throws")]
@@ -191,6 +192,17 @@ namespace Konsola.Tests
 			Assert.True(context.StringArray[0] == "some1");
 			Assert.True(context.StringArray[1] == "some2");
 		}
+
+		[Fact(DisplayName = "Parsing with context with invalid chars for params throws")]
+		public void ParsingWithContextWithInvalidCharsForParamsThrows()
+		{
+			var args = "-int 3".SplitCommandLineArgs();
+
+			Assert.Throws<ContextException>(() =>
+				{
+					CommandLineParser.Parse<ContextWithInvalidCharsForParams>(args);
+				});
+		}
 	}
 
 	public enum Platform
@@ -219,6 +231,9 @@ namespace Konsola.Tests
 		[Parameter("s1,s2")]
 		public string SomeString2 { get; set; }
 
+		[Parameter("set-something,s-s")]
+		public string SomeString3 { get; set; }
+
 		[Parameter("sa")]
 		public string[] StringArray { get; set; }
 
@@ -235,7 +250,7 @@ namespace Konsola.Tests
 		public FlagsPlatform FlagsPlatform { get; set; }
 
 		[Command("restore")]
-		public class RestoreContext : CommandBase
+		public class RestoreCommand : CommandBase
 		{
 			[Parameter("an")]
 			public bool Another { get; set; }
@@ -249,6 +264,12 @@ namespace Konsola.Tests
 	public class FaultyContext : ContextBase
 	{
 		[Parameter("my not")]
+		public string SomeString { get; set; }
+	}
+
+	public class ContextWithInvalidCharsForParams : ContextBase
+	{
+		[Parameter("my,-some")]
 		public string SomeString { get; set; }
 	}
 
