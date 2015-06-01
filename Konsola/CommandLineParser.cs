@@ -38,10 +38,16 @@ namespace Konsola
 		/// <summary>
 		/// Parses the provided args into a new context instance of <typeparamref name="T"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="args"/> is null.</exception>
+		/// <exception cref="ContextException">The context is invalid.</exception>
+		/// <exception cref="CommandLineException">The args did not correctly match the expectations of the context.</exception>
 		/// <returns>The new context containing the parsed options.</returns>
 		public static T Parse<T>(string[] args)
 			where T : ContextBase, new()
 		{
+			if (args == null)
+				throw new ArgumentNullException("args");
+
 			var context = new T();
 			return new CommandLineParser(context, args)._InternalParse<T>();
 		}
@@ -70,13 +76,13 @@ namespace Konsola
 			}
 			catch (CommandLineException ex)
 			{
-				if (!_options.ExitOnException)
+				if (_options.ExitOnException)
 				{
-					throw;
+					Console.WriteLine(ex.Message);
+					Environment.Exit(1);
 				}
 
-				Console.WriteLine(ex.Message);
-				Environment.Exit(1);
+				throw;
 			}
 		}
 
@@ -139,7 +145,7 @@ namespace Konsola
 				{
 					// No command has been specified on the command line
 					// and no default command has been registered.
-					// TODO:
+					// TODO: Print usage instead?
 					throw new CommandLineException(CommandLineExceptionKind.NoCommand, "");
 				}
 				commandType = defaultCommandAttribute.DefaultCommand;
@@ -151,7 +157,7 @@ namespace Konsola
 			var propContexts = commandType.GetPropertyContexts().ToArray();
 			_InitializePropertyAttributes(propContexts);
 
-			// Bind the context.
+			// Bind the command.
 			_BindCommandOptions(tokens, offset, command, propContexts);
 
 			// Check for mandatory params that have not been set.

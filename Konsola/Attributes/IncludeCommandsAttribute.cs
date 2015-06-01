@@ -8,10 +8,12 @@ using Konsola.Internal;
 
 namespace Konsola.Attributes
 {
+	/// <summary>
+	/// Specifies all the commands that are associated to the decorated context.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 	public sealed class IncludeCommandsAttribute : Attribute
 	{
-
 		public IncludeCommandsAttribute(params Type[] commands)
 		{
 			if (commands == null || commands.Length == 0)

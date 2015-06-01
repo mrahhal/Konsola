@@ -7,6 +7,10 @@ using Konsola.Internal;
 
 namespace Konsola.Attributes
 {
+	/// <summary>
+	/// Specifies the default command to be invoked when the args do not specify
+	/// a command.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 	public sealed class DefaultCommandAttribute : Attribute
 	{
@@ -17,7 +21,7 @@ namespace Konsola.Attributes
 			DefaultCommand = defaultCommand;
 		}
 
-		public Type DefaultCommand
+		internal Type DefaultCommand
 		{
 			get { return _defaultCommand; }
 			set

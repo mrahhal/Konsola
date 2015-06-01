@@ -219,6 +219,19 @@ namespace Konsola.Tests
 			Assert.True(command != null);
 			Assert.True(command.Some == true);
 		}
+
+		[Fact(DisplayName = "Parsing incorrect nested command throws")]
+		public void ParsingIncorrectNestedCommandThrows()
+		{
+			var args = "restore --an restore-sub --some".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+				{
+					CommandLineParser.Parse<Context>(args);
+				});
+
+			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidParameter);
+		}
 	}
 
 	public enum Platform
@@ -317,12 +330,12 @@ namespace Konsola.Tests
 		}
 	}
 
-	[DefaultCommand(typeof(ContextWihtInvalidCharsForParamDefaultCommand))]
+	[DefaultCommand(typeof(ContextWithInvalidCharsForParamDefaultCommand))]
 	public class ContextWithInvalidCharsForParams : ContextBase
 	{
 	}
 
-	public class ContextWihtInvalidCharsForParamDefaultCommand : CommandBase<ContextWithInvalidCharsForParams>
+	public class ContextWithInvalidCharsForParamDefaultCommand : CommandBase<ContextWithInvalidCharsForParams>
 	{
 		[Parameter("my,-some")]
 		public string SomeString { get; set; }

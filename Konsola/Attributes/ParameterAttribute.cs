@@ -8,6 +8,9 @@ using Konsola.Internal;
 
 namespace Konsola.Attributes
 {
+	/// <summary>
+	/// Decorates a property of a command class and makes it a binding target for args.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
 	public sealed class ParameterAttribute : Attribute
 	{
@@ -19,6 +22,9 @@ namespace Konsola.Attributes
 			_Validate();
 		}
 
+		/// <summary>
+		/// Gets or sets whether the decorated property is mandatory.
+		/// </summary>
 		public bool IsMandatory { get; set; }
 
 		#region Internal
