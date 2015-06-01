@@ -31,7 +31,7 @@ namespace Konsola.Internal
 			}
 
 			return includeCommandsAttribute
-				.CommandTypes
+				.Commands
 				.Select(t => new CommandContext(t, t.GetCustomAttribute<CommandAttribute>()))
 				.Where(cc => cc.Attribute != null && cc.Attribute.Name == commandName)
 				.FirstOrDefault();
@@ -60,6 +60,11 @@ namespace Konsola.Internal
 		public static T GetCustomAttribute<T>(this ParameterInfo @this) where T : Attribute
 		{
 			return (T)Attribute.GetCustomAttribute(@this, typeof(T));
+		}
+
+		public static bool IsCommandType(this Type @this)
+		{
+			return typeof(CommandBase).IsAssignableFrom(@this);
 		}
 	}
 }

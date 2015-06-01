@@ -14,6 +14,11 @@ namespace Konsola
 		InvalidCommand,
 
 		/// <summary>
+		/// No command has been specified.
+		/// </summary>
+		NoCommand,
+
+		/// <summary>
 		/// A mandatory parameter is missing.
 		/// </summary>
 		MissingParameter,
@@ -69,6 +74,10 @@ namespace Konsola
 			{
 				case CommandLineExceptionKind.InvalidCommand:
 					Message = "Invalid command: ";
+					break;
+
+				case CommandLineExceptionKind.NoCommand:
+					Message = "No command has been specified";
 					break;
 
 				case CommandLineExceptionKind.MissingParameter:

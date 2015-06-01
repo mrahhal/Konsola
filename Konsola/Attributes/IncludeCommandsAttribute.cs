@@ -4,26 +4,28 @@
 
 using System;
 using System.Linq;
+using Konsola.Internal;
 
 namespace Konsola.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 	public sealed class IncludeCommandsAttribute : Attribute
 	{
-		public IncludeCommandsAttribute(params Type[] commandTypes)
+
+		public IncludeCommandsAttribute(params Type[] commands)
 		{
-			if (commandTypes == null || commandTypes.Length == 0)
+			if (commands == null || commands.Length == 0)
 			{
 				throw new ContextException("Must contain command types.");
 			}
-			if (commandTypes.Any(ct => !typeof(CommandBase).IsAssignableFrom(ct)))
+			if (commands.Any(ct => !ct.IsCommandType()))
 			{
 				throw new ContextException("Commands must extend CommandBase.");
 			}
 
-			CommandTypes = commandTypes;
+			Commands = commands;
 		}
 
-		internal Type[] CommandTypes { get; set; }
+		internal Type[] Commands { get; set; }
 	}
 }

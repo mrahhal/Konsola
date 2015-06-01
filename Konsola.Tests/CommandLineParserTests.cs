@@ -30,13 +30,14 @@ namespace Konsola.Tests
 			var args = "-my some -s2 something -int 3 --sw -set-something hello".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as DefaultCommand;
 
-			Assert.True(context.InnerContext == null);
-			Assert.True(context.SomeString == "some");
-			Assert.True(context.SomeString2 == "something");
-			Assert.True(context.SomeString3 == "hello");
-			Assert.True(context.SomeInt == 3);
-			Assert.True(context.SomeBool == true);
+			Assert.True(command != null);
+			Assert.True(command.SomeString == "some");
+			Assert.True(command.SomeString2 == "something");
+			Assert.True(command.SomeString3 == "hello");
+			Assert.True(command.SomeInt == 3);
+			Assert.True(command.SomeBool == true);
 		}
 
 		[Fact(DisplayName = "Parsing command")]
@@ -45,10 +46,10 @@ namespace Konsola.Tests
 			var args = "restore --an".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as RestoreCommand;
 
-			Assert.True(context.InnerContext != null);
-			Assert.True(context.InnerContext is RestoreCommand);
-			Assert.True(((RestoreCommand)context.InnerContext).Another == true);
+			Assert.True(command != null);
+			Assert.True(command.Another == true);
 		}
 
 		[Fact(DisplayName="Parsing with invalid int value throws")]
@@ -83,8 +84,9 @@ namespace Konsola.Tests
 			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as DefaultCommand;
 
-			Assert.True(context.Platform == Platform.Windows);
+			Assert.True(command.Platform == Platform.Windows);
 		}
 
 		[Fact(DisplayName = "Parsing invalid enum value throws")]
@@ -115,9 +117,10 @@ namespace Konsola.Tests
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as DefaultCommand;
 
-			Assert.True((context.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
-				&& (context.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
+			Assert.True((command.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
+				&& (command.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
 		}
 
 		[Fact(DisplayName = "Parsing enum inside command")]
@@ -126,10 +129,10 @@ namespace Konsola.Tests
 			var args = "restore -p linux".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as RestoreCommand;
 
-			Assert.True(context.InnerContext != null);
-			Assert.True(context.InnerContext is RestoreCommand);
-			Assert.True(((RestoreCommand)context.InnerContext).Plaform == Platform.Linux);
+			Assert.True(command != null);
+			Assert.True(command.Plaform == Platform.Linux);
 		}
 
 		[Fact(DisplayName = "Parsing invalid flags enum value throws")]
@@ -186,11 +189,12 @@ namespace Konsola.Tests
 			var args = "-sa some1,some2 -int 3".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as DefaultCommand;
 
-			Assert.True(context.StringArray != null);
-			Assert.True(context.StringArray.Length == 2);
-			Assert.True(context.StringArray[0] == "some1");
-			Assert.True(context.StringArray[1] == "some2");
+			Assert.True(command.StringArray != null);
+			Assert.True(command.StringArray.Length == 2);
+			Assert.True(command.StringArray[0] == "some1");
+			Assert.True(command.StringArray[1] == "some2");
 		}
 
 		[Fact(DisplayName = "Parsing with context with invalid chars for params throws")]
@@ -210,10 +214,10 @@ namespace Konsola.Tests
 			var args = "restore restore-sub --some".SplitCommandLineArgs();
 
 			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as RestoreSubCommand;
 
-			Assert.True(context.InnerContext is RestoreCommand);
-			Assert.True(context.InnerContext.InnerContext is RestoreSubCommand);
-			Assert.True((context.InnerContext.InnerContext as RestoreSubCommand).Some == true);
+			Assert.True(command != null);
+			Assert.True(command.Some == true);
 		}
 	}
 
@@ -236,7 +240,12 @@ namespace Konsola.Tests
 
 	[ContextOptions]
 	[IncludeCommands(typeof(RestoreCommand))]
+	[DefaultCommand(typeof(DefaultCommand))]
 	public class Context : ContextBase
+	{
+	}
+
+	public class DefaultCommand : CommandBase<Context>
 	{
 		[Parameter("my")]
 		public string SomeString { get; set; }
@@ -261,37 +270,66 @@ namespace Konsola.Tests
 
 		[Parameter("fp")]
 		public FlagsPlatform FlagsPlatform { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
 	}
 
 	[Command("restore")]
 	[IncludeCommands(typeof(RestoreSubCommand))]
-	public class RestoreCommand : CommandBase
+	public class RestoreCommand : CommandBase<Context>
 	{
 		[Parameter("an")]
 		public bool Another { get; set; }
 
 		[Parameter("p")]
 		public Platform Plaform { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
 	}
 
 	[Command("restore-sub")]
-	public class RestoreSubCommand : CommandBase
+	public class RestoreSubCommand : CommandBase<Context>
 	{
 		[Parameter("some")]
 		public bool Some { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
 	}
 
-	[ContextOptions]
+	[DefaultCommand(typeof(FaultyContextDefaultCommand))]
 	public class FaultyContext : ContextBase
+	{
+	}
+
+	public class FaultyContextDefaultCommand : CommandBase<FaultyContext>
 	{
 		[Parameter("my not")]
 		public string SomeString { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
 	}
 
+	[DefaultCommand(typeof(ContextWihtInvalidCharsForParamDefaultCommand))]
 	public class ContextWithInvalidCharsForParams : ContextBase
+	{
+	}
+
+	public class ContextWihtInvalidCharsForParamDefaultCommand : CommandBase<ContextWithInvalidCharsForParams>
 	{
 		[Parameter("my,-some")]
 		public string SomeString { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
 	}
 
 	public static partial class Mixin

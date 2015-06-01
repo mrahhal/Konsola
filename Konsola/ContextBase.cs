@@ -3,14 +3,23 @@
 //------------------------------------------------------------------------------
 
 using System;
+using Konsola.Attributes;
 
 namespace Konsola
 {
 	/// <summary>
-	/// Represents a context.
+	/// Represents a parsed context.
 	/// </summary>
 	public abstract class ContextBase
 	{
-		public ContextBase InnerContext { get; internal set; }
+		/// <summary>
+		/// Gets the command.
+		/// </summary>
+		public CommandBase Command { get; internal set; }
+
+		/// <summary>
+		/// Gets the options.
+		/// </summary>
+		public ContextOptionsAttribute Options { get; set; }
 	}
 }

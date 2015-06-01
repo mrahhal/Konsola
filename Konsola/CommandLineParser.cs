@@ -26,7 +26,7 @@ namespace Konsola
 
 		private ContextBase _context;
 		private string[] _args;
-		private Type _type;
+		private Type _contextType;
 		private ContextOptionsAttribute _options;
 
 		private CommandLineParser(ContextBase context, string[] args)
@@ -49,8 +49,8 @@ namespace Konsola
 		private T _InternalParse<T>()
 			where T : ContextBase
 		{
-			_type = typeof(T);
-			_options = _type.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
+			_contextType = typeof(T);
+			_options = _contextType.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
 
 			_InternalWork();
 			if (_options.InvokeMethods)
@@ -130,35 +130,52 @@ namespace Konsola
 
 		private void _ProcessTokens(Token[] tokens, int offset, ContextBase context)
 		{
-			var type = context == _context ? _type : context.GetType();
-
-			var firstToken = tokens[offset];
-			if (firstToken.Kind == TokenKind.Command)
+			var commandType = _FindTargetCommandType(tokens, ref offset, _contextType);
+			if (commandType == null)
 			{
-				++offset;
-				var commandContext = type.GetCommandContextOrDefault(firstToken.Param);
-
-				if (commandContext.IsEmpty)
+				// Resolve the default command.
+				var defaultCommandAttribute = _contextType.GetCustomAttribute<DefaultCommandAttribute>();
+				if (defaultCommandAttribute == null)
 				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, firstToken.Param);
+					// No command has been specified on the command line
+					// and no default command has been registered.
+					// TODO:
+					throw new CommandLineException(CommandLineExceptionKind.NoCommand, "");
 				}
-
-				var newContext = commandContext.Type.CreateInstance<ContextBase>();
-				context.InnerContext = newContext;
-				_ProcessTokens(tokens, offset, newContext);
-				return;
+				commandType = defaultCommandAttribute.DefaultCommand;
 			}
-			// We are at the end of the contexts.
 
-			var propContexts = type.GetPropertyContexts().ToArray();
-
+			var command = commandType.CreateInstance<CommandBase>();
+			context.Command = command;
+			command.ContextBase = context;
+			var propContexts = commandType.GetPropertyContexts().ToArray();
 			_InitializePropertyAttributes(propContexts);
 
 			// Bind the context.
-			_BindContext(tokens, offset, context, propContexts);
+			_BindCommandOptions(tokens, offset, command, propContexts);
 
 			// Check for mandatory params that have not been set.
 			_EnsureMandatoriesSet(propContexts);
+		}
+
+		private Type _FindTargetCommandType(Token[] tokens, ref int offset, Type contextType, Type lastCommandType = null)
+		{
+			var type = lastCommandType ?? contextType;
+
+			var token = tokens[offset];
+			if (token.Kind != TokenKind.Command)
+			{
+				return null;
+			}
+
+			++offset;
+			var cc = type.GetCommandContextOrDefault(token.Param);
+			if (cc.IsEmpty)
+			{
+				throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, token.Param);
+			}
+
+			return _FindTargetCommandType(tokens, ref offset, contextType, cc.Type) ?? cc.Type;
 		}
 
 		private void _InitializePropertyAttributes(PropertyContext[] propContexts)
@@ -210,7 +227,7 @@ namespace Konsola
 			}
 		}
 
-		private void _BindContext(Token[] tokens, int offset, ContextBase context, PropertyContext[] propContexts)
+		private void _BindCommandOptions(Token[] tokens, int offset, CommandBase command, PropertyContext[] propContexts)
 		{
 			for (int i = offset; i < tokens.Length; i++)
 			{
@@ -223,7 +240,7 @@ namespace Konsola
 
 				if (token.Kind == TokenKind.Partial)
 				{
-					propContext.Property.SetValue(context, _trueBox, null);
+					propContext.Property.SetValue(command, _trueBox, null);
 				}
 				else // TokenKind.Full
 				{
@@ -231,7 +248,7 @@ namespace Konsola
 					{
 						case ParameterKind.String:
 							{
-								propContext.Property.SetValue(context, token.Value, null);
+								propContext.Property.SetValue(command, token.Value, null);
 							}
 							break;
 
@@ -242,7 +259,7 @@ namespace Konsola
 								{
 									throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 								}
-								propContext.Property.SetValue(context, parsed, null);
+								propContext.Property.SetValue(command, parsed, null);
 							}
 							break;
 
@@ -257,7 +274,7 @@ namespace Konsola
 										throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 									}
 									var e = Enum.Parse(propContext.Property.PropertyType, value, true);
-									propContext.Property.SetValue(context, e, null);
+									propContext.Property.SetValue(command, e, null);
 								}
 								else
 								{
@@ -272,7 +289,7 @@ namespace Konsola
 										var e = Enum.Parse(propContext.Property.PropertyType, v, true);
 										crux |= (int)e;
 									}
-									propContext.Property.SetValue(context, crux, null);
+									propContext.Property.SetValue(command, crux, null);
 								}
 							}
 							break;
@@ -280,7 +297,7 @@ namespace Konsola
 						case ParameterKind.StringArray:
 							{
 								var values = token.Value.Split(',');
-								propContext.Property.SetValue(context, values, null);
+								propContext.Property.SetValue(command, values, null);
 							}
 							break;
 					}
@@ -308,7 +325,7 @@ namespace Konsola
 
 		private void _InvokeOnParsedMethod()
 		{
-			var onParsedMethod = _type
+			var onParsedMethod = _contextType
 						 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 						 .Where(mi => mi.GetParameters().Length == 0)
 						 .Where(mi => mi.GetCustomAttribute<OnParsedAttribute>() != null)
