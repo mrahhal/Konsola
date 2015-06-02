@@ -12,6 +12,7 @@ namespace Konsola.Internal
 	{
 		private PropertyInfo _pi;
 		private ParameterAttribute _parameterAttribute;
+		private ConstraintBaseAttribute[] _constraints;
 
 		public ParameterContext(PropertyInfo pi)
 		{
@@ -22,11 +23,13 @@ namespace Konsola.Internal
 		private void _Initialize()
 		{
 			_parameterAttribute = _pi.GetCustomAttribute<ParameterAttribute>();
+			_constraints = _pi.GetCustomAttributes<ConstraintBaseAttribute>();
 		}
 
 		public PropertyInfo Property { get { return _pi; } }
 
 		public ParameterAttribute ParameterAttribute { get { return _parameterAttribute; } }
 
+		public ConstraintBaseAttribute[] ConstraintAttributes { get { return _constraints; } }
 	}
 }

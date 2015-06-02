@@ -37,6 +37,11 @@ namespace Konsola
 		/// A value is invalid.
 		/// </summary>
 		InvalidValue,
+
+		/// <summary>
+		/// A constraint has been violated.
+		/// </summary>
+		Constraint,
 	}
 
 	[Serializable]
@@ -56,9 +61,15 @@ namespace Konsola
 	public class CommandLineException : Exception
 	{
 		public CommandLineException(CommandLineExceptionKind kind, string name)
+			: this(kind, name, null)
+		{
+		}
+
+		public CommandLineException(CommandLineExceptionKind kind, string name, string message)
 		{
 			Kind = kind;
 			Name = name;
+			Message = message;
 			_Initialize();
 		}
 
@@ -70,6 +81,11 @@ namespace Konsola
 
 		private void _Initialize()
 		{
+			if (Message != null)
+			{
+				return;
+			}
+
 			switch (Kind)
 			{
 				case CommandLineExceptionKind.InvalidCommand:

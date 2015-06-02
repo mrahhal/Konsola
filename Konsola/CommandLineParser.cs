@@ -171,14 +171,14 @@ namespace Konsola
 			var command = commandType.CreateInstance<CommandBase>();
 			context.Command = command;
 			command.ContextBase = context;
-			var propContexts = commandType.GetPropertyContexts().ToArray();
-			_InitializePropertyAttributes(propContexts);
+			var parameterContexts = commandType.GetPropertyContexts().ToArray();
+			_InitializePropertyAttributes(parameterContexts);
 
 			// Bind the command.
-			_BindCommandOptions(tokens, offset, command, propContexts);
+			_BindCommandOptions(tokens, offset, command, parameterContexts);
 
 			// Check for mandatory params that have not been set.
-			_EnsureMandatoriesSet(propContexts);
+			_EnsureMandatoriesSet(parameterContexts);
 		}
 
 		private Type _FindTargetCommandType(Token[] tokens, ref int offset, Type contextType, Type lastCommandType = null)
@@ -201,12 +201,12 @@ namespace Konsola
 			return _FindTargetCommandType(tokens, ref offset, contextType, cc.Type) ?? cc.Type;
 		}
 
-		private void _InitializePropertyAttributes(ParameterContext[] propContexts)
+		private void _InitializePropertyAttributes(ParameterContext[] parameterContexts)
 		{
-			foreach (var propc in propContexts)
+			foreach (var pc in parameterContexts)
 			{
-				var att = propc.ParameterAttribute;
-				var prop = propc.Property;
+				var att = pc.ParameterAttribute;
+				var prop = pc.Property;
 				var propType = prop.PropertyType;
 
 				if (propType == _typeOfString)
@@ -250,28 +250,38 @@ namespace Konsola
 			}
 		}
 
-		private void _BindCommandOptions(Token[] tokens, int offset, CommandBase command, ParameterContext[] propContexts)
+		private void _BindCommandOptions(Token[] tokens, int offset, CommandBase command, ParameterContext[] parameterContexts)
 		{
 			for (int i = offset; i < tokens.Length; i++)
 			{
 				var token = tokens[i];
-				var propContext = propContexts.FirstOrDefault(pc => pc.ParameterAttribute.InternalParameters.Contains(token.Param));
-				if (propContext == null)
+				var parameterContext = parameterContexts.FirstOrDefault(pc => pc.ParameterAttribute.InternalParameters.Contains(token.Param));
+				if (parameterContext == null)
 				{
 					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, token.Param);
 				}
 
+				// Bind the values.
 				if (token.Kind == TokenKind.Partial)
 				{
-					propContext.Property.SetValue(command, _trueBox, null);
+					parameterContext.Property.SetValue(command, _trueBox, null);
 				}
 				else // TokenKind.Full
 				{
-					switch (propContext.ParameterAttribute.Kind)
+					// Validate the constraints.
+					foreach (var constraint in parameterContext.ConstraintAttributes)
+					{
+						if (!constraint.Validate(token.Value))
+						{
+							throw new CommandLineException(CommandLineExceptionKind.Constraint, token.Param, constraint.ErrorMessage);
+						}
+					}
+
+					switch (parameterContext.ParameterAttribute.Kind)
 					{
 						case ParameterKind.String:
 							{
-								propContext.Property.SetValue(command, token.Value, null);
+								parameterContext.Property.SetValue(command, token.Value, null);
 							}
 							break;
 
@@ -282,13 +292,13 @@ namespace Konsola
 								{
 									throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 								}
-								propContext.Property.SetValue(command, parsed, null);
+								parameterContext.Property.SetValue(command, parsed, null);
 							}
 							break;
 
 						case ParameterKind.Enum:
 							{
-								var att = propContext.ParameterAttribute;
+								var att = parameterContext.ParameterAttribute;
 								var value = token.Value;
 								if (!att.IsFlags)
 								{
@@ -296,8 +306,8 @@ namespace Konsola
 									{
 										throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 									}
-									var e = Enum.Parse(propContext.Property.PropertyType, value, true);
-									propContext.Property.SetValue(command, e, null);
+									var e = Enum.Parse(parameterContext.Property.PropertyType, value, true);
+									parameterContext.Property.SetValue(command, e, null);
 								}
 								else
 								{
@@ -309,10 +319,10 @@ namespace Konsola
 										{
 											throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 										}
-										var e = Enum.Parse(propContext.Property.PropertyType, v, true);
+										var e = Enum.Parse(parameterContext.Property.PropertyType, v, true);
 										crux |= (int)e;
 									}
-									propContext.Property.SetValue(command, crux, null);
+									parameterContext.Property.SetValue(command, crux, null);
 								}
 							}
 							break;
@@ -320,23 +330,23 @@ namespace Konsola
 						case ParameterKind.StringArray:
 							{
 								var values = token.Value.Split(',');
-								propContext.Property.SetValue(command, values, null);
+								parameterContext.Property.SetValue(command, values, null);
 							}
 							break;
 					}
 				}
-				propContext.ParameterAttribute.IsSet = true;
+				parameterContext.ParameterAttribute.IsSet = true;
 			}
 		}
 
-		private static void _EnsureMandatoriesSet(ParameterContext[] propContexts)
+		private static void _EnsureMandatoriesSet(ParameterContext[] parameterContexts)
 		{
 			var unset = default(ParameterContext);
-			for (int i = 0; i < propContexts.Length; i++)
+			for (int i = 0; i < parameterContexts.Length; i++)
 			{
-				if (propContexts[i].ParameterAttribute.IsMandatory && !propContexts[i].ParameterAttribute.IsSet)
+				if (parameterContexts[i].ParameterAttribute.IsMandatory && !parameterContexts[i].ParameterAttribute.IsSet)
 				{
-					unset = propContexts[i];
+					unset = parameterContexts[i];
 					break;
 				}
 			}
