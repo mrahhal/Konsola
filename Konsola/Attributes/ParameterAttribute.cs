@@ -15,6 +15,7 @@ namespace Konsola.Attributes
 	public sealed class ParameterAttribute : Attribute
 	{
 		internal const string InvalidCharacters = " /\\";
+		private ParameterKind _kind;
 
 		public ParameterAttribute(string parameters)
 		{
@@ -35,7 +36,18 @@ namespace Konsola.Attributes
 
 		internal bool IsSet { get; set; }
 
-		internal ParameterKind Kind { get; set; }
+		internal ParameterKind Kind
+		{
+			get { return _kind; }
+			set
+			{
+				_kind = value;
+				if (_kind == ParameterKind.Switch && IsMandatory)
+				{
+					throw new ContextException("Switch parameters don't make sense being mandatory.");
+				}
+			}
+		}
 
 		internal bool IsFlags { get; set; }
 

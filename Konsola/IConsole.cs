@@ -34,5 +34,6 @@ namespace Konsola
 
 		void WriteJustified(int startIndex, string value);
 		void WriteJustified(int startIndex, string value, int maxWidth);
+		void WriteJustified(ConsoleColor color, int startIndex, string value, int maxWidth);
 	}
 }
