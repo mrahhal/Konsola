@@ -54,7 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineParserTests.cs" />
+    <Compile Include="ConstraintTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="KUtilsTests.cs" />
+    <Compile Include="_Contexts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Konsola\Konsola.csproj">
