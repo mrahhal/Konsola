@@ -73,7 +73,7 @@ namespace Konsola
 			where T : ContextBase
 		{
 			_contextType = typeof(T);
-			_options = _contextType.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
+			_options = _context.Options = _contextType.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
 
 			_InternalWork();
 			if (_options.InvokeMethods)
