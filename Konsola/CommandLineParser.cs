@@ -93,10 +93,11 @@ namespace Konsola
 			}
 			catch (CommandLineException ex)
 			{
+				_console.WriteErrorLine(ex.Message);
+
 				if (_options.ExitOnException)
 				{
-					_console.WriteErrorLine(ex.Message);
-					Environment.Exit(1);
+					Environment.Exit(0);
 				}
 
 				throw;
