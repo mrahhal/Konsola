@@ -7,25 +7,20 @@ using Konsola.Attributes;
 
 namespace Konsola.Internal
 {
-	internal struct CommandContext
+	internal class CommandContext
 	{
-		public static readonly CommandContext Empty = new CommandContext();
-
 		private Type _type;
 		private CommandAttribute _attribute;
 
-		public CommandContext(Type type, CommandAttribute attribute)
+		public CommandContext(Type type)
 		{
 			_type = type;
-			_attribute = attribute;
+			_Initialize();
 		}
 
-		public bool IsEmpty
+		private void _Initialize()
 		{
-			get
-			{
-				return Type == null && Attribute == null;
-			}
+			_attribute = _type.GetCustomAttribute<CommandAttribute>();
 		}
 
 		public Type Type { get { return _type; } }

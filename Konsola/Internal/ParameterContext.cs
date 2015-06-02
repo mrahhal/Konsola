@@ -8,27 +8,25 @@ using Konsola.Attributes;
 
 namespace Konsola.Internal
 {
-	internal struct PropertyContext
+	internal class ParameterContext
 	{
 		private PropertyInfo _pi;
-		private ParameterAttribute _attribute;
+		private ParameterAttribute _parameterAttribute;
 
-		public PropertyContext(PropertyInfo pi, ParameterAttribute attribute)
+		public ParameterContext(PropertyInfo pi)
 		{
 			_pi = pi;
-			_attribute = attribute;
+			_Initialize();
 		}
 
-		public bool IsEmpty
+		private void _Initialize()
 		{
-			get
-			{
-				return Property == null && Attribute == null;
-			}
+			_parameterAttribute = _pi.GetCustomAttribute<ParameterAttribute>();
 		}
 
 		public PropertyInfo Property { get { return _pi; } }
 
-		public ParameterAttribute Attribute { get { return _attribute; } }
+		public ParameterAttribute ParameterAttribute { get { return _parameterAttribute; } }
+
 	}
 }

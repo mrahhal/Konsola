@@ -14,12 +14,12 @@ namespace Konsola.Internal
 	{
 		private const BindingFlags Declared = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
 
-		public static IEnumerable<PropertyContext> GetPropertyContexts(this Type @this)
+		public static IEnumerable<ParameterContext> GetPropertyContexts(this Type @this)
 		{
 			return @this
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Select(prop => new PropertyContext(prop, prop.GetCustomAttribute<ParameterAttribute>()))
-				.Where(propc => propc.Attribute != null);
+				.Select(prop => new ParameterContext(prop))
+				.Where(propc => propc.ParameterAttribute != null);
 		}
 
 		public static CommandContext GetCommandContextOrDefault(this Type @this, string commandName)
@@ -27,12 +27,12 @@ namespace Konsola.Internal
 			var includeCommandsAttribute = @this.GetCustomAttribute<IncludeCommandsAttribute>();
 			if (includeCommandsAttribute == null)
 			{
-				return CommandContext.Empty;
+				return null;
 			}
 
 			return includeCommandsAttribute
 				.Commands
-				.Select(t => new CommandContext(t, t.GetCustomAttribute<CommandAttribute>()))
+				.Select(t => new CommandContext(t))
 				.Where(cc => cc.Attribute != null && cc.Attribute.Name == commandName)
 				.FirstOrDefault();
 		}
@@ -55,6 +55,11 @@ namespace Konsola.Internal
 		public static T GetCustomAttribute<T>(this MemberInfo @this) where T : Attribute
 		{
 			return (T)Attribute.GetCustomAttribute(@this, typeof(T));
+		}
+
+		public static T[] GetCustomAttributes<T>(this MemberInfo @this) where T : Attribute
+		{
+			return Attribute.GetCustomAttributes(@this, typeof(T)).OfType<T>().ToArray();
 		}
 
 		public static T GetCustomAttribute<T>(this ParameterInfo @this) where T : Attribute

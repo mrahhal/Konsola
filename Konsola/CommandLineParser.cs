@@ -193,7 +193,7 @@ namespace Konsola
 
 			++offset;
 			var cc = type.GetCommandContextOrDefault(token.Param);
-			if (cc.IsEmpty)
+			if (cc == null)
 			{
 				throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, token.Param);
 			}
@@ -201,11 +201,11 @@ namespace Konsola
 			return _FindTargetCommandType(tokens, ref offset, contextType, cc.Type) ?? cc.Type;
 		}
 
-		private void _InitializePropertyAttributes(PropertyContext[] propContexts)
+		private void _InitializePropertyAttributes(ParameterContext[] propContexts)
 		{
 			foreach (var propc in propContexts)
 			{
-				var att = propc.Attribute;
+				var att = propc.ParameterAttribute;
 				var prop = propc.Property;
 				var propType = prop.PropertyType;
 
@@ -250,13 +250,13 @@ namespace Konsola
 			}
 		}
 
-		private void _BindCommandOptions(Token[] tokens, int offset, CommandBase command, PropertyContext[] propContexts)
+		private void _BindCommandOptions(Token[] tokens, int offset, CommandBase command, ParameterContext[] propContexts)
 		{
 			for (int i = offset; i < tokens.Length; i++)
 			{
 				var token = tokens[i];
-				var propContext = propContexts.FirstOrDefault(pc => pc.Attribute.InternalParameters.Contains(token.Param));
-				if (propContext.IsEmpty)
+				var propContext = propContexts.FirstOrDefault(pc => pc.ParameterAttribute.InternalParameters.Contains(token.Param));
+				if (propContext == null)
 				{
 					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, token.Param);
 				}
@@ -267,7 +267,7 @@ namespace Konsola
 				}
 				else // TokenKind.Full
 				{
-					switch (propContext.Attribute.Kind)
+					switch (propContext.ParameterAttribute.Kind)
 					{
 						case ParameterKind.String:
 							{
@@ -288,7 +288,7 @@ namespace Konsola
 
 						case ParameterKind.Enum:
 							{
-								var att = propContext.Attribute;
+								var att = propContext.ParameterAttribute;
 								var value = token.Value;
 								if (!att.IsFlags)
 								{
@@ -325,24 +325,24 @@ namespace Konsola
 							break;
 					}
 				}
-				propContext.Attribute.IsSet = true;
+				propContext.ParameterAttribute.IsSet = true;
 			}
 		}
 
-		private static void _EnsureMandatoriesSet(PropertyContext[] propContexts)
+		private static void _EnsureMandatoriesSet(ParameterContext[] propContexts)
 		{
-			var unset = default(PropertyContext);
+			var unset = default(ParameterContext);
 			for (int i = 0; i < propContexts.Length; i++)
 			{
-				if (propContexts[i].Attribute.IsMandatory && !propContexts[i].Attribute.IsSet)
+				if (propContexts[i].ParameterAttribute.IsMandatory && !propContexts[i].ParameterAttribute.IsSet)
 				{
 					unset = propContexts[i];
 					break;
 				}
 			}
-			if (!unset.IsEmpty)
+			if (unset != null)
 			{
-				throw new CommandLineException(CommandLineExceptionKind.MissingParameter, unset.Attribute.InternalParameters[0]);
+				throw new CommandLineException(CommandLineExceptionKind.MissingParameter, unset.ParameterAttribute.InternalParameters[0]);
 			}
 		}
 
