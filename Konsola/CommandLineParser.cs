@@ -268,19 +268,23 @@ namespace Konsola
 				}
 				else // TokenKind.Full
 				{
-					// Validate the constraints.
-					foreach (var constraint in parameterContext.ConstraintAttributes)
+					Action<object> validateConstraints = (value) =>
 					{
-						if (!constraint.Validate(token.Value))
+						// Validate the constraints.
+						foreach (var constraint in parameterContext.ConstraintAttributes)
 						{
-							throw new CommandLineException(CommandLineExceptionKind.Constraint, token.Param, constraint.ErrorMessage);
+							if (!constraint.Validate(value))
+							{
+								throw new CommandLineException(CommandLineExceptionKind.Constraint, token.Param, constraint.ErrorMessage);
+							}
 						}
-					}
+					};
 
 					switch (parameterContext.ParameterAttribute.Kind)
 					{
 						case ParameterKind.String:
 							{
+								validateConstraints(token.Value);
 								parameterContext.Property.SetValue(command, token.Value, null);
 							}
 							break;
@@ -292,6 +296,7 @@ namespace Konsola
 								{
 									throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 								}
+								validateConstraints(parsed);
 								parameterContext.Property.SetValue(command, parsed, null);
 							}
 							break;
@@ -307,6 +312,7 @@ namespace Konsola
 										throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 									}
 									var e = Enum.Parse(parameterContext.Property.PropertyType, value, true);
+									validateConstraints(e);
 									parameterContext.Property.SetValue(command, e, null);
 								}
 								else
@@ -322,6 +328,7 @@ namespace Konsola
 										var e = Enum.Parse(parameterContext.Property.PropertyType, v, true);
 										crux |= (int)e;
 									}
+									validateConstraints(crux);
 									parameterContext.Property.SetValue(command, crux, null);
 								}
 							}
@@ -330,6 +337,7 @@ namespace Konsola
 						case ParameterKind.StringArray:
 							{
 								var values = token.Value.Split(',');
+								validateConstraints(values);
 								parameterContext.Property.SetValue(command, values, null);
 							}
 							break;

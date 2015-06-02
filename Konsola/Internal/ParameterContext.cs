@@ -23,7 +23,14 @@ namespace Konsola.Internal
 		private void _Initialize()
 		{
 			_parameterAttribute = _pi.GetCustomAttribute<ParameterAttribute>();
+			if (_parameterAttribute == null)
+				return;
+
 			_constraints = _pi.GetCustomAttributes<ConstraintBaseAttribute>();
+			foreach (var constraint in _constraints)
+			{
+				constraint.ParameterName = _parameterAttribute.InternalParameters[0];
+			}
 		}
 
 		public PropertyInfo Property { get { return _pi; } }

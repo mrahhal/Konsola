@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using Konsola.Attributes;
+using Konsola.Attributes.Constraints;
 using Xunit;
 
 namespace Konsola.Tests
@@ -232,6 +233,19 @@ namespace Konsola.Tests
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidParameter);
 		}
+
+		[Fact(DisplayName = "Parsing with constraint violation throws")]
+		public void ParsingWithConstraintViolationThrows()
+		{
+			var args = "-int 102".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+				{
+					CommandLineParser.Parse<Context>(args);
+				});
+
+			Assert.True(ex.Kind == CommandLineExceptionKind.Constraint);
+		}
 	}
 
 	public enum Platform
@@ -273,6 +287,7 @@ namespace Konsola.Tests
 		public string[] StringArray { get; set; }
 
 		[Parameter("int", IsMandatory = true)]
+		[Range(1, 100, IsMaxInclusive = false)]
 		public int SomeInt { get; set; }
 
 		[Parameter("sw")]
