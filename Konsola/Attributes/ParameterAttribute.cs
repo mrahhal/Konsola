@@ -23,6 +23,8 @@ namespace Konsola.Attributes
 			_Validate();
 		}
 
+		public string Description { get; set; }
+
 		/// <summary>
 		/// Gets or sets whether the decorated property is mandatory.
 		/// </summary>

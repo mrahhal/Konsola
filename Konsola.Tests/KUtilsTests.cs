@@ -9,8 +9,8 @@ namespace Konsola.Tests
 {
 	public class KUtilsTests
 	{
-		[Fact(DisplayName = "Split command line args")]
-		public void SplitCommandLineArgsTest()
+		[Fact]
+		public void SplitCommandLineArgs()
 		{
 			var args = "-my some -s2 \"something -int 3\" --sw".SplitCommandLineArgs();
 

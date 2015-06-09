@@ -57,6 +57,7 @@
     <Compile Include="ConstraintTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="KUtilsTests.cs" />
+    <Compile Include="TestConsole.cs" />
     <Compile Include="_Contexts.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +67,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

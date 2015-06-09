@@ -24,6 +24,8 @@ namespace Konsola.Attributes
 		/// </summary>
 		internal string Name { get; private set; }
 
+		public string Description { get; set; }
+
 		private void _Validate()
 		{
 			if (string.IsNullOrWhiteSpace(Name) || Name.Any(c => ParameterAttribute.InvalidCharacters.Contains(c)))

@@ -9,8 +9,8 @@ namespace Konsola.Tests
 {
 	public class ConstraintTests
 	{
-		[Fact(DisplayName = "Parsing with constraint violation throws")]
-		public void ParsingWithConstraintViolationThrows()
+		[Fact]
+		public void Parse_WithConstraintViolation_Throws()
 		{
 			var args = "-some 103".SplitCommandLineArgs();
 
@@ -22,10 +22,10 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.Constraint);
 		}
 
-		[Theory(DisplayName = "Range basic test")]
+		[Theory]
 		[InlineData(3)]
 		[InlineData(99)]
-		public void RangeTest(string value)
+		public void Range(string value)
 		{
 			var args = ("-some " + value).SplitCommandLineArgs();
 
@@ -35,11 +35,11 @@ namespace Konsola.Tests
 			Assert.True(command.Some == int.Parse(value));
 		}
 
-		[Theory(DisplayName = "Range with invalid values throws")]
+		[Theory]
 		[InlineData(2)]
 		[InlineData(100)]
 		[InlineData(102)]
-		public void RangeWithInvalidValuesThrows(string value)
+		public void Range_WithInvalidValues_Throws(string value)
 		{
 			var args = ("-some " + value).SplitCommandLineArgs();
 
@@ -51,10 +51,10 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.Constraint);
 		}
 
-		[Theory(DisplayName = "Range with inclusive max")]
+		[Theory]
 		[InlineData("5")]
 		[InlineData("100")]
-		public void RangeWithInclusiveMax(string value)
+		public void Range_InclusiveMax(string value)
 		{
 			var args = ("-some2 " + value).SplitCommandLineArgs();
 
@@ -64,10 +64,10 @@ namespace Konsola.Tests
 			Assert.True(command.Some2 == int.Parse(value));
 		}
 
-		[Theory(DisplayName = "Range with inclusive max with invalid values throws")]
+		[Theory]
 		[InlineData("1")]
 		[InlineData("101")]
-		public void RangeWithInclusiveMaxWithInvalidValuesThrows(string value)
+		public void Range_WithInclusiveMaxWithInvalidValues_Throws(string value)
 		{
 			var args = ("-some2 " + value).SplitCommandLineArgs();
 

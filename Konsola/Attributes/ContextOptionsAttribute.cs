@@ -16,6 +16,8 @@ namespace Konsola.Attributes
 		{
 		}
 
+		public string Description { get; set; }
+
 		/// <summary>
 		/// Gets or sets whether to print exception message and exit when
 		/// a CommandLineException occures.

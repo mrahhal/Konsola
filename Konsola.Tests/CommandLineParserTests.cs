@@ -12,8 +12,8 @@ namespace Konsola.Tests
 {
 	public class CommandLineParserTests
 	{
-		[Fact(DisplayName= "Parsing basic")]
-		public void BasicParsing()
+		[Fact]
+		public void Parse_Basic()
 		{
 			var args = "-my some -s2 something -int 3 --sw -set-something hello".SplitCommandLineArgs();
 
@@ -28,8 +28,8 @@ namespace Konsola.Tests
 			Assert.True(command.SomeBool == true);
 		}
 
-		[Fact(DisplayName = "Parsing command")]
-		public void ParsingCommand()
+		[Fact]
+		public void Parse_Command()
 		{
 			var args = "restore --an".SplitCommandLineArgs();
 
@@ -40,8 +40,8 @@ namespace Konsola.Tests
 			Assert.True(command.Another == true);
 		}
 
-		[Fact(DisplayName="Parsing with invalid int value throws")]
-		public void ParsingWithInvalidIntValueThrows()
+		[Fact]
+		public void Parse_WithInvalidIntValue_Throws()
 		{
 			var args = "-int some".SplitCommandLineArgs();
 
@@ -53,8 +53,8 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidValue);
 		}
 
-		[Fact(DisplayName = "Parsing invalid command throws")]
-		public void ParsingInvalidCommandThrows()
+		[Fact]
+		public void Parse_WithInvalidCommand_Throws()
 		{
 			var args = "invalidcommand --an".SplitCommandLineArgs();
 
@@ -66,8 +66,8 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidCommand);
 		}
 
-		[Fact(DisplayName = "Parsing enum")]
-		public void ParsingEnum()
+		[Fact]
+		public void Parse_Enum()
 		{
 			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
 
@@ -77,8 +77,8 @@ namespace Konsola.Tests
 			Assert.True(command.Platform == Platform.Windows);
 		}
 
-		[Fact(DisplayName = "Parsing invalid enum value throws")]
-		public void ParsingInvalidEnumValueThrows()
+		[Fact]
+		public void Parse_WithInvalidEnumValue_Throws()
 		{
 			var args = "-my some -p some -int 3".SplitCommandLineArgs();
 
@@ -88,8 +88,8 @@ namespace Konsola.Tests
 				});
 		}
 
-		[Fact(DisplayName = "Parsing multiple enum values with enum throws")]
-		public void ParsingMultipleEnumValuesWithEnumThrows()
+		[Fact]
+		public void Parse_WithMultipleEnumValuesWithEnum_Throws()
 		{
 			var args = "-my some -p windows,unix -int 3".SplitCommandLineArgs();
 
@@ -99,8 +99,8 @@ namespace Konsola.Tests
 				});
 		}
 
-		[Fact(DisplayName = "Parsing flags enum")]
-		public void ParsingFlagsEnum()
+		[Fact]
+		public void Parse_FlagsEnum()
 		{
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
 
@@ -111,8 +111,8 @@ namespace Konsola.Tests
 				&& (command.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
 		}
 
-		[Fact(DisplayName = "Parsing enum inside command")]
-		public void ParsingEnumInsideCommand()
+		[Fact]
+		public void Parse_EnumInsideCommand()
 		{
 			var args = "restore -p linux".SplitCommandLineArgs();
 
@@ -123,8 +123,8 @@ namespace Konsola.Tests
 			Assert.True(command.Plaform == Platform.Linux);
 		}
 
-		[Fact(DisplayName = "Parsing invalid flags enum value throws")]
-		public void ParsingInvalidFlagsEnumValueThrows()
+		[Fact]
+		public void Parse_WithInvalidFlagsEnumValue_Throws()
 		{
 			var args = "-my some -fp windows,some -int 3".SplitCommandLineArgs();
 
@@ -134,8 +134,8 @@ namespace Konsola.Tests
 			});
 		}
 
-		[Fact(DisplayName = "Parsing with invalid context throws")]
-		public void ParsingWithInvalidContextThrows()
+		[Fact]
+		public void Parse_WithInvalidContext_Throws()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
@@ -145,8 +145,8 @@ namespace Konsola.Tests
 			});
 		}
 
-		[Fact(DisplayName = "Parsing with missing mandatory param throws")]
-		public void ParsingWithMissingMandatoryParamThrows()
+		[Fact]
+		public void Parse_WithMissingMandatoryParam_Throws()
 		{
 			var args = "-my some".SplitCommandLineArgs();
 
@@ -158,8 +158,8 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.MissingParameter);
 		}
 
-		[Fact(DisplayName = "Parsing with missing data throws")]
-		public void ParsingWithMissingDataThrows()
+		[Fact]
+		public void Parse_WithMissingData_Throws()
 		{
 			var args = "-my -s2 something -int 3 --sw".SplitCommandLineArgs();
 
@@ -171,8 +171,8 @@ namespace Konsola.Tests
 			Assert.True(ex.Kind == CommandLineExceptionKind.MissingValue && ex.Name == "-my");
 		}
 
-		[Fact(DisplayName = "Parsing string array")]
-		public void ParsingStringArray()
+		[Fact]
+		public void Parse_StringArray()
 		{
 			var args = "-sa some1,some2 -int 3".SplitCommandLineArgs();
 
@@ -185,8 +185,8 @@ namespace Konsola.Tests
 			Assert.True(command.StringArray[1] == "some2");
 		}
 
-		[Fact(DisplayName = "Parsing with context with invalid chars for params throws")]
-		public void ParsingWithContextWithInvalidCharsForParamsThrows()
+		[Fact]
+		public void Parse_WithContextWithInvalidCharsForParams_Throws()
 		{
 			var args = "-int 3".SplitCommandLineArgs();
 
@@ -196,8 +196,8 @@ namespace Konsola.Tests
 				});
 		}
 
-		[Fact(DisplayName = "Parsing nested command")]
-		public void ParsingNestedCommand()
+		[Fact]
+		public void Parse_NestedCommand()
 		{
 			var args = "restore restore-sub --some".SplitCommandLineArgs();
 
@@ -208,8 +208,8 @@ namespace Konsola.Tests
 			Assert.True(command.Some == true);
 		}
 
-		[Fact(DisplayName = "Parsing incorrect nested command throws")]
-		public void ParsingIncorrectNestedCommandThrows()
+		[Fact]
+		public void Parse_WithIncorrectNestedCommand_Throws()
 		{
 			var args = "restore --an restore-sub --some".SplitCommandLineArgs();
 
