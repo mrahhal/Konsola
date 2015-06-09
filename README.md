@@ -1,6 +1,8 @@
 # Konsola
 Contains services for command line tools.
 
+Latest nuget package [here](https://www.nuget.org/packages/Konsola).
+
 ### CommandLineParser
 Dynamically parses command line args based on strong typed objects.
 
