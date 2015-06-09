@@ -51,8 +51,8 @@ CommandLineParser knows about the following types:
 * bool (--[param name])
 * enums (-[param name])
 
-string arrays and flag enums can have multiple values seperated by a comma.
-For example: "-fe linux,windows" where fe corresponds to a flags enum parameter.
+string arrays and flags enums can have multiple values seperated by a comma.
+For example: "-fe linux,windows" where "fe" corresponds to a flags enum parameter.
 
 And it automatically detects and throws exceptions on command line errors.
 
