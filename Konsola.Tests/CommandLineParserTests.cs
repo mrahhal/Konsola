@@ -17,7 +17,7 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -s2 something -int 3 --sw -set-something hello".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as DefaultCommand;
 
 			Assert.True(command != null);
@@ -33,7 +33,7 @@ namespace Konsola.Tests
 		{
 			var args = "restore --an".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as RestoreCommand;
 
 			Assert.True(command != null);
@@ -47,7 +47,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 				{
-					CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+					CommandLineParser.Parse<Context>(args);
 				});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidValue);
@@ -60,7 +60,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+				CommandLineParser.Parse<Context>(args);
 			});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidCommand);
@@ -71,7 +71,7 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as DefaultCommand;
 
 			Assert.True(command.Platform == Platform.Windows);
@@ -84,7 +84,7 @@ namespace Konsola.Tests
 
 			Assert.Throws<CommandLineException>(() =>
 				{
-					CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+					CommandLineParser.Parse<Context>(args);
 				});
 		}
 
@@ -95,7 +95,7 @@ namespace Konsola.Tests
 
 			Assert.Throws<CommandLineException>(() =>
 				{
-					CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+					CommandLineParser.Parse<Context>(args);
 				});
 		}
 
@@ -104,7 +104,7 @@ namespace Konsola.Tests
 		{
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as DefaultCommand;
 
 			Assert.True((command.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
@@ -116,7 +116,7 @@ namespace Konsola.Tests
 		{
 			var args = "restore -p linux".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as RestoreCommand;
 
 			Assert.True(command != null);
@@ -130,7 +130,7 @@ namespace Konsola.Tests
 
 			Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+				CommandLineParser.Parse<Context>(args);
 			});
 		}
 
@@ -141,7 +141,7 @@ namespace Konsola.Tests
 
 			Assert.Throws<ContextException>(() =>
 			{
-				CommandLineParser.Parse<FaultyContext>(args, SilentConsole.Instance);
+				CommandLineParser.Parse<FaultyContext>(args);
 			});
 		}
 
@@ -152,7 +152,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+				CommandLineParser.Parse<Context>(args);
 			});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.MissingParameter);
@@ -165,7 +165,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+				CommandLineParser.Parse<Context>(args);
 			});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.MissingValue && ex.Name == "-my");
@@ -176,7 +176,7 @@ namespace Konsola.Tests
 		{
 			var args = "-sa some1,some2 -int 3".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as DefaultCommand;
 
 			Assert.True(command.StringArray != null);
@@ -192,7 +192,7 @@ namespace Konsola.Tests
 
 			Assert.Throws<ContextException>(() =>
 				{
-					CommandLineParser.Parse<ContextWithInvalidCharsForParams>(args, SilentConsole.Instance);
+					CommandLineParser.Parse<ContextWithInvalidCharsForParams>(args);
 				});
 		}
 
@@ -201,7 +201,7 @@ namespace Konsola.Tests
 		{
 			var args = "restore restore-sub --some".SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+			var context = CommandLineParser.Parse<Context>(args);
 			var command = context.Command as RestoreSubCommand;
 
 			Assert.True(command != null);
@@ -215,7 +215,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 				{
-					CommandLineParser.Parse<Context>(args, SilentConsole.Instance);
+					CommandLineParser.Parse<Context>(args);
 				});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidParameter);
