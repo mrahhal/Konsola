@@ -1,6 +1,4 @@
-$konsola_dir = "Konsola"
-$konsola_csproj = Join-Path $konsola_dir "/Konsola.csproj"
-$konsola_nuspec = Join-Path $konsola_dir "/Konsola.nuspec"
+$konsola_nuspec = "Konsola.nuspec"
 $nugetDir = "_nupkg"
 
 Function mkdirb($path)
@@ -11,11 +9,10 @@ Function mkdirb($path)
     }
 }
 
-# Create .nuget directory
 mkdirb $nugetDir
 
 # Build for Release
-msbuild /nologo /verbosity:minimal /property:Configuration=Release
+msbuild Konsola.sln /nologo /verbosity:minimal /property:Configuration=Release
 
 # Build nuget packages
 nuget pack $konsola_nuspec -Properties Configuration=Release -OutputDirectory $nugetDir

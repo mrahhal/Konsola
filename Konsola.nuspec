@@ -10,7 +10,10 @@
     <copyright>Copyright 2015</copyright>
   </metadata>
   <files>
-    <file src="bin\Release\Konsola.dll" target="lib\net4" />
-    <file src="bin\Release\Konsola.xml" target="lib\net4" />
+    <file src="Konsola\bin\Release\Konsola.dll" target="lib\portable-net403+netcore45" />
+    <file src="Konsola\bin\Release\Konsola.xml" target="lib\portable-net403+netcore45" />
+
+    <file src="Konsola.Net40\bin\Release\Konsola.dll" target="lib\net40" />
+    <file src="Konsola.Net40\bin\Release\Konsola.xml" target="lib\net40" />
   </files>
 </package>
