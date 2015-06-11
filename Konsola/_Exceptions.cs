@@ -44,7 +44,6 @@ namespace Konsola
 		Constraint,
 	}
 
-	[Serializable]
 	public class ContextException : Exception
 	{
 		public ContextException()
@@ -57,7 +56,6 @@ namespace Konsola
 		}
 	}
 
-	[Serializable]
 	public class CommandLineException : Exception
 	{
 		public CommandLineException(CommandLineExceptionKind kind, string name)

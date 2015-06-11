@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konsola.Net40", "Konsola.Net40\Konsola.Net40.csproj", "{D59DD9B1-7B26-4537-8D29-6FA85F392128}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D59DD9B1-7B26-4537-8D29-6FA85F392128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D59DD9B1-7B26-4537-8D29-6FA85F392128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D59DD9B1-7B26-4537-8D29-6FA85F392128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D59DD9B1-7B26-4537-8D29-6FA85F392128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

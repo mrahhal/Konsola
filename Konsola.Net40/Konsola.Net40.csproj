@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D59DD9B1-7B26-4537-8D29-6FA85F392128}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Konsola</RootNamespace>
+    <AssemblyName>Konsola</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Konsola\Attributes\CommandAttribute.cs">
+      <Link>Attributes\CommandAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\ConstraintBaseAttribute.cs">
+      <Link>Attributes\ConstraintBaseAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\Constraints\RangeAttribute.cs">
+      <Link>Attributes\Constraints\RangeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\ContextOptionsAttribute.cs">
+      <Link>Attributes\ContextOptionsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\DefaultCommandAttribute.cs">
+      <Link>Attributes\DefaultCommandAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\IncludeCommandsAttribute.cs">
+      <Link>Attributes\IncludeCommandsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\OnParsedAttribute.cs">
+      <Link>Attributes\OnParsedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Attributes\ParameterAttribute.cs">
+      <Link>Attributes\ParameterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\CommandBase.cs">
+      <Link>CommandBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\CommandLineParser.cs">
+      <Link>CommandLineParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\ContextBase.cs">
+      <Link>ContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\IConsole.cs">
+      <Link>IConsole.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Internal\CommandContext.cs">
+      <Link>Internal\CommandContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Internal\ParameterContext.cs">
+      <Link>Internal\ParameterContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Internal\ParameterKind.cs">
+      <Link>Internal\ParameterKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Internal\ReflectionExtensions.cs">
+      <Link>Internal\ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Internal\Token.cs">
+      <Link>Internal\Token.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Internal\TokenKind.cs">
+      <Link>Internal\TokenKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\KUtils.cs">
+      <Link>KUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\SilentConsole.cs">
+      <Link>SilentConsole.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\WriteKind.cs">
+      <Link>WriteKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\_Exceptions.cs">
+      <Link>_Exceptions.cs</Link>
+    </Compile>
+    <Compile Include="Console.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

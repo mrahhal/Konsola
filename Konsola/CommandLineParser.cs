@@ -63,7 +63,7 @@ namespace Konsola
 			if (args == null)
 				throw new ArgumentNullException("args");
 			if (console == null)
-				console = new Console();
+				console = SilentConsole.Instance;
 
 			var context = new T();
 			return new CommandLineParser(context, console, args)._InternalParse<T>();
@@ -95,10 +95,12 @@ namespace Konsola
 			{
 				_console.WriteLine(WriteKind.Error, ex.Message);
 
+#if NET40
 				if (_options.ExitOnException)
 				{
 					Environment.Exit(0);
 				}
+#endif
 
 				throw;
 			}
@@ -308,7 +310,7 @@ namespace Konsola
 								var value = token.Value;
 								if (!att.IsFlags)
 								{
-									if (value.Contains(',') || !att.ValidValues.Contains(value, StringComparer.InvariantCultureIgnoreCase))
+									if (value.Contains(",") || !att.ValidValues.Contains(value, StringComparer.OrdinalIgnoreCase))
 									{
 										throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 									}
@@ -322,7 +324,7 @@ namespace Konsola
 									int crux = 0;
 									foreach (var v in values)
 									{
-										if (!att.ValidValues.Contains(v, StringComparer.InvariantCultureIgnoreCase))
+										if (!att.ValidValues.Contains(v, StringComparer.OrdinalIgnoreCase))
 										{
 											throw new CommandLineException(CommandLineExceptionKind.InvalidValue, token.Param);
 										}

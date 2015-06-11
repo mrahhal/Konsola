@@ -28,7 +28,7 @@ namespace Konsola.Attributes
 
 		private void _Validate()
 		{
-			if (string.IsNullOrWhiteSpace(Name) || Name.Any(c => ParameterAttribute.InvalidCharacters.Contains(c)))
+			if (string.IsNullOrWhiteSpace(Name) || Name.IndexOfAny(ParameterAttribute.InvalidCharacters) != -1)
 			{
 				throw new ContextException("Command name is invalid.");
 			}

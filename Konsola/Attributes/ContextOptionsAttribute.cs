@@ -18,11 +18,13 @@ namespace Konsola.Attributes
 
 		public string Description { get; set; }
 
+#if NET40
 		/// <summary>
 		/// Gets or sets whether to print exception message and exit when
 		/// a CommandLineException occures.
 		/// </summary>
 		public bool ExitOnException { get; set; }
+#endif
 
 		/// <summary>
 		/// Gets or sets whether to invoke the special methods after parsing.

@@ -47,11 +47,6 @@ namespace Konsola.Internal
 			return (T)Attribute.GetCustomAttribute(@this, typeof(T));
 		}
 
-		public static T GetCustomAttribute<T>(this Module @this) where T : Attribute
-		{
-			return (T)Attribute.GetCustomAttribute(@this, typeof(T));
-		}
-
 		public static T GetCustomAttribute<T>(this MemberInfo @this) where T : Attribute
 		{
 			return (T)Attribute.GetCustomAttribute(@this, typeof(T));

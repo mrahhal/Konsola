@@ -14,7 +14,7 @@ namespace Konsola.Attributes
 	[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
 	public sealed class ParameterAttribute : Attribute
 	{
-		internal const string InvalidCharacters = " /\\";
+		internal static readonly char[] InvalidCharacters = " /\\".ToCharArray();
 		private ParameterKind _kind;
 
 		public ParameterAttribute(string parameters)
@@ -62,7 +62,7 @@ namespace Konsola.Attributes
 			InternalParameters = Parameters.Split(',');
 
 			if (InternalParameters.Any((p) => p.StartsWith("-") || p.EndsWith("-"))
-				|| Parameters.Any((c) => InvalidCharacters.Contains(c)))
+				|| Parameters.IndexOfAny(InvalidCharacters) != -1)
 			{
 				throw new ContextException("Parameters contain invalid characters.");
 			}

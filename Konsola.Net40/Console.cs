@@ -57,17 +57,6 @@ namespace Konsola
 			}
 		}
 
-		/// <summary>
-		/// Gets a console that silently consumes messages.
-		/// </summary>
-		public static IConsole Silent
-		{
-			get
-			{
-				return SilentConsole.Singleton;
-			}
-		}
-
 		public void Write(WriteKind kind, string value)
 		{
 			var color = _GetColorFromKind(kind);
@@ -105,26 +94,6 @@ namespace Konsola
 				default:
 					return ConsoleColor.Gray;
 			}
-		}
-
-		private class SilentConsole : IConsole
-		{
-			public static readonly SilentConsole Singleton;
-
-			static SilentConsole()
-			{
-				Singleton = new SilentConsole();
-			}
-
-			private SilentConsole()
-			{
-			}
-
-			public int WindowWidth { get { return -1; } }
-			public int CursorLeft { get { return -1; } }
-
-			public void Write(WriteKind kind, string value) { }
-			public void WriteLine(WriteKind kind, string value) { }
 		}
 	}
 }

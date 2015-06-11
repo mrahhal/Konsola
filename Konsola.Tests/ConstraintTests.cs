@@ -16,7 +16,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<ConstraintsContext>(args, Console.Silent);
+				CommandLineParser.Parse<ConstraintsContext>(args, SilentConsole.Instance);
 			});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.Constraint);
@@ -29,7 +29,7 @@ namespace Konsola.Tests
 		{
 			var args = ("-some " + value).SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<ConstraintsContext>(args, Console.Silent);
+			var context = CommandLineParser.Parse<ConstraintsContext>(args, SilentConsole.Instance);
 			var command = context.Command as ConstraintsContextCommand;
 
 			Assert.True(command.Some == int.Parse(value));
@@ -45,7 +45,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<ConstraintsContext>(args, Console.Silent);
+				CommandLineParser.Parse<ConstraintsContext>(args, SilentConsole.Instance);
 			});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.Constraint);
@@ -58,7 +58,7 @@ namespace Konsola.Tests
 		{
 			var args = ("-some2 " + value).SplitCommandLineArgs();
 
-			var context = CommandLineParser.Parse<ConstraintsContext>(args, Console.Silent);
+			var context = CommandLineParser.Parse<ConstraintsContext>(args, SilentConsole.Instance);
 			var command = context.Command as ConstraintsContextCommand;
 
 			Assert.True(command.Some2 == int.Parse(value));
@@ -73,7 +73,7 @@ namespace Konsola.Tests
 
 			var ex = Assert.Throws<CommandLineException>(() =>
 			{
-				CommandLineParser.Parse<ConstraintsContext>(args, Console.Silent);
+				CommandLineParser.Parse<ConstraintsContext>(args, SilentConsole.Instance);
 			});
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.Constraint);
