@@ -11,29 +11,73 @@ namespace Konsola
 {
 	public interface IConsole
 	{
-		void Write(string value);
-		void Write(string format, params object[] args);
-		void WriteLine();
-		void WriteLine(string value);
-		void WriteLine(string format, params object[] args);
+		/// <summary>
+		/// Gets the console window's width, or -1 if not defined.
+		/// </summary>
+		int WindowWidth { get; }
 
-		void WriteWarning(string value);
-		void WriteWarning(string format, params object[] args);
-		void WriteWarningLine(string value);
-		void WriteWarningLine(string format, params object[] args);
+		/// <summary>
+		/// Gets the column position of the cursor, or -1 if not defined.
+		/// </summary>
+		int CursorLeft { get; }
 
-		void WriteError(string value);
-		void WriteError(string format, params object[] args);
-		void WriteErrorLine(string value);
-		void WriteErrorLine(string format, params object[] args);
+		void Write(WriteKind kind, string value);
+		void WriteLine(WriteKind kind, string value);
+	}
 
-		void WriteColor(ConsoleColor color, string value);
-		void WriteColor(ConsoleColor color, string format, params object[] args);
-		void WriteColorLine(ConsoleColor color, string value);
-		void WriteColorLine(ConsoleColor color, string format, params object[] args);
+	public static class ConsoleExtensions
+	{
+		//public static void WriteLine(this IConsole @this, WriteKind kind, string value)
+		//{
+		//	@this.Write(kind, value + Environment.NewLine);
+		//}
 
-		void WriteJustified(int startIndex, string value);
-		void WriteJustified(int startIndex, string value, int maxWidth);
-		void WriteJustified(ConsoleColor color, int startIndex, string value, int maxWidth);
+		public static void WriteJustified(this IConsole @this, int padding, string format, params object[] args)
+		{
+			@this.WriteJustified(padding, string.Format(format, args));
+		}
+
+		public static void WriteJustified(this IConsole @this, int padding, string value)
+		{
+			@this.WriteJustified(WriteKind.Normal, padding, value);
+		}
+
+		public static void WriteJustified(this IConsole @this, WriteKind kind, int padding, string format, params object[] args)
+		{
+			@this.WriteJustified(kind, padding, string.Format(format, args));
+		}
+
+		public static void WriteJustified(this IConsole @this, WriteKind kind, int padding, string value)
+		{
+			var width = @this.WindowWidth;
+			width = width == -1 ? int.MaxValue : width;
+			var maxWidth = width;
+			if (maxWidth > padding)
+			{
+				maxWidth = maxWidth - padding - 1;
+			}
+
+			while (value.Length > 0)
+			{
+				value = value.TrimStart();
+				int length = Math.Min(value.Length, maxWidth);
+
+				var content = default(string);
+
+				int newLineIndex = value.IndexOf(Environment.NewLine, 0, length, StringComparison.OrdinalIgnoreCase);
+				if (newLineIndex > -1)
+				{
+					content = value.Substring(0, newLineIndex);
+				}
+				else
+				{
+					content = value.Substring(0, length);
+				}
+
+				var leftPadding = padding + content.Length - @this.CursorLeft;
+				@this.WriteLine(kind, (leftPadding > 0) ? content.PadLeft(leftPadding) : content);
+				value = value.Substring(content.Length);
+			}
+		}
 	}
 }

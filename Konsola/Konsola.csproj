@@ -63,6 +63,7 @@
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="Internal\ReflectionExtensions.cs" />
     <Compile Include="KUtils.cs" />
+    <Compile Include="WriteKind.cs" />
     <Compile Include="_Exceptions.cs" />
   </ItemGroup>
   <ItemGroup />
