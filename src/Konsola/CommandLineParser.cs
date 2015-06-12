@@ -227,7 +227,7 @@ namespace Konsola
 				else if (propType.IsEnum)
 				{
 					att.Kind = ParameterKind.Enum;
-					if (propType.GetCustomAttribute<FlagsAttribute>() != null)
+					if (propType.IsAttributeDefined<FlagsAttribute>())
 					{
 						att.IsFlags = true;
 					}
@@ -371,8 +371,8 @@ namespace Konsola
 		{
 			var onParsedMethod = _contextType
 						 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-						 .Where(mi => mi.GetParameters().Length == 0)
-						 .Where(mi => mi.GetCustomAttribute<OnParsedAttribute>() != null)
+						 .Where(mi => mi.GetParameters().Length == 0
+							 && mi.IsAttributeDefined<OnParsedAttribute>())
 						 .FirstOrDefault();
 
 			if (onParsedMethod != null)

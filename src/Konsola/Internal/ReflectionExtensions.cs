@@ -62,6 +62,11 @@ namespace Konsola.Internal
 			return (T)Attribute.GetCustomAttribute(@this, typeof(T));
 		}
 
+		public static bool IsAttributeDefined<T>(this MemberInfo @this) where T : Attribute
+		{
+			return Attribute.IsDefined(@this, typeof(T));
+		}
+
 		public static bool IsCommandType(this Type @this)
 		{
 			return typeof(CommandBase).IsAssignableFrom(@this);
