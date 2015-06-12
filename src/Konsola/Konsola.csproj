@@ -66,6 +66,7 @@
     <Compile Include="Attributes\IncludeCommandsAttribute.cs" />
     <Compile Include="Attributes\ConstraintBaseAttribute.cs" />
     <Compile Include="CommandBase.cs" />
+    <Compile Include="Consoles.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="Internal\CommandContext.cs" />
     <Compile Include="ContextBase.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="Internal\ReflectionExtensions.cs" />
     <Compile Include="KUtils.cs" />
-    <Compile Include="SilentConsole.cs" />
+    <Compile Include="Internal\SilentConsole.cs" />
     <Compile Include="WriteKind.cs" />
     <Compile Include="_Exceptions.cs" />
   </ItemGroup>

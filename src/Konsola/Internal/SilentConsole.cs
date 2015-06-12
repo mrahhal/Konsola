@@ -6,7 +6,7 @@ using System;
 
 namespace Konsola
 {
-	public class SilentConsole : IConsole
+	internal class SilentConsole : IConsole
 	{
 		private static readonly SilentConsole s_singleton;
 
@@ -19,9 +19,6 @@ namespace Konsola
 		{
 		}
 
-		/// <summary>
-		/// Gets a console that silently consumes messages.
-		/// </summary>
 		public static IConsole Instance
 		{
 			get

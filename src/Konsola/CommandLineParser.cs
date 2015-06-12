@@ -63,7 +63,7 @@ namespace Konsola
 			if (args == null)
 				throw new ArgumentNullException("args");
 			if (console == null)
-				console = SilentConsole.Instance;
+				console = Consoles.Silent;
 
 			var context = new T();
 			return new CommandLineParser(context, console, args)._InternalParse<T>();

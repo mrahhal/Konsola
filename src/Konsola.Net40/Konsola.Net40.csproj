@@ -66,6 +66,9 @@
     <Compile Include="..\Konsola\CommandLineParser.cs">
       <Link>CommandLineParser.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Consoles.cs">
+      <Link>Consoles.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\ContextBase.cs">
       <Link>ContextBase.cs</Link>
     </Compile>
@@ -84,6 +87,9 @@
     <Compile Include="..\Konsola\Internal\ReflectionExtensions.cs">
       <Link>Internal\ReflectionExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Internal\SilentConsole.cs">
+      <Link>Internal\SilentConsole.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Internal\Token.cs">
       <Link>Internal\Token.cs</Link>
     </Compile>
@@ -95,9 +101,6 @@
     </Compile>
     <Compile Include="..\Konsola\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\SilentConsole.cs">
-      <Link>SilentConsole.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\WriteKind.cs">
       <Link>WriteKind.cs</Link>
