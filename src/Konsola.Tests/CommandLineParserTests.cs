@@ -223,6 +223,18 @@ namespace Konsola.Tests
 		}
 
 		[Fact]
+		public void Parse_WithHelp_TestConsole()
+		{
+			var args = "--h".SplitCommandLineArgs();
+
+			var console = new TestConsole();
+			var context = CommandLineParser.Parse<Context>(args, console);
+
+			Assert.Null(context);
+			Assert.True(!string.IsNullOrWhiteSpace(console.Text));
+		}
+
+		[Fact]
 		public void Parse_WithHelp_ReturnsNull()
 		{
 			var args = "restore --an --h".SplitCommandLineArgs();

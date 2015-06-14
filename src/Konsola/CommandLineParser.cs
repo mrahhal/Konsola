@@ -203,7 +203,6 @@ namespace Konsola
 				&& (t.Param.ToLower() == "h" || t.Param.ToLower() == "help")))
 			{
 				var helpInfo = new HelpInfo(command);
-				//_PrintHelp(command, parameterContexts);
 				_PrintHelp(helpInfo);
 				return true;
 			}
@@ -216,6 +215,7 @@ namespace Konsola
 			if (helpInfo.ProgramDescription != null)
 			{
 				_console.WriteLine(helpInfo.ProgramDescription);
+				_console.WriteLine();
 			}
 			if (helpInfo.Commands != null)
 			{
@@ -226,35 +226,6 @@ namespace Konsola
 				_PrintParameters(helpInfo.Parameters);
 			}
 		}
-
-		//private void _PrintHelp(CommandBase command, ParameterContext[] parameterContexts)
-		//{
-		//	var isDefault = _IsDefaultCommand(command);
-		//	var sb = new StringBuilder();
-		//	if (isDefault)
-		//	{
-		//		sb.AppendLine(command.ContextBase.Options.Description);
-		//		sb.AppendLine();
-		//		var includes = command.ContextBase.IncludeCommandsAttribute;
-		//		if (includes != null)
-		//		{
-		//			_PrintCommands(sb, includes);
-		//		}
-		//		_PrintParameters(sb, parameterContexts);
-		//	} else
-		//	{
-		//		var cAttribute = command.CommandAttribute;
-		//		sb.AppendLine(cAttribute.Name);
-		//		sb.AppendLine("    " + cAttribute.Description);
-		//		sb.AppendLine();
-		//		if (command.IncludeCommandsAttribute != null)
-		//		{
-		//			_PrintCommands(sb, command.IncludeCommandsAttribute);
-		//		}
-		//		_PrintParameters(sb, parameterContexts);
-		//	}
-		//	_console.Write(sb.ToString());
-		//}
 
 		private void _PrintCommands(CommandAttribute[] commands)
 		{
@@ -279,14 +250,6 @@ namespace Konsola
 				_console.WriteLine(p.Description);
 			}
 		}
-
-		//private bool _IsDefaultCommand(CommandBase command)
-		//{
-		//	var defaultAttribute = command.ContextBase.DefaultCommandAttribute;
-		//	if (defaultAttribute == null)
-		//		return false;
-		//	return defaultAttribute.DefaultCommand == command.GetType();
-		//}
 
 		private Type _FindTargetCommandType(Token[] tokens, ref int offset, Type contextType, Type lastCommandType = null)
 		{
