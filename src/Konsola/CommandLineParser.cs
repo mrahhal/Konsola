@@ -43,7 +43,7 @@ namespace Konsola
 		/// <exception cref="ArgumentNullException"><paramref name="args"/> is null.</exception>
 		/// <exception cref="ContextException">The context is invalid.</exception>
 		/// <exception cref="CommandLineException">The args did not correctly match the expectations of the context.</exception>
-		/// <returns>The new context containing the parsed options.</returns>
+		/// <returns>The new context containing the parsed options, or null if it has been handled.</returns>
 		public static T Parse<T>(string[] args)
 			where T : ContextBase, new()
 		{
@@ -56,7 +56,7 @@ namespace Konsola
 		/// <exception cref="ArgumentNullException"><paramref name="args"/> is null.</exception>
 		/// <exception cref="ContextException">The context is invalid.</exception>
 		/// <exception cref="CommandLineException">The args did not correctly match the expectations of the context.</exception>
-		/// <returns>The new context containing the parsed options.</returns>
+		/// <returns>The new context containing the parsed options, or null if it has been handled.</returns>
 		public static T Parse<T>(string[] args, IConsole console)
 			where T : ContextBase, new()
 		{
@@ -75,7 +75,8 @@ namespace Konsola
 			_contextType = typeof(T);
 			_options = _context.Options = _contextType.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
 
-			_InternalWork();
+			if (_InternalWork())
+				return null;
 			if (_options.InvokeMethods)
 			{
 				_InvokeOnParsedMethod();
@@ -84,12 +85,13 @@ namespace Konsola
 			return (T)_context;
 		}
 
-		private void _InternalWork()
+		// Returns if handled.
+		private bool _InternalWork()
 		{
 			try
 			{
 				var tokens = _ParseTokens(_args);
-				_ProcessTokens(tokens, 0, _context);
+				return _ProcessTokens(tokens, 0, _context);
 			}
 			catch (CommandLineException ex)
 			{
@@ -154,7 +156,8 @@ namespace Konsola
 			return list.ToArray();
 		}
 
-		private void _ProcessTokens(Token[] tokens, int offset, ContextBase context)
+		// Returns if handled.
+		private bool _ProcessTokens(Token[] tokens, int offset, ContextBase context)
 		{
 			var commandType = _FindTargetCommandType(tokens, ref offset, _contextType);
 			if (commandType == null)
@@ -177,11 +180,64 @@ namespace Konsola
 			var parameterContexts = commandType.GetPropertyContexts().ToArray();
 			_InitializePropertyAttributes(parameterContexts);
 
+			if (_TryHandleHelp(tokens, command, parameterContexts))
+			{
+				return true;
+			}
+
 			// Bind the command.
 			_BindCommandOptions(tokens, offset, command, parameterContexts);
 
 			// Check for mandatory params that have not been set.
 			_EnsureMandatoriesSet(parameterContexts);
+			return false;
+		}
+
+		private bool _TryHandleHelp(Token[] tokens, CommandBase command, ParameterContext[] parameterContexts)
+		{
+			if (tokens.Any(t => t.Kind == TokenKind.Partial
+				&& t.Param.ToLower() == "h"))
+			{
+				_PrintHelp(command, parameterContexts);
+				return true;
+			}
+
+			return false;
+		}
+
+		private void _PrintHelp(CommandBase command, ParameterContext[] parameterContexts)
+		{
+			var isDefault = _IsDefaultCommand(command);
+			if (isDefault)
+			{
+				_console.WriteLine(WriteKind.Normal, command.ContextBase.Options.Description);
+				var includes = command.ContextBase.GetType().GetCustomAttribute<IncludeCommandsAttribute>();
+				foreach (var c in includes.Commands)
+				{
+					var cAttribute = c.GetCustomAttribute<CommandAttribute>();
+					_console.WriteLine(WriteKind.Normal, cAttribute.Name);
+					_console.WriteLine(WriteKind.Normal, "    " + cAttribute.Description);
+				}
+			} else
+			{
+				var cAttribute = command.GetType().GetCustomAttribute<CommandAttribute>();
+				_console.WriteLine(WriteKind.Normal, cAttribute.Name);
+				_console.WriteLine(WriteKind.Normal, "    " + cAttribute.Description);
+				_console.WriteLine(WriteKind.Normal, "");
+				foreach (var pc in parameterContexts)
+				{
+					_console.Write(WriteKind.Normal, pc.ParameterAttribute.Parameters);
+					_console.WriteLine(WriteKind.Normal, pc.ParameterAttribute.Description);
+				}
+			}
+		}
+
+		private bool _IsDefaultCommand(CommandBase command)
+		{
+			var defaultAttribute = command.ContextBase.GetType().GetCustomAttribute<DefaultCommandAttribute>();
+			if (defaultAttribute == null)
+				return false;
+			return defaultAttribute.DefaultCommand == command.GetType();
 		}
 
 		private Type _FindTargetCommandType(Token[] tokens, ref int offset, Type contextType, Type lastCommandType = null)
