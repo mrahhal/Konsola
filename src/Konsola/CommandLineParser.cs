@@ -74,6 +74,8 @@ namespace Konsola
 		{
 			_contextType = typeof(T);
 			_options = _context.Options = _contextType.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
+			_context.DefaultCommandAttribute = _contextType.GetCustomAttribute<DefaultCommandAttribute>();
+			_context.IncludeCommandsAttribute = _contextType.GetCustomAttribute<IncludeCommandsAttribute>();
 
 			if (_InternalWork())
 				return null;
@@ -163,7 +165,7 @@ namespace Konsola
 			if (commandType == null)
 			{
 				// Resolve the default command.
-				var defaultCommandAttribute = _contextType.GetCustomAttribute<DefaultCommandAttribute>();
+				var defaultCommandAttribute = context.DefaultCommandAttribute;
 				if (defaultCommandAttribute == null)
 				{
 					// No command has been specified on the command line
@@ -175,6 +177,7 @@ namespace Konsola
 			}
 
 			var command = commandType.CreateInstance<CommandBase>();
+			command.CommandAttribute = commandType.GetCustomAttribute<CommandAttribute>();
 			context.Command = command;
 			command.ContextBase = context;
 			var parameterContexts = commandType.GetPropertyContexts().ToArray();
@@ -211,7 +214,7 @@ namespace Konsola
 			if (isDefault)
 			{
 				_console.WriteLine(command.ContextBase.Options.Description);
-				var includes = command.ContextBase.GetType().GetCustomAttribute<IncludeCommandsAttribute>();
+				var includes = command.ContextBase.IncludeCommandsAttribute;
 				foreach (var c in includes.Commands)
 				{
 					var cAttribute = c.GetCustomAttribute<CommandAttribute>();
@@ -220,7 +223,7 @@ namespace Konsola
 				}
 			} else
 			{
-				var cAttribute = command.GetType().GetCustomAttribute<CommandAttribute>();
+				var cAttribute = command.CommandAttribute;
 				_console.WriteLine(cAttribute.Name);
 				_console.WriteLine("    " + cAttribute.Description);
 				_console.WriteLine();
@@ -234,7 +237,7 @@ namespace Konsola
 
 		private bool _IsDefaultCommand(CommandBase command)
 		{
-			var defaultAttribute = command.ContextBase.GetType().GetCustomAttribute<DefaultCommandAttribute>();
+			var defaultAttribute = command.ContextBase.DefaultCommandAttribute;
 			if (defaultAttribute == null)
 				return false;
 			return defaultAttribute.DefaultCommand == command.GetType();

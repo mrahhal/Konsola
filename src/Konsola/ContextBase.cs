@@ -20,6 +20,10 @@ namespace Konsola
 		/// <summary>
 		/// Gets the options.
 		/// </summary>
-		public ContextOptionsAttribute Options { get; set; }
+		public ContextOptionsAttribute Options { get; internal set; }
+
+		internal IncludeCommandsAttribute IncludeCommandsAttribute { get; set; }
+
+		internal DefaultCommandAttribute DefaultCommandAttribute { get; set; }
 	}
 }

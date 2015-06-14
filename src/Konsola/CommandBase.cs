@@ -3,6 +3,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using Konsola.Attributes;
 
 namespace Konsola
 {
@@ -16,6 +17,8 @@ namespace Konsola
 		}
 
 		internal ContextBase ContextBase { get; set; }
+
+		internal CommandAttribute CommandAttribute { get; set; }
 
 		public abstract void ExecuteCommand();
 	}
