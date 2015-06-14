@@ -199,7 +199,7 @@ namespace Konsola
 		private bool _TryHandleHelp(Token[] tokens, CommandBase command, ParameterContext[] parameterContexts)
 		{
 			if (tokens.Any(t => t.Kind == TokenKind.Partial
-				&& t.Param.ToLower() == "h"))
+				&& (t.Param.ToLower() == "h" || t.Param.ToLower() == "help")))
 			{
 				_PrintHelp(command, parameterContexts);
 				return true;

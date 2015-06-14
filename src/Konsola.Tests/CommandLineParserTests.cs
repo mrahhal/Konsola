@@ -220,6 +220,16 @@ namespace Konsola.Tests
 
 			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidParameter);
 		}
+
+		[Fact]
+		public void Parse_WithHelp_ReturnsNull()
+		{
+			var args = "restore --an --h".SplitCommandLineArgs();
+
+			var context = CommandLineParser.Parse<Context>(args);
+
+			Assert.Null(context);
+		}
 	}
 
 	public static partial class Mixin
