@@ -210,24 +210,24 @@ namespace Konsola
 			var isDefault = _IsDefaultCommand(command);
 			if (isDefault)
 			{
-				_console.WriteLine(WriteKind.Normal, command.ContextBase.Options.Description);
+				_console.WriteLine(command.ContextBase.Options.Description);
 				var includes = command.ContextBase.GetType().GetCustomAttribute<IncludeCommandsAttribute>();
 				foreach (var c in includes.Commands)
 				{
 					var cAttribute = c.GetCustomAttribute<CommandAttribute>();
-					_console.WriteLine(WriteKind.Normal, cAttribute.Name);
-					_console.WriteLine(WriteKind.Normal, "    " + cAttribute.Description);
+					_console.WriteLine(cAttribute.Name);
+					_console.WriteLine("    " + cAttribute.Description);
 				}
 			} else
 			{
 				var cAttribute = command.GetType().GetCustomAttribute<CommandAttribute>();
-				_console.WriteLine(WriteKind.Normal, cAttribute.Name);
-				_console.WriteLine(WriteKind.Normal, "    " + cAttribute.Description);
-				_console.WriteLine(WriteKind.Normal, "");
+				_console.WriteLine(cAttribute.Name);
+				_console.WriteLine("    " + cAttribute.Description);
+				_console.WriteLine();
 				foreach (var pc in parameterContexts)
 				{
-					_console.Write(WriteKind.Normal, pc.ParameterAttribute.Parameters);
-					_console.WriteLine(WriteKind.Normal, pc.ParameterAttribute.Description);
+					_console.Write(pc.ParameterAttribute.Parameters);
+					_console.WriteLine(pc.ParameterAttribute.Description);
 				}
 			}
 		}
