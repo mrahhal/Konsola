@@ -42,6 +42,11 @@ namespace Konsola
 		/// A constraint has been violated.
 		/// </summary>
 		Constraint,
+
+		/// <summary>
+		/// A general exception kind.
+		/// </summary>
+		Invalid,
 	}
 
 	public class ContextException : Exception
@@ -110,6 +115,9 @@ namespace Konsola
 					Message = "Invalid value: ";
 					break;
 
+				case CommandLineExceptionKind.Invalid:
+					Message = "Invalid arguments";
+					return;
 			}
 			Message += Name;
 		}

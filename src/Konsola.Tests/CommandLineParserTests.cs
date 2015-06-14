@@ -223,6 +223,19 @@ namespace Konsola.Tests
 		}
 
 		[Fact]
+		public void Parse_WithNoValuesForCommand_Throws()
+		{
+			var args = "restore".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+				{
+					CommandLineParser.Parse<Context>(args);
+				});
+
+			Assert.True(ex.Kind == CommandLineExceptionKind.Invalid);
+		}
+
+		[Fact]
 		public void Parse_WithHelp_TestConsole()
 		{
 			var args = "--h".SplitCommandLineArgs();

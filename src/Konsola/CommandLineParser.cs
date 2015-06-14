@@ -255,6 +255,10 @@ namespace Konsola
 		{
 			var type = lastCommandType ?? contextType;
 
+			if (offset == tokens.Length)
+			{
+				throw new CommandLineException(CommandLineExceptionKind.Invalid, null);
+			}
 			var token = tokens[offset];
 			if (token.Kind != TokenKind.Command)
 			{
