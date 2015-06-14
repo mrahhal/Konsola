@@ -39,6 +39,11 @@ namespace Konsola
 		InvalidValue,
 
 		/// <summary>
+		/// Positional parameters are invalid.
+		/// </summary>
+		InvalidPositionalParameters,
+
+		/// <summary>
 		/// A constraint has been violated.
 		/// </summary>
 		Constraint,
@@ -110,6 +115,10 @@ namespace Konsola
 				case CommandLineExceptionKind.MissingValue:
 					Message = "Missing value: ";
 					break;
+
+				case CommandLineExceptionKind.InvalidPositionalParameters:
+					Message = "Positional parameters should come at the end";
+					return;
 
 				case CommandLineExceptionKind.InvalidValue:
 					Message = "Invalid value: ";

@@ -30,6 +30,11 @@ namespace Konsola.Attributes
 		/// </summary>
 		public bool IsMandatory { get; set; }
 
+		/// <summary>
+		/// Gets or sets the parameter's position.
+		/// </summary>
+		public int Position { get; set; }
+
 		#region Internal
 
 		internal string Parameters { get; private set; }

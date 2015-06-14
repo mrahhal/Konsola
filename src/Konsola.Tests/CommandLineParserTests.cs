@@ -282,6 +282,32 @@ namespace Konsola.Tests
 			Assert.True(helpInfo.Commands != null);
 			Assert.True(helpInfo.Parameters != null);
 		}
+
+		[Fact]
+		public void Parse_WithPosition()
+		{
+			var args = "position -some somestr fstr sstr".SplitCommandLineArgs();
+
+			var context = CommandLineParser.Parse<Context>(args);
+			var command = context.Command as PositionCommand;
+
+			Assert.True(command.First == "fstr");
+			Assert.True(command.Second == "sstr");
+			Assert.True(command.Some == "somestr");
+		}
+
+		[Fact]
+		public void Parse_WithPosition_WithInvalidPositionalParameters_Throws()
+		{
+			var args = "position fstr -some somestr sstr".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+				{
+					CommandLineParser.Parse<Context>(args);
+				});
+
+			Assert.True(ex.Kind == CommandLineExceptionKind.InvalidPositionalParameters);
+		}
 	}
 
 	public static partial class Mixin
