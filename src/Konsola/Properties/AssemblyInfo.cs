@@ -3,6 +3,7 @@
 //------------------------------------------------------------------------------
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Konsola")]
 [assembly: AssemblyDescription("Contains services for command line tools.")]
@@ -13,3 +14,5 @@ using System.Reflection;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("0.2.0")]
+
+[assembly: InternalsVisibleTo("Konsola.Tests")]
