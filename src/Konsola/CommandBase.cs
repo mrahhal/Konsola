@@ -20,6 +20,8 @@ namespace Konsola
 
 		internal CommandAttribute CommandAttribute { get; set; }
 
+		internal IncludeCommandsAttribute IncludeCommandsAttribute { get; set; }
+
 		public abstract void ExecuteCommand();
 	}
 

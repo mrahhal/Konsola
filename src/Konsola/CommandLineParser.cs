@@ -178,6 +178,7 @@ namespace Konsola
 
 			var command = commandType.CreateInstance<CommandBase>();
 			command.CommandAttribute = commandType.GetCustomAttribute<CommandAttribute>();
+			command.IncludeCommandsAttribute = commandType.GetCustomAttribute<IncludeCommandsAttribute>();
 			context.Command = command;
 			command.ContextBase = context;
 			var parameterContexts = commandType.GetPropertyContexts().ToArray();
@@ -201,47 +202,91 @@ namespace Konsola
 			if (tokens.Any(t => t.Kind == TokenKind.Partial
 				&& (t.Param.ToLower() == "h" || t.Param.ToLower() == "help")))
 			{
-				_PrintHelp(command, parameterContexts);
+				var helpInfo = new HelpInfo(command);
+				//_PrintHelp(command, parameterContexts);
+				_PrintHelp(helpInfo);
 				return true;
 			}
 
 			return false;
 		}
 
-		private void _PrintHelp(CommandBase command, ParameterContext[] parameterContexts)
+		private void _PrintHelp(HelpInfo helpInfo)
 		{
-			var isDefault = _IsDefaultCommand(command);
-			if (isDefault)
+			if (helpInfo.ProgramDescription != null)
 			{
-				_console.WriteLine(command.ContextBase.Options.Description);
-				var includes = command.ContextBase.IncludeCommandsAttribute;
-				foreach (var c in includes.Commands)
-				{
-					var cAttribute = c.GetCustomAttribute<CommandAttribute>();
-					_console.WriteLine(cAttribute.Name);
-					_console.WriteLine("    " + cAttribute.Description);
-				}
-			} else
+				_console.WriteLine(helpInfo.ProgramDescription);
+			}
+			if (helpInfo.Commands != null)
 			{
-				var cAttribute = command.CommandAttribute;
-				_console.WriteLine(cAttribute.Name);
-				_console.WriteLine("    " + cAttribute.Description);
-				_console.WriteLine();
-				foreach (var pc in parameterContexts)
-				{
-					_console.Write(pc.ParameterAttribute.Parameters);
-					_console.WriteLine(pc.ParameterAttribute.Description);
-				}
+				_PrintCommands(helpInfo.Commands);
+			}
+			if (helpInfo.Parameters != null)
+			{
+				_PrintParameters(helpInfo.Parameters);
 			}
 		}
 
-		private bool _IsDefaultCommand(CommandBase command)
+		//private void _PrintHelp(CommandBase command, ParameterContext[] parameterContexts)
+		//{
+		//	var isDefault = _IsDefaultCommand(command);
+		//	var sb = new StringBuilder();
+		//	if (isDefault)
+		//	{
+		//		sb.AppendLine(command.ContextBase.Options.Description);
+		//		sb.AppendLine();
+		//		var includes = command.ContextBase.IncludeCommandsAttribute;
+		//		if (includes != null)
+		//		{
+		//			_PrintCommands(sb, includes);
+		//		}
+		//		_PrintParameters(sb, parameterContexts);
+		//	} else
+		//	{
+		//		var cAttribute = command.CommandAttribute;
+		//		sb.AppendLine(cAttribute.Name);
+		//		sb.AppendLine("    " + cAttribute.Description);
+		//		sb.AppendLine();
+		//		if (command.IncludeCommandsAttribute != null)
+		//		{
+		//			_PrintCommands(sb, command.IncludeCommandsAttribute);
+		//		}
+		//		_PrintParameters(sb, parameterContexts);
+		//	}
+		//	_console.Write(sb.ToString());
+		//}
+
+		private void _PrintCommands(CommandAttribute[] commands)
 		{
-			var defaultAttribute = command.ContextBase.DefaultCommandAttribute;
-			if (defaultAttribute == null)
-				return false;
-			return defaultAttribute.DefaultCommand == command.GetType();
+			_console.WriteLine("commands:");
+			_console.WriteLine("---------");
+			foreach (var c in commands)
+			{
+				_console.WriteLine(c.Name);
+				_console.WriteLine("    " + c.Description);
+			}
+			_console.WriteLine();
 		}
+
+		private void _PrintParameters(ParameterAttribute[] parameters)
+		{
+			_console.WriteLine("parameters:");
+			_console.WriteLine("-----------");
+			foreach (var p in parameters)
+			{
+				_console.Write(p.Parameters);
+				_console.Write("    ");
+				_console.WriteLine(p.Description);
+			}
+		}
+
+		//private bool _IsDefaultCommand(CommandBase command)
+		//{
+		//	var defaultAttribute = command.ContextBase.DefaultCommandAttribute;
+		//	if (defaultAttribute == null)
+		//		return false;
+		//	return defaultAttribute.DefaultCommand == command.GetType();
+		//}
 
 		private Type _FindTargetCommandType(Token[] tokens, ref int offset, Type contextType, Type lastCommandType = null)
 		{

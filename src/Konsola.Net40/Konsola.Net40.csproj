@@ -78,6 +78,9 @@
     <Compile Include="..\Konsola\Internal\CommandContext.cs">
       <Link>Internal\CommandContext.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Internal\HelpInfo.cs">
+      <Link>Internal\HelpInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Internal\ParameterContext.cs">
       <Link>Internal\ParameterContext.cs</Link>
     </Compile>
