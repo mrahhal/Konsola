@@ -25,7 +25,7 @@ namespace Konsola.Tests
 		Linux = 4,
 	}
 
-	[ContextOptions]
+	[ContextOptions(Description = "This is some kind of a program description v1.0.123")]
 	[IncludeCommands(typeof(RestoreCommand))]
 	[DefaultCommand(typeof(DefaultCommand))]
 	public class Context : ContextBase
@@ -63,14 +63,14 @@ namespace Konsola.Tests
 		}
 	}
 
-	[Command("restore")]
+	[Command("restore", Description = "restores something from there")]
 	[IncludeCommands(typeof(RestoreSubCommand))]
 	public class RestoreCommand : CommandBase<Context>
 	{
-		[Parameter("an")]
+		[Parameter("an", Description = "specify another")]
 		public bool Another { get; set; }
 
-		[Parameter("p")]
+		[Parameter("p", Description = "specify the chosen platform")]
 		public Platform Plaform { get; set; }
 
 		public override void ExecuteCommand()

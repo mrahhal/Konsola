@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Konsola.Attributes;
 using Konsola.Attributes.Constraints;
+using Konsola.Internal;
 using Xunit;
 
 namespace Konsola.Tests
@@ -229,6 +230,32 @@ namespace Konsola.Tests
 			var context = CommandLineParser.Parse<Context>(args);
 
 			Assert.Null(context);
+		}
+
+		[Fact]
+		public void HelpInfo_Default()
+		{
+			var args = "-int 3".SplitCommandLineArgs();
+
+			var context = CommandLineParser.Parse<Context>(args);
+			var helpInfo = new HelpInfo(context.Command);
+
+			Assert.True(helpInfo.ProgramDescription != null);
+			Assert.True(helpInfo.Commands != null);
+			Assert.True(helpInfo.Parameters != null);
+		}
+
+		[Fact]
+		public void HelpInfo_OfCommand()
+		{
+			var args = "restore --an".SplitCommandLineArgs();
+
+			var context = CommandLineParser.Parse<Context>(args);
+			var helpInfo = new HelpInfo(context.Command);
+
+			Assert.True(helpInfo.ProgramDescription == null);
+			Assert.True(helpInfo.Commands != null);
+			Assert.True(helpInfo.Parameters != null);
 		}
 	}
 
