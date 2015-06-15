@@ -8,7 +8,6 @@ Dynamically parses command line args based on strong typed objects.
 
 ##### Simplest example:
 ```c#
-
 [DefaultCommand(typeof(DefaultCommand))]
 class Context : ContextBase
 {
@@ -40,7 +39,6 @@ Assert.True(command.SomeInt == 3);
 Assert.True(command.SomeBool == true);
 
 command.ExecuteCommand(); // Execute the command.
-
 ```
 
 ### More details
@@ -58,4 +56,6 @@ And it automatically detects and throws exceptions on command line errors. It al
 A help message is automatically handled and printed when `--h` or `--help` is passed as an arg.
 
 #### A lot more stuff
-There's a lot more (default command, multiple and nested commands, context options, error detection, automatic printing to an extensible console, automatic help printing, positional params [coming], ...). Check the unit tests project for more.
+There's a lot more (default command, multiple and nested commands, context options, error detection, automatic printing to an extensible console, automatic help printing, constraints, positional params [coming], ...).
+
+Check the unit tests project for more.
