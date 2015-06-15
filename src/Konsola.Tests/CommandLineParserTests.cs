@@ -5,7 +5,6 @@
 using System;
 using System.Linq;
 using Konsola.Attributes;
-using Konsola.Attributes.Constraints;
 using Konsola.Internal;
 using Xunit;
 

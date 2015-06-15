@@ -4,7 +4,7 @@
 
 using System;
 using Konsola.Attributes;
-using Konsola.Attributes.Constraints;
+using Konsola.Constraints;
 
 namespace Konsola.Tests
 {

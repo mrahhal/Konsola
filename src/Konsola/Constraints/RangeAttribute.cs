@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Konsola.Attributes.Constraints
+namespace Konsola.Constraints
 {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
 	public class RangeAttribute : ConstraintBaseAttribute

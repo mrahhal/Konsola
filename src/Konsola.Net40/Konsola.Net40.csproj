@@ -39,12 +39,6 @@
     <Compile Include="..\Konsola\Attributes\CommandAttribute.cs">
       <Link>Attributes\CommandAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\Attributes\ConstraintBaseAttribute.cs">
-      <Link>Attributes\ConstraintBaseAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Attributes\Constraints\RangeAttribute.cs">
-      <Link>Attributes\Constraints\RangeAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\Konsola\Attributes\ContextOptionsAttribute.cs">
       <Link>Attributes\ContextOptionsAttribute.cs</Link>
     </Compile>
@@ -68,6 +62,12 @@
     </Compile>
     <Compile Include="..\Konsola\Consoles.cs">
       <Link>Consoles.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Constraints\ConstraintBaseAttribute.cs">
+      <Link>Constraints\ConstraintBaseAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Constraints\RangeAttribute.cs">
+      <Link>Constraints\RangeAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\ContextBase.cs">
       <Link>ContextBase.cs</Link>

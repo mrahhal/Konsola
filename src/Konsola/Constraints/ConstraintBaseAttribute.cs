@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Konsola.Attributes
+namespace Konsola.Constraints
 {
 	/// <summary>
 	/// Represents a constraint that can be applied to a parameter.
