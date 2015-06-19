@@ -142,13 +142,13 @@ namespace Konsola
 				}
 				else
 				{
-					if (i != 0)
-					{
-						if (list[j - 1].Kind != TokenKind.Word)
-						{
-							throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
-						}
-					}
+					//if (i != 0)
+					//{
+					//	if (list[j - 1].Kind != TokenKind.Word)
+					//	{
+					//		throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
+					//	}
+					//}
 
 					list.Add(new Token(arg, true));
 					j++;
@@ -266,10 +266,15 @@ namespace Konsola
 			}
 
 			++offset;
+
+			// WARN: There are a lot of potential problems in positional
+			// params for commands that contain subcommands.
+
 			var cc = type.GetCommandContextOrDefault(token.Param);
 			if (cc == null)
 			{
-				throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, token.Param);
+				//throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, token.Param);
+				return lastCommandType;
 			}
 
 			return _FindTargetCommandType(tokens, ref offset, contextType, cc.Type) ?? cc.Type;
