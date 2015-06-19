@@ -142,14 +142,6 @@ namespace Konsola
 				}
 				else
 				{
-					if (i != 0)
-					{
-						if (list[j - 1].Kind != TokenKind.Command)
-						{
-							throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
-						}
-					}
-
 					list.Add(new Token(arg, true));
 					j++;
 				}
@@ -246,6 +238,10 @@ namespace Konsola
 			foreach (var p in parameters)
 			{
 				_console.Write(p.Parameters);
+				if (p.Position != 0)
+				{
+					_console.Write("[" + p.Position + "]");
+				}
 				_console.Write("    ");
 				_console.WriteLine(p.Description);
 			}
@@ -260,16 +256,20 @@ namespace Konsola
 				throw new CommandLineException(CommandLineExceptionKind.Invalid, null);
 			}
 			var token = tokens[offset];
-			if (token.Kind != TokenKind.Command)
+			if (token.Kind != TokenKind.Word)
 			{
 				return null;
 			}
 
 			++offset;
+
+			// WARN: There are a lot of potential problems in positional
+			// params for commands that contain subcommands.
+
 			var cc = type.GetCommandContextOrDefault(token.Param);
 			if (cc == null)
 			{
-				throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, token.Param);
+				return lastCommandType;
 			}
 
 			return _FindTargetCommandType(tokens, ref offset, contextType, cc.Type) ?? cc.Type;
@@ -326,34 +326,48 @@ namespace Konsola
 
 		private void _BindCommandOptions(Token[] tokens, int offset, CommandBase command, ParameterContext[] parameterContexts)
 		{
+			var position = 1;
 			for (int i = offset; i < tokens.Length; i++)
 			{
 				var token = tokens[i];
-				var parameterContext = parameterContexts.FirstOrDefault(pc => pc.ParameterAttribute.InternalParameters.Contains(token.Param));
+				var parameterContext = token.Kind == TokenKind.Word ?
+					parameterContexts.FirstOrDefault(pc => pc.ParameterAttribute.Position == position) :
+					parameterContexts.FirstOrDefault(pc => pc.ParameterAttribute.InternalParameters.Contains(token.Param));
 				if (parameterContext == null)
 				{
 					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, token.Param);
 				}
+
+				Action<object> validateConstraints = (value) =>
+				{
+					// Validate the constraints.
+					foreach (var constraint in parameterContext.ConstraintAttributes)
+					{
+						if (!constraint.Validate(value))
+						{
+							throw new CommandLineException(CommandLineExceptionKind.Constraint, token.Param, constraint.ErrorMessage);
+						}
+					}
+				};
 
 				// Bind the values.
 				if (token.Kind == TokenKind.Partial)
 				{
 					parameterContext.Property.SetValue(command, s_trueBox, null);
 				}
-				else // TokenKind.Full
+				else // TokenKind.Full || TokenKind.Word
 				{
-					Action<object> validateConstraints = (value) =>
+					if (token.Kind == TokenKind.Word && parameterContext == null)
 					{
-						// Validate the constraints.
-						foreach (var constraint in parameterContext.ConstraintAttributes)
-						{
-							if (!constraint.Validate(value))
-							{
-								throw new CommandLineException(CommandLineExceptionKind.Constraint, token.Param, constraint.ErrorMessage);
-							}
-						}
-					};
-
+						// Binding failed for the current positional param.
+						throw new CommandLineException(CommandLineExceptionKind.InvalidPositionalParameters, null);
+					}
+					if (token.Kind == TokenKind.Word)
+					{
+						// Transform the token to a full kind.
+						token = new Token(parameterContext.ParameterAttribute.InternalParameters[0], token.Param);
+						position++;
+					}
 					switch (parameterContext.ParameterAttribute.Kind)
 					{
 						case ParameterKind.String:

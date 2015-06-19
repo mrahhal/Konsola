@@ -12,9 +12,9 @@ namespace Konsola.Internal
 	internal enum TokenKind
 	{
 		/// <summary>
-		/// A command token.
+		/// A one word token.
 		/// </summary>
-		Command,
+		Word,
 
 		/// <summary>
 		/// A param-value token.

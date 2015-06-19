@@ -26,7 +26,7 @@ namespace Konsola.Tests
 	}
 
 	[ContextOptions(Description = "This is some kind of a program description v1.0.123")]
-	[IncludeCommands(typeof(RestoreCommand))]
+	[IncludeCommands(typeof(RestoreCommand), typeof(PositionCommand))]
 	[DefaultCommand(typeof(DefaultCommand))]
 	public class Context : ContextBase
 	{
@@ -83,6 +83,23 @@ namespace Konsola.Tests
 	{
 		[Parameter("some")]
 		public bool Some { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
+
+	[Command("position")]
+	public class PositionCommand : CommandBase<Context>
+	{
+		[Parameter("some")]
+		public string Some { get; set; }
+
+		[Parameter("first", Position = 1)]
+		public string First { get; set; }
+
+		[Parameter("second", Position = 2)]
+		public string Second { get; set; }
 
 		public override void ExecuteCommand()
 		{

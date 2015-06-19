@@ -17,12 +17,12 @@ namespace Konsola.Internal
 		private string _value;
 		private TokenKind _kind;
 
-		public Token(string param, bool isCommand)
+		public Token(string param, bool isWord)
 			: this(param, null)
 		{
-			if (isCommand)
+			if (isWord)
 			{
-				_kind = TokenKind.Command;
+				_kind = TokenKind.Word;
 			}
 		}
 
