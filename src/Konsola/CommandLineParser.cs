@@ -142,14 +142,6 @@ namespace Konsola
 				}
 				else
 				{
-					//if (i != 0)
-					//{
-					//	if (list[j - 1].Kind != TokenKind.Word)
-					//	{
-					//		throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
-					//	}
-					//}
-
 					list.Add(new Token(arg, true));
 					j++;
 				}
@@ -273,7 +265,6 @@ namespace Konsola
 			var cc = type.GetCommandContextOrDefault(token.Param);
 			if (cc == null)
 			{
-				//throw new CommandLineException(CommandLineExceptionKind.InvalidCommand, token.Param);
 				return lastCommandType;
 			}
 
