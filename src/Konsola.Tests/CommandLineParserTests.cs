@@ -285,7 +285,7 @@ namespace Konsola.Tests
 		}
 
 		[Fact]
-		public void Parse_WithPosition()
+		public void Parse_WithPositionalParams()
 		{
 			var args = "position -some somestr fstr sstr".SplitCommandLineArgs();
 
@@ -295,6 +295,17 @@ namespace Konsola.Tests
 			Assert.True(command.First == "fstr");
 			Assert.True(command.Second == "sstr");
 			Assert.True(command.Some == "somestr");
+		}
+
+		[Fact]
+		public void Parse_WithInvalidPostionalParams_Throws()
+		{
+			var args = "position -some somestr asd fstr sstr".SplitCommandLineArgs();
+
+			var ex = Assert.Throws<CommandLineException>(() =>
+				{
+					var context = CommandLineParser.Parse<Context>(args);
+				});
 		}
 	}
 

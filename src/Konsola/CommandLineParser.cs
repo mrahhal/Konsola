@@ -238,6 +238,10 @@ namespace Konsola
 			foreach (var p in parameters)
 			{
 				_console.Write(p.Parameters);
+				if (p.Position != 0)
+				{
+					_console.Write("[" + p.Position + "]");
+				}
 				_console.Write("    ");
 				_console.WriteLine(p.Description);
 			}
