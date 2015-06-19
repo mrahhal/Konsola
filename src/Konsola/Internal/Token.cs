@@ -22,7 +22,7 @@ namespace Konsola.Internal
 		{
 			if (isCommand)
 			{
-				_kind = TokenKind.Command;
+				_kind = TokenKind.Word;
 			}
 		}
 

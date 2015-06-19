@@ -144,7 +144,7 @@ namespace Konsola
 				{
 					if (i != 0)
 					{
-						if (list[j - 1].Kind != TokenKind.Command)
+						if (list[j - 1].Kind != TokenKind.Word)
 						{
 							throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, arg);
 						}
@@ -260,7 +260,7 @@ namespace Konsola
 				throw new CommandLineException(CommandLineExceptionKind.Invalid, null);
 			}
 			var token = tokens[offset];
-			if (token.Kind != TokenKind.Command)
+			if (token.Kind != TokenKind.Word)
 			{
 				return null;
 			}
