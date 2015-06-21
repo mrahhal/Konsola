@@ -6,13 +6,13 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Konsola")]
-[assembly: AssemblyDescription("Contains services for command line tools.")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MRH")]
 [assembly: AssemblyProduct("Konsola")]
 [assembly: AssemblyCopyright("Copyright © 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.3.1.*")]
+[assembly: AssemblyVersion("0.0.0")]
 
 [assembly: InternalsVisibleTo("Konsola.Tests")]

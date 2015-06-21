@@ -2,18 +2,19 @@
 <package >
   <metadata>
     <id>Konsola</id>
-    <version>0.3.1</version>
+    <version>__VERSION__</version>
     <title>Konsola</title>
     <authors>Mohammad Rahhal</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Contains services for command line tools.</description>
+    <description>__DESCRIPTION__</description>
     <copyright>Copyright 2015</copyright>
   </metadata>
   <files>
-    <file src="src\Konsola\bin\Release\Konsola.dll" target="lib\portable-net403+netcore45" />
+    <!--<file src="src\Konsola\bin\Release\Konsola.dll" target="lib\portable-net403+netcore45" />
     <file src="src\Konsola\bin\Release\Konsola.xml" target="lib\portable-net403+netcore45" />
 
     <file src="src\Konsola.Net40\bin\Release\Konsola.dll" target="lib\net40" />
-    <file src="src\Konsola.Net40\bin\Release\Konsola.xml" target="lib\net40" />
+    <file src="src\Konsola.Net40\bin\Release\Konsola.xml" target="lib\net40" />-->
+	<file src="**\*" target="" />
   </files>
 </package>

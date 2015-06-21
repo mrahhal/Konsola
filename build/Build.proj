@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="MR.Build.props" />
+	<Import Project="Build.Info.props" />
+	<Import Project="MR.Build.tasks" />
+	
+	<Target Name="CreateDirs">
+		<RemoveDir Directories="$(BinariesDir)" Condition="Exists('$(BinariesDir)')" ContinueOnError="true" />
+		<MakeDir Directories="$(ArtifactsDir)" Condition="!Exists('$(ArtifactsDir)')" />
+		<MakeDir Directories="$(BinariesDir)" Condition="!Exists('$(PackagesDestinationDir)')" />
+		<MakeDir Directories="$(NuspecsDestination)" Condition="!Exists('$(PackagesDestinationDir)')" />
+		<MakeDir Directories="$(PackagesDestinationDir)" Condition="!Exists('$(PackagesDestinationDir)')" />
+	</Target>
+	
+	<Target Name="Build" DependsOnTargets="CreateDirs">
+		<MSBuild Projects="@(Projects)" Condition="'%(Projects.SkipBuild)' == '' Or !%(Projects.SkipBuild)" Properties="Configuration=Release" />
+	</Target>
+	
+	<Target Name="CopyArtifacts" DependsOnTargets="Build">
+		<ItemGroup>
+			<NuspecSources Include="$(NuspecsSrc)*.nuspec" />
+		</ItemGroup>
+		<Copy SourceFiles="@(NuspecSources)" DestinationFolder="$(NuspecsDestination)" />
+	</Target>
+	
+	<Target Name="TransformNuspecs" DependsOnTargets="CopyArtifacts">
+		<ItemGroup>
+			<Nuspecs Include="$(NuspecsDestination)*.nuspec" />
+			
+			<NuspecTransform Include="@(Nuspecs)">
+				<Find>__VERSION__</Find>
+				<ReplaceWith>$(Version)</ReplaceWith>
+			</NuspecTransform>
+			<NuspecTransform Include="@(Nuspecs)">
+				<Find>__DESCRIPTION__</Find>
+				<ReplaceWith>$(AssemblyDescription)</ReplaceWith>
+			</NuspecTransform>
+		</ItemGroup>
+		
+		<FileRegexTransform Items="@(NuspecTransform)" />
+	</Target>
+	
+	<Target Name="BuildPackages" DependsOnTargets="TransformNuspecs">
+		<ItemGroup>
+			<Nuspecs Include="$(NuspecsDestination)*.nuspec" />
+		</ItemGroup>
+		<Exec
+			Command="nuget pack &quot;%(Nuspecs.Identity)&quot; -o &quot;$(PackagesDestinationDir)&quot; -BasePath &quot;$(BinariesDir)%(Nuspecs.Filename)&quot;"
+			LogStandardErrorAsError="true" />
+	</Target>
+</Project>

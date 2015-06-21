@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	
+	<!--
+		TODO: Specify all projects here with the required metadata.
+		
+		Required metadata:
+			Platform: Specifies the target platform of the project.
+			
+		Optional metadata:
+			SkipBuild[true]: Skip building the project.
+	-->
+	<ItemGroup>
+		<Projects Include="$(SolutionDir)src\Konsola\Konsola.csproj">
+			<Platform>portable-net403+netcore45</Platform>
+		</Projects>
+		<Projects Include="$(SolutionDir)src\Konsola.Net40\Konsola.Net40.csproj">
+			<Platform>net40</Platform>
+		</Projects>
+	</ItemGroup>
+	
+</Project>
