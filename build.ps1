@@ -1,4 +1,4 @@
-$konsola_nuspec = "Konsola.nuspec"
+$konsola_nuspec = "nuspecs\Konsola.nuspec"
 $nugetDir = "_nupkg"
 
 Function mkdirb($path)
