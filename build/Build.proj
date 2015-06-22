@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="MR.Build.props" />
-	<Import Project="Build.Info.props" />
-	<Import Project="MR.Build.tasks" />
+	<Import Project="MR.Build.props" Condition="'$(MR_Build_props_Imported)' == ''" />
+	<Import Project="Build.Info.props" Condition="'$(Build_Info_props_Imported)' == ''" />
+	<Import Project="MR.Build.tasks" Condition="'$(MR_Build_tasks_Imported)' == ''" />
 	
 	<Target Name="CreateDirs">
 		<RemoveDir Directories="$(BinariesDir)" Condition="Exists('$(BinariesDir)')" ContinueOnError="true" />
 		<MakeDir Directories="$(ArtifactsDir)" Condition="!Exists('$(ArtifactsDir)')" />
 		<MakeDir Directories="$(BinariesDir)" Condition="!Exists('$(PackagesDestinationDir)')" />
-		<MakeDir Directories="$(NuspecsDestination)" Condition="!Exists('$(PackagesDestinationDir)')" />
+		<MakeDir Directories="$(NuspecsDestination)" Condition="!Exists('$(NuspecsDestination)')" />
 		<MakeDir Directories="$(PackagesDestinationDir)" Condition="!Exists('$(PackagesDestinationDir)')" />
 	</Target>
 	
@@ -41,9 +41,6 @@
 	</Target>
 	
 	<Target Name="BuildPackages" DependsOnTargets="TransformNuspecs">
-		<ItemGroup>
-			<Nuspecs Include="$(NuspecsDestination)*.nuspec" />
-		</ItemGroup>
 		<Exec
 			Command="nuget pack &quot;%(Nuspecs.Identity)&quot; -o &quot;$(PackagesDestinationDir)&quot; -BasePath &quot;$(BinariesDir)%(Nuspecs.Filename)&quot;"
 			LogStandardErrorAsError="true" />

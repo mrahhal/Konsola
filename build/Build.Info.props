@@ -6,15 +6,17 @@
 		<MinorVersion>3</MinorVersion>
 		<PatchVersion>1</PatchVersion>
 		<PrereleaseTag></PrereleaseTag>
-		
-		<PrereleaseTagWithDash Condition="'$(PrereleaseTag)' != ''">-$(PrereleaseTag)</PrereleaseTagWithDash>
-
-		<VersionWithoutTag>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionWithoutTag>
-		<Version>$(VersionWithoutTag)$(PrereleaseTagWithDash)</Version>
 		<!--============-->
 		
 		<!-- Assembly info -->
 		<AssemblyDescription>Contains services for command line tools.</AssemblyDescription>
 		<!--============-->
+		
+		<!-- Don't change -->
+		<Build_Info_props_Imported>true</Build_Info_props_Imported>
+		<PrereleaseTagWithDash Condition="'$(PrereleaseTag)' != ''">-$(PrereleaseTag)</PrereleaseTagWithDash>
+		<VersionWithoutTag>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionWithoutTag>
+		<Version>$(VersionWithoutTag)$(PrereleaseTagWithDash)</Version>
+		<!--============-->		
 	</PropertyGroup>
 </Project>

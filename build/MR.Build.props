@@ -3,6 +3,7 @@
 	<Import Project="Build.Projects.props" />
 	
 	<PropertyGroup>
+		<MR_Build_props_Imported>true</MR_Build_props_Imported>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 		<BuildDir>$(MSBuildThisFileDirectory)</BuildDir>
 		<SolutionDir>$(BuildDir)..\</SolutionDir>
