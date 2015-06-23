@@ -112,7 +112,7 @@
     <Compile Include="..\Konsola\_Exceptions.cs">
       <Link>_Exceptions.cs</Link>
     </Compile>
-    <Compile Include="Console.cs" />
+    <Compile Include="DefaultConsole.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

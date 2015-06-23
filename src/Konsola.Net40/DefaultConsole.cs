@@ -4,18 +4,17 @@
 
 using System;
 using System.IO;
-using SConsole = System.Console;
 
 namespace Konsola
 {
 	/// <summary>
 	/// An IConsole implementation that writes to system console.
 	/// </summary>
-	public class Console : IConsole
+	public class DefaultConsole : IConsole
 	{
 		private readonly object _sync = new object();
 
-		public Console()
+		public DefaultConsole()
 		{
 		}
 
@@ -25,7 +24,7 @@ namespace Konsola
 			{
 				try
 				{
-					var width = SConsole.WindowWidth;
+					var width = Console.WindowWidth;
 					if (width > 0)
 					{
 						return width;
@@ -48,7 +47,7 @@ namespace Konsola
 			{
 				try
 				{
-					return SConsole.CursorLeft;
+					return Console.CursorLeft;
 				}
 				catch (IOException)
 				{
@@ -62,14 +61,14 @@ namespace Konsola
 			var color = _GetColorFromKind(kind);
 			lock (_sync)
 			{
-				SConsole.ForegroundColor = color;
+				Console.ForegroundColor = color;
 				try
 				{
-					SConsole.Write(value);
+					Console.Write(value);
 				}
 				finally
 				{
-					SConsole.ForegroundColor = ConsoleColor.Gray;
+					Console.ForegroundColor = ConsoleColor.Gray;
 				}
 			}
 		}
