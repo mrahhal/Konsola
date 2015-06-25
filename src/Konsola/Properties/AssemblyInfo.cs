@@ -14,5 +14,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("0.0.0")]
+[assembly: AssemblyInformationalVersion("0.0.0")]
 
 [assembly: InternalsVisibleTo("Konsola.Tests")]
