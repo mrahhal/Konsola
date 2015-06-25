@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<MR_Build_tasks_Imported>true</MR_Build_tasks_Imported>
-		<MR_Build_Tasks_dll>..\packages\MR.Build.1.1.1\tools\MR.Build.Tasks.dll</MR_Build_Tasks_dll>
+		<MR_Build_Tasks_dll>..\packages\MR.Build.2.0.0\tools\MR.Build.Tasks.dll</MR_Build_Tasks_dll>
 	</PropertyGroup>
 	
 	<UsingTask TaskName="FileRegexTransform" AssemblyFile="$(MR_Build_Tasks_dll)" />

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="MR.Build.props" Condition="'$(MR_Build_props_Imported)' == ''" />
-	<Import Project="Build.Info.props" Condition="'$(Build_Info_props_Imported)' == ''" />
-	<Import Project="MR.Build.tasks" Condition="'$(MR_Build_tasks_Imported)' == ''" />
+	<Import Project="MR.Build.props" />
 	
 	<Target Name="CreateDirs">
 		<RemoveDir Directories="$(BinariesDir)" Condition="Exists('$(BinariesDir)')" ContinueOnError="true" />
@@ -16,27 +14,19 @@
 		<MSBuild Projects="@(Projects)" Condition="'%(Projects.SkipBuild)' == '' Or !%(Projects.SkipBuild)" Properties="Configuration=Release" />
 	</Target>
 	
-	<Target Name="CopyArtifacts" DependsOnTargets="Build">
+	<Target Name="CopyNuspecs" DependsOnTargets="Build">
 		<ItemGroup>
 			<NuspecSources Include="$(NuspecsSrc)*.nuspec" />
 		</ItemGroup>
 		<Copy SourceFiles="@(NuspecSources)" DestinationFolder="$(NuspecsDestination)" />
 	</Target>
 	
-	<Target Name="TransformNuspecs" DependsOnTargets="CopyArtifacts">
+	<Target Name="TransformNuspecsPre">
 		<ItemGroup>
 			<Nuspecs Include="$(NuspecsDestination)*.nuspec" />
-			
-			<NuspecTransform Include="@(Nuspecs)">
-				<Find>__VERSION__</Find>
-				<ReplaceWith>$(Version)</ReplaceWith>
-			</NuspecTransform>
-			<NuspecTransform Include="@(Nuspecs)">
-				<Find>__DESCRIPTION__</Find>
-				<ReplaceWith>$(AssemblyDescription)</ReplaceWith>
-			</NuspecTransform>
 		</ItemGroup>
-		
+	</Target>
+	<Target Name="TransformNuspecs" DependsOnTargets="CopyNuspecs;TransformNuspecsPre;SpecifyNuspecTransforms">
 		<FileRegexTransform Items="@(NuspecTransform)" />
 	</Target>
 	
