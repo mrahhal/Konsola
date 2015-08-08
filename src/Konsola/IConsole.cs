@@ -29,7 +29,7 @@ namespace Konsola
 	{
 		public static void WriteLine(this IConsole @this)
 		{
-			@this.WriteLine(WriteKind.Normal, "");
+			@this.WriteLine(WriteKind.Normal, string.Empty);
 		}
 
 		public static void Write(this IConsole @this, string value)
