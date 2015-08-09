@@ -43,6 +43,9 @@
     <Compile Include="..\Konsola\CommandBase.cs">
       <Link>CommandBase.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\CommandContext.cs">
+      <Link>CommandContext.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\CommandLineParser.cs">
       <Link>CommandLineParser.cs</Link>
     </Compile>
@@ -64,35 +67,14 @@
     <Compile Include="..\Konsola\DefaultCommandAttribute.cs">
       <Link>DefaultCommandAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\HelpInfo.cs">
+      <Link>HelpInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\IConsole.cs">
       <Link>IConsole.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\IncludeCommandsAttribute.cs">
       <Link>IncludeCommandsAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\CommandContext.cs">
-      <Link>Internal\CommandContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\HelpInfo.cs">
-      <Link>Internal\HelpInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\ParameterContext.cs">
-      <Link>Internal\ParameterContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\ParameterKind.cs">
-      <Link>Internal\ParameterKind.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\ReflectionExtensions.cs">
-      <Link>Internal\ReflectionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\SilentConsole.cs">
-      <Link>Internal\SilentConsole.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\Token.cs">
-      <Link>Internal\Token.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Internal\TokenKind.cs">
-      <Link>Internal\TokenKind.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\KUtils.cs">
       <Link>KUtils.cs</Link>
@@ -103,8 +85,26 @@
     <Compile Include="..\Konsola\ParameterAttribute.cs">
       <Link>ParameterAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\ParameterContext.cs">
+      <Link>ParameterContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\ParameterKind.cs">
+      <Link>ParameterKind.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\ReflectionExtensions.cs">
+      <Link>ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\SilentConsole.cs">
+      <Link>SilentConsole.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Token.cs">
+      <Link>Token.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\TokenKind.cs">
+      <Link>TokenKind.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\WriteKind.cs">
       <Link>WriteKind.cs</Link>

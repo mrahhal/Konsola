@@ -3,7 +3,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using Konsola.Internal;
 
 namespace Konsola
 {

@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Konsola.Internal
+namespace Konsola
 {
 	/// <summary>
 	/// Represents a token in a stream of command line arguments.

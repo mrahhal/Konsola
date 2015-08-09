@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Konsola.Internal
+namespace Konsola
 {
 	internal class CommandContext
 	{

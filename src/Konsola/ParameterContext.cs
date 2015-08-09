@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using Konsola.Constraints;
 
-namespace Konsola.Internal
+namespace Konsola
 {
 	internal class ParameterContext
 	{

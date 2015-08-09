@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Konsola.Internal
+namespace Konsola
 {
 	internal static class ReflectionExtensions
 	{

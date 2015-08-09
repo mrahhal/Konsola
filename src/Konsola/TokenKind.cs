@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Konsola.Internal
+namespace Konsola
 {
 	/// <summary>
 	/// Represents the token kind.

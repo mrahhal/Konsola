@@ -4,7 +4,6 @@
 
 using System;
 using System.Linq;
-using Konsola.Internal;
 using Xunit;
 
 namespace Konsola.Tests

@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 
-namespace Konsola.Internal
+namespace Konsola
 {
 	internal class HelpInfo
 	{
