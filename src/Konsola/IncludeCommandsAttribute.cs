@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using Konsola.Internal;
 
-namespace Konsola.Attributes
+namespace Konsola
 {
 	/// <summary>
 	/// Specifies all the commands that are associated to the decorated context.

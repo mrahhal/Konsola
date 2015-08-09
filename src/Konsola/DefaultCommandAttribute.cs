@@ -5,7 +5,7 @@
 using System;
 using Konsola.Internal;
 
-namespace Konsola.Attributes
+namespace Konsola
 {
 	/// <summary>
 	/// Specifies the default command to be invoked when the args do not specify

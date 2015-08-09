@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Konsola.Attributes
+namespace Konsola
 {
 	/// <summary>
 	/// Configures the options when parsing args and binding them to a context.

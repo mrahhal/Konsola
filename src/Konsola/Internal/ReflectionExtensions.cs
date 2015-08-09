@@ -2,7 +2,6 @@
 // Copyright (c) 2015, Mohammad Rahhal @mrahhal
 //------------------------------------------------------------------------------
 
-using Konsola.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

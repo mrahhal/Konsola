@@ -4,7 +4,6 @@
 
 using System;
 using System.Reflection;
-using Konsola.Attributes;
 using Konsola.Constraints;
 
 namespace Konsola.Internal

@@ -37,23 +37,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Konsola\Attributes\CommandAttribute.cs">
-      <Link>Attributes\CommandAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Attributes\ContextOptionsAttribute.cs">
-      <Link>Attributes\ContextOptionsAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Attributes\DefaultCommandAttribute.cs">
-      <Link>Attributes\DefaultCommandAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Attributes\IncludeCommandsAttribute.cs">
-      <Link>Attributes\IncludeCommandsAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Attributes\OnParsedAttribute.cs">
-      <Link>Attributes\OnParsedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Attributes\ParameterAttribute.cs">
-      <Link>Attributes\ParameterAttribute.cs</Link>
+    <Compile Include="..\Konsola\CommandAttribute.cs">
+      <Link>CommandAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\CommandBase.cs">
       <Link>CommandBase.cs</Link>
@@ -73,8 +58,17 @@
     <Compile Include="..\Konsola\ContextBase.cs">
       <Link>ContextBase.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\ContextOptionsAttribute.cs">
+      <Link>ContextOptionsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\DefaultCommandAttribute.cs">
+      <Link>DefaultCommandAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\IConsole.cs">
       <Link>IConsole.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\IncludeCommandsAttribute.cs">
+      <Link>IncludeCommandsAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Internal\CommandContext.cs">
       <Link>Internal\CommandContext.cs</Link>
@@ -103,6 +97,12 @@
     <Compile Include="..\Konsola\KUtils.cs">
       <Link>KUtils.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\OnParsedAttribute.cs">
+      <Link>OnParsedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\ParameterAttribute.cs">
+      <Link>ParameterAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
@@ -117,6 +117,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\build\MR.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

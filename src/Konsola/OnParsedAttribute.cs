@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Konsola.Attributes
+namespace Konsola
 {
 	/// <summary>
 	/// Decorates a method in a command class.

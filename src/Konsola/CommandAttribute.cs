@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 
-namespace Konsola.Attributes
+namespace Konsola
 {
 	/// <summary>
 	/// Decorates a command class and specifies its binding options.

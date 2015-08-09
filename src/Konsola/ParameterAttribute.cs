@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using Konsola.Internal;
 
-namespace Konsola.Attributes
+namespace Konsola
 {
 	/// <summary>
 	/// Decorates a property of a command class and makes it a binding target for args.

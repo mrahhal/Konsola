@@ -61,10 +61,10 @@
     <DocumentationFile>bin\Release\Konsola.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Attributes\CommandAttribute.cs" />
+    <Compile Include="CommandAttribute.cs" />
     <Compile Include="Constraints\RangeAttribute.cs" />
-    <Compile Include="Attributes\DefaultCommandAttribute.cs" />
-    <Compile Include="Attributes\IncludeCommandsAttribute.cs" />
+    <Compile Include="DefaultCommandAttribute.cs" />
+    <Compile Include="IncludeCommandsAttribute.cs" />
     <Compile Include="Constraints\ConstraintBaseAttribute.cs" />
     <Compile Include="CommandBase.cs" />
     <Compile Include="Consoles.cs" />
@@ -74,9 +74,9 @@
     <Compile Include="Internal\HelpInfo.cs" />
     <Compile Include="Internal\ParameterContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Attributes\ContextOptionsAttribute.cs" />
-    <Compile Include="Attributes\ParameterAttribute.cs" />
-    <Compile Include="Attributes\OnParsedAttribute.cs" />
+    <Compile Include="ContextOptionsAttribute.cs" />
+    <Compile Include="ParameterAttribute.cs" />
+    <Compile Include="OnParsedAttribute.cs" />
     <Compile Include="Internal\ParameterKind.cs" />
     <Compile Include="Internal\Token.cs" />
     <Compile Include="Internal\TokenKind.cs" />

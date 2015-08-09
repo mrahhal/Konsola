@@ -3,7 +3,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using Konsola.Attributes;
 using Konsola.Constraints;
 
 namespace Konsola.Tests
