@@ -351,6 +351,8 @@ namespace Konsola
 				// Bind the values.
 				if (token.Kind == TokenKind.Partial)
 				{
+					if (parameterContext.Property.PropertyType != s_typeOfBool)
+						throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, token.Param);
 					parameterContext.Property.SetValue(command, s_trueBox, null);
 				}
 				else // TokenKind.Full || TokenKind.Word
