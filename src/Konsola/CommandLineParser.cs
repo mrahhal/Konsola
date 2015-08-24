@@ -223,8 +223,15 @@ namespace Konsola
 			_console.WriteLine("---------");
 			foreach (var c in commands)
 			{
-				_console.WriteLine(c.Name);
-				_console.WriteLine("    " + c.Description);
+				_console.Write("* " + c.Name);
+				if (!string.IsNullOrWhiteSpace(c.Description))
+				{
+					_console.Write(" - ");
+					_console.WriteLine(c.Description);
+				} else
+				{
+					_console.WriteLine();
+				}
 			}
 			_console.WriteLine();
 		}
@@ -235,13 +242,19 @@ namespace Konsola
 			_console.WriteLine("-----------");
 			foreach (var p in parameters)
 			{
-				_console.Write(p.Parameters);
+				_console.Write("* " + p.Parameters);
 				if (p.Position != 0)
 				{
 					_console.Write("[" + p.Position + "]");
 				}
-				_console.Write("    ");
-				_console.WriteLine(p.Description);
+				if (!string.IsNullOrWhiteSpace(p.Description))
+				{
+					_console.Write(" - ");
+					_console.WriteLine(p.Description);
+				} else
+				{
+					_console.WriteLine();
+				}
 			}
 		}
 
