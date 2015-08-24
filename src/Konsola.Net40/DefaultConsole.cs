@@ -18,44 +18,6 @@ namespace Konsola
 		{
 		}
 
-		public int WindowWidth
-		{
-			get
-			{
-				try
-				{
-					var width = Console.WindowWidth;
-					if (width > 0)
-					{
-						return width;
-					}
-					else
-					{
-						return int.MaxValue;
-					}
-				}
-				catch (IOException)
-				{
-					return int.MaxValue;
-				}
-			}
-		}
-
-		public int CursorLeft
-		{
-			get
-			{
-				try
-				{
-					return Console.CursorLeft;
-				}
-				catch (IOException)
-				{
-					return 0;
-				}
-			}
-		}
-
 		public void Write(WriteKind kind, string value)
 		{
 			var color = _GetColorFromKind(kind);
