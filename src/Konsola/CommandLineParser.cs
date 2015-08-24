@@ -74,6 +74,8 @@ namespace Konsola
 			_options = _context.Options = _contextType.GetCustomAttribute<ContextOptionsAttribute>() ?? new ContextOptionsAttribute();
 			_context.DefaultCommandAttribute = _contextType.GetCustomAttribute<DefaultCommandAttribute>();
 			_context.IncludeCommandsAttribute = _contextType.GetCustomAttribute<IncludeCommandsAttribute>();
+			if (_context.IncludeCommandsAttribute != null)
+				_ValidateIncludedCommands(_context.IncludeCommandsAttribute.Commands);
 
 			if (_InternalWork())
 				return null;
@@ -169,6 +171,8 @@ namespace Konsola
 			var command = commandType.CreateInstance<CommandBase>();
 			command.CommandAttribute = commandType.GetCustomAttribute<CommandAttribute>();
 			command.IncludeCommandsAttribute = commandType.GetCustomAttribute<IncludeCommandsAttribute>();
+			if (command.IncludeCommandsAttribute != null)
+				_ValidateIncludedCommands(command.IncludeCommandsAttribute.Commands);
 			context.Command = command;
 			command.ContextBase = context;
 			var parameterContexts = commandType.GetPropertyContexts().ToArray();
@@ -445,6 +449,19 @@ namespace Konsola
 					}
 				}
 				parameterContext.ParameterAttribute.IsSet = true;
+			}
+		}
+
+		private void _ValidateIncludedCommands(Type[] types)
+		{
+			if (types == null || types.Length == 0)
+				return;
+			foreach (var type in types)
+			{
+				if (type.GetCustomAttribute<CommandAttribute>() == null)
+				{
+					throw new ContextException("A command doesn't have a CommandAttribute type: " + type.Name);
+				}
 			}
 		}
 
