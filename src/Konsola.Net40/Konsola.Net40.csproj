@@ -76,9 +76,6 @@
     <Compile Include="..\Konsola\IncludeCommandsAttribute.cs">
       <Link>IncludeCommandsAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\KUtils.cs">
-      <Link>KUtils.cs</Link>
-    </Compile>
     <Compile Include="..\Konsola\OnParsedAttribute.cs">
       <Link>OnParsedAttribute.cs</Link>
     </Compile>
@@ -105,6 +102,9 @@
     </Compile>
     <Compile Include="..\Konsola\TokenKind.cs">
       <Link>TokenKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Util.cs">
+      <Link>Util.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\WriteKind.cs">
       <Link>WriteKind.cs</Link>

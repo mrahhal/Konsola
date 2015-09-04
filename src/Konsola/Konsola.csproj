@@ -82,7 +82,7 @@
     <Compile Include="TokenKind.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ReflectionExtensions.cs" />
-    <Compile Include="KUtils.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="SilentConsole.cs" />
     <Compile Include="WriteKind.cs" />
     <Compile Include="_Exceptions.cs" />

@@ -310,7 +310,7 @@ namespace Konsola.Tests
 	{
 		public static string[] SplitCommandLineArgs(this string args)
 		{
-			return KUtils.SplitCommandLineArgs(args).ToArray();
+			return Util.SplitCommandLineArgs(args).ToArray();
 		}
 	}
 }
