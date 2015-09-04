@@ -153,6 +153,9 @@ namespace Konsola
 		// Returns if handled.
 		private bool _ProcessTokens(Token[] tokens, int offset, ContextBase context)
 		{
+			if (_TryHandleNoArgs(context, _args))
+				return true;
+
 			var commandType = _FindTargetCommandType(tokens, ref offset, _contextType);
 			if (commandType == null)
 			{
@@ -194,6 +197,17 @@ namespace Konsola
 
 			// Check for mandatory params that have not been set.
 			_EnsureMandatoriesSet(parameterContexts);
+			return false;
+		}
+
+		private bool _TryHandleNoArgs(ContextBase context, string[] args)
+		{
+			if (args.Length == 0)
+			{
+				var helpInfo = new HelpInfo(context);
+				_PrintHelp(helpInfo);
+				return true;
+			}
 			return false;
 		}
 
