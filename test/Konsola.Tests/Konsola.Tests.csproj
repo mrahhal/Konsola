@@ -46,7 +46,7 @@
     <Compile Include="_Contexts.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Konsola\Konsola.csproj">
+    <ProjectReference Include="..\..\src\Konsola\Konsola.csproj">
       <Project>{62B7A141-F1EA-4507-8024-35865CB7ACB6}</Project>
       <Name>Konsola</Name>
     </ProjectReference>

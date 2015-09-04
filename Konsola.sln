@@ -13,7 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konsola", "src\Konsola\Kons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konsola.Net40", "src\Konsola.Net40\Konsola.Net40.csproj", "{D59DD9B1-7B26-4537-8D29-6FA85F392128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konsola.Tests", "src\Konsola.Tests\Konsola.Tests.csproj", "{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2298100C-A310-43B7-B0F3-052C5E8C52A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{96D0E6CC-3D87-49AF-AB94-1104ECF887A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konsola.Tests", "test\Konsola.Tests\Konsola.Tests.csproj", "{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +40,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{62B7A141-F1EA-4507-8024-35865CB7ACB6} = {2298100C-A310-43B7-B0F3-052C5E8C52A4}
+		{D59DD9B1-7B26-4537-8D29-6FA85F392128} = {2298100C-A310-43B7-B0F3-052C5E8C52A4}
+		{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3} = {96D0E6CC-3D87-49AF-AB94-1104ECF887A5}
 	EndGlobalSection
 EndGlobal
