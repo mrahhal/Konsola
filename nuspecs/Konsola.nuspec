@@ -8,6 +8,8 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>__DESCRIPTION__</description>
 		<copyright>Copyright 2015</copyright>
+		<projectUrl>https://github.com/mrahhal/Konsola</projectUrl>
+		<tags>CommandLineParser Portable</tags>
 	</metadata>
 	<files>
 		<file src="**\*" target="" />
