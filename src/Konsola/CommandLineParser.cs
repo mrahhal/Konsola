@@ -162,8 +162,14 @@ namespace Konsola
 				{
 					// No command has been specified on the command line
 					// and no default command has been registered.
-					// TODO: Print usage instead?
-					throw new CommandLineException(CommandLineExceptionKind.NoCommand, "");
+					if (_TryHandleHelp(tokens, context))
+					{
+						return true;
+					}
+					else
+					{
+						throw new CommandLineException(CommandLineExceptionKind.NoCommand, "");
+					}
 				}
 				commandType = defaultCommandAttribute.DefaultCommand;
 			}
@@ -188,6 +194,19 @@ namespace Konsola
 
 			// Check for mandatory params that have not been set.
 			_EnsureMandatoriesSet(parameterContexts);
+			return false;
+		}
+
+		private bool _TryHandleHelp(Token[] tokens, ContextBase context)
+		{
+			if (tokens.Any(t => t.Kind == TokenKind.Partial
+				&& (t.Param.ToLower() == "h" || t.Param.ToLower() == "help")))
+			{
+				var helpInfo = new HelpInfo(context);
+				_PrintHelp(helpInfo);
+				return true;
+			}
+
 			return false;
 		}
 

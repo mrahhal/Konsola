@@ -15,6 +15,17 @@ namespace Konsola
 
 		public ParameterAttribute[] Parameters { get; set; }
 
+		public HelpInfo(ContextBase context)
+		{
+			ProgramDescription = context.Options.Description;
+			if (context.IncludeCommandsAttribute != null)
+			{
+				Commands = context.IncludeCommandsAttribute.Commands
+					.Select(c => c.GetCustomAttribute<CommandAttribute>())
+					.ToArray();
+			}
+		}
+
 		public HelpInfo(CommandBase command, ParameterContext[] pcs = null)
 		{
 			if (pcs == null)
