@@ -2,9 +2,9 @@
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<MajorVersion>0</MajorVersion>
-		<MinorVersion>3</MinorVersion>
-		<PatchVersion>1</PatchVersion>
-		<PrereleaseTag></PrereleaseTag>
+		<MinorVersion>4</MinorVersion>
+		<PatchVersion>0</PatchVersion>
+		<PrereleaseTag>pre</PrereleaseTag>
 		
 		<AssemblyDescription>Contains services for command line tools.</AssemblyDescription>
 	</PropertyGroup>
