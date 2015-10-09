@@ -3,6 +3,8 @@ Contains services for command line tools.
 
 Latest nuget package [here](https://www.nuget.org/packages/Konsola).
 
+[![Build status](https://ci.appveyor.com/api/projects/status/xsc0a2iarj4a292b?svg=true)](https://ci.appveyor.com/project/mrahhal/konsola)
+
 ***Note**: Use cases and samples are coming for `v1.0`*
 
 ### CommandLineParser
