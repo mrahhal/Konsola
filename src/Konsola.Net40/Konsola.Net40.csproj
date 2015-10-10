@@ -37,6 +37,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Konsola\Boxes.cs">
+      <Link>Boxes.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\CommandAttribute.cs">
       <Link>CommandAttribute.cs</Link>
     </Compile>

@@ -61,6 +61,7 @@
     <DocumentationFile>bin\Release\Konsola.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Boxes.cs" />
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="Constraints\RangeAttribute.cs" />
     <Compile Include="DefaultCommandAttribute.cs" />
