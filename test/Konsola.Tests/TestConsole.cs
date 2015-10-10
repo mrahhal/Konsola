@@ -9,16 +9,6 @@ namespace Konsola.Tests
 
 		public string Text { get { return _sb.ToString(); } }
 
-		public int WindowWidth
-		{
-			get { return -1; }
-		}
-
-		public int CursorLeft
-		{
-			get { return -1; }
-		}
-
 		public void Write(WriteKind kind, string value)
 		{
 			_sb.Append(value);
