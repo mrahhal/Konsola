@@ -11,13 +11,6 @@ namespace Konsola
 	/// </summary>
 	public class CommandLineParser
 	{
-		private static readonly object s_trueBox = (object)true;
-
-		private static readonly Type s_typeOfString = typeof(string);
-		private static readonly Type s_typeOfStringArray = typeof(string[]);
-		private static readonly Type s_typeOfInt = typeof(int);
-		private static readonly Type s_typeOfBool = typeof(bool);
-
 		private ContextBase _context;
 		private IConsole _console;
 		private string[] _args;
@@ -327,15 +320,15 @@ namespace Konsola
 				var prop = pc.Property;
 				var propType = prop.PropertyType;
 
-				if (propType == s_typeOfString)
+				if (propType == typeof(string))
 				{
 					att.Kind = ParameterKind.String;
 				}
-				else if (propType == s_typeOfInt)
+				else if (propType == typeof(int))
 				{
 					att.Kind = ParameterKind.Int;
 				}
-				else if (propType == s_typeOfBool)
+				else if (propType == typeof(bool))
 				{
 					att.Kind = ParameterKind.Switch;
 				}
@@ -357,7 +350,7 @@ namespace Konsola
 					}
 					att.ValidValues = sb.ToString().Split(',');
 				}
-				else if (propType == s_typeOfStringArray)
+				else if (propType == typeof(string[]))
 				{
 					att.Kind = ParameterKind.StringArray;
 				}
@@ -397,9 +390,9 @@ namespace Konsola
 				// Bind the values.
 				if (token.Kind == TokenKind.Partial)
 				{
-					if (parameterContext.Property.PropertyType != s_typeOfBool)
+					if (parameterContext.Property.PropertyType != typeof(bool))
 						throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, token.Param);
-					parameterContext.Property.SetValue(command, s_trueBox, null);
+					parameterContext.Property.SetValue(command, Boxes.True, null);
 				}
 				else // TokenKind.Full || TokenKind.Word
 				{
