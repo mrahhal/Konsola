@@ -76,6 +76,9 @@
     <Compile Include="..\Konsola\IConsole.cs">
       <Link>IConsole.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\IConsole.Silent.cs">
+      <Link>IConsole.Silent.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\IncludeCommandsAttribute.cs">
       <Link>IncludeCommandsAttribute.cs</Link>
     </Compile>
@@ -97,9 +100,6 @@
     <Compile Include="..\Konsola\ReflectionExtensions.cs">
       <Link>ReflectionExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\SilentConsole.cs">
-      <Link>SilentConsole.cs</Link>
-    </Compile>
     <Compile Include="..\Konsola\Token.cs">
       <Link>Token.cs</Link>
     </Compile>
@@ -115,7 +115,7 @@
     <Compile Include="..\Konsola\_Exceptions.cs">
       <Link>_Exceptions.cs</Link>
     </Compile>
-    <Compile Include="DefaultConsole.cs" />
+    <Compile Include="IConsole.Default.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

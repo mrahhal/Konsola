@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 
 namespace Konsola.Tests
 {
-	public class KUtilsTests
+	public class UtilsTests
 	{
 		[Fact]
 		public void SplitCommandLineArgs()
 		{
-			var args = "-my some -s2 \"something -int 3\" --sw".SplitCommandLineArgs();
+			var args = Util.SplitCommandLineArgs( "-my some -s2 \"something -int 3\" --sw").ToArray();
 
 			Assert.True(args.Length == 5);
 			Assert.True(args[0] == "-my");
@@ -17,6 +18,5 @@ namespace Konsola.Tests
 			Assert.True(args[3] == "something -int 3");
 			Assert.True(args[4] == "--sw");
 		}
-
 	}
 }

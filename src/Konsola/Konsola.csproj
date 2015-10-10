@@ -84,7 +84,9 @@
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Util.cs" />
-    <Compile Include="SilentConsole.cs" />
+    <Compile Include="IConsole.Silent.cs">
+      <DependentUpon>IConsole.cs</DependentUpon>
+    </Compile>
     <Compile Include="WriteKind.cs" />
     <Compile Include="_Exceptions.cs" />
   </ItemGroup>
