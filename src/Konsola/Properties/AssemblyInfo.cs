@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// Copyright (c) 2015, Mohammad Rahhal @mrahhal
-//------------------------------------------------------------------------------
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Konsola")]

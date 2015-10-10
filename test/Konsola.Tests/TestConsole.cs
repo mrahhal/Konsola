@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// Copyright (c) 2015, Mohammad Rahhal @mrahhal
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Text;
 
 namespace Konsola.Tests
