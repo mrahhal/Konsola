@@ -1,7 +1,7 @@
 # Konsola
 Contains services for command line tools.
 
-[![Build status](https://img.shields.io/appveyor/ci/mrahhal/konsola.svg)](https://ci.appveyor.com/project/mrahhal/konsola)
+[![Build status](https://img.shields.io/appveyor/ci/mrahhal/konsola/master.svg)](https://ci.appveyor.com/project/mrahhal/konsola)
 
 Latest nuget package [here](https://www.nuget.org/packages/Konsola).
 
