@@ -62,33 +62,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boxes.cs" />
-    <Compile Include="CommandAttribute.cs" />
-    <Compile Include="Constraints\RangeAttribute.cs" />
-    <Compile Include="DefaultCommandAttribute.cs" />
-    <Compile Include="IncludeCommandsAttribute.cs" />
-    <Compile Include="Constraints\ConstraintBaseAttribute.cs" />
-    <Compile Include="CommandBase.cs" />
-    <Compile Include="Consoles.cs" />
-    <Compile Include="IConsole.cs" />
-    <Compile Include="CommandContext.cs" />
-    <Compile Include="ContextBase.cs" />
-    <Compile Include="HelpInfo.cs" />
-    <Compile Include="ParameterContext.cs" />
+    <Compile Include="Parsing\CommandAttribute.cs" />
+    <Compile Include="Parsing\Constraints\RangeAttribute.cs" />
+    <Compile Include="Parsing\DefaultCommandAttribute.cs" />
+    <Compile Include="Parsing\IncludeCommandsAttribute.cs" />
+    <Compile Include="Parsing\Constraints\ConstraintBaseAttribute.cs" />
+    <Compile Include="Parsing\CommandBase.cs" />
+    <Compile Include="Parsing\Consoles.cs" />
+    <Compile Include="Parsing\IConsole.cs" />
+    <Compile Include="Parsing\CommandContext.cs" />
+    <Compile Include="Parsing\ContextBase.cs" />
+    <Compile Include="Parsing\HelpInfo.cs" />
+    <Compile Include="Parsing\ParameterContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ContextOptionsAttribute.cs" />
-    <Compile Include="ParameterAttribute.cs" />
-    <Compile Include="OnParsedAttribute.cs" />
-    <Compile Include="ParameterKind.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="TokenKind.cs" />
-    <Compile Include="CommandLineParser.cs" />
-    <Compile Include="ReflectionExtensions.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="IConsole.Silent.cs">
+    <Compile Include="Parsing\ContextOptionsAttribute.cs" />
+    <Compile Include="Parsing\ParameterAttribute.cs" />
+    <Compile Include="Parsing\OnParsedAttribute.cs" />
+    <Compile Include="Parsing\ParameterKind.cs" />
+    <Compile Include="Parsing\Token.cs" />
+    <Compile Include="Parsing\TokenKind.cs" />
+    <Compile Include="Parsing\CommandLineParser.cs" />
+    <Compile Include="Parsing\ReflectionExtensions.cs" />
+    <Compile Include="Parsing\Util.cs" />
+    <Compile Include="Parsing\IConsole.Silent.cs">
       <DependentUpon>IConsole.cs</DependentUpon>
     </Compile>
-    <Compile Include="WriteKind.cs" />
-    <Compile Include="_Exceptions.cs" />
+    <Compile Include="Parsing\WriteKind.cs" />
+    <Compile Include="Parsing\_Exceptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

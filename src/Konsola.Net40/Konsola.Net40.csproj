@@ -40,82 +40,83 @@
     <Compile Include="..\Konsola\Boxes.cs">
       <Link>Boxes.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandAttribute.cs">
-      <Link>CommandAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\CommandAttribute.cs">
+      <Link>Parsing\CommandAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandBase.cs">
-      <Link>CommandBase.cs</Link>
+    <Compile Include="..\Konsola\Parsing\CommandBase.cs">
+      <Link>Parsing\CommandBase.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandContext.cs">
-      <Link>CommandContext.cs</Link>
+    <Compile Include="..\Konsola\Parsing\CommandContext.cs">
+      <Link>Parsing\CommandContext.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandLineParser.cs">
-      <Link>CommandLineParser.cs</Link>
+    <Compile Include="..\Konsola\Parsing\CommandLineParser.cs">
+      <Link>Parsing\CommandLineParser.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\Consoles.cs">
-      <Link>Consoles.cs</Link>
+    <Compile Include="..\Konsola\Parsing\Consoles.cs">
+      <Link>Parsing\Consoles.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\Constraints\ConstraintBaseAttribute.cs">
-      <Link>Constraints\ConstraintBaseAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\Constraints\ConstraintBaseAttribute.cs">
+      <Link>Parsing\Constraints\ConstraintBaseAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\Constraints\RangeAttribute.cs">
-      <Link>Constraints\RangeAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\Constraints\RangeAttribute.cs">
+      <Link>Parsing\Constraints\RangeAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ContextBase.cs">
-      <Link>ContextBase.cs</Link>
+    <Compile Include="..\Konsola\Parsing\ContextBase.cs">
+      <Link>Parsing\ContextBase.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ContextOptionsAttribute.cs">
-      <Link>ContextOptionsAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\ContextOptionsAttribute.cs">
+      <Link>Parsing\ContextOptionsAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\DefaultCommandAttribute.cs">
-      <Link>DefaultCommandAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\DefaultCommandAttribute.cs">
+      <Link>Parsing\DefaultCommandAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\HelpInfo.cs">
-      <Link>HelpInfo.cs</Link>
+    <Compile Include="..\Konsola\Parsing\HelpInfo.cs">
+      <Link>Parsing\HelpInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\IConsole.cs">
-      <Link>IConsole.cs</Link>
+    <Compile Include="..\Konsola\Parsing\IConsole.cs">
+      <Link>Parsing\IConsole.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\IConsole.Silent.cs">
-      <Link>IConsole.Silent.cs</Link>
+    <Compile Include="..\Konsola\Parsing\IConsole.Silent.cs">
+      <Link>Parsing\IConsole.Silent.cs</Link>
+      <DependentUpon>IConsole.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\Konsola\IncludeCommandsAttribute.cs">
-      <Link>IncludeCommandsAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\IncludeCommandsAttribute.cs">
+      <Link>Parsing\IncludeCommandsAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\OnParsedAttribute.cs">
-      <Link>OnParsedAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\OnParsedAttribute.cs">
+      <Link>Parsing\OnParsedAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ParameterAttribute.cs">
-      <Link>ParameterAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parsing\ParameterAttribute.cs">
+      <Link>Parsing\ParameterAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ParameterContext.cs">
-      <Link>ParameterContext.cs</Link>
+    <Compile Include="..\Konsola\Parsing\ParameterContext.cs">
+      <Link>Parsing\ParameterContext.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ParameterKind.cs">
-      <Link>ParameterKind.cs</Link>
+    <Compile Include="..\Konsola\Parsing\ParameterKind.cs">
+      <Link>Parsing\ParameterKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parsing\ReflectionExtensions.cs">
+      <Link>Parsing\ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parsing\Token.cs">
+      <Link>Parsing\Token.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parsing\TokenKind.cs">
+      <Link>Parsing\TokenKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parsing\Util.cs">
+      <Link>Parsing\Util.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parsing\WriteKind.cs">
+      <Link>Parsing\WriteKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parsing\_Exceptions.cs">
+      <Link>Parsing\_Exceptions.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ReflectionExtensions.cs">
-      <Link>ReflectionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Token.cs">
-      <Link>Token.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\TokenKind.cs">
-      <Link>TokenKind.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Util.cs">
-      <Link>Util.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\WriteKind.cs">
-      <Link>WriteKind.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\_Exceptions.cs">
-      <Link>_Exceptions.cs</Link>
-    </Compile>
-    <Compile Include="IConsole.Default.cs" />
+    <Compile Include="Parsing\IConsole.Default.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

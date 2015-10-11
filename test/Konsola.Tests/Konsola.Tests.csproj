@@ -38,12 +38,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandLineParserTests.cs" />
-    <Compile Include="ConstraintTests.cs" />
+    <Compile Include="Parsing\CommandLineParserTests.cs" />
+    <Compile Include="Parsing\ConstraintTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UtilsTests.cs" />
-    <Compile Include="TestConsole.cs" />
-    <Compile Include="_Contexts.cs" />
+    <Compile Include="Parsing\UtilTests.cs" />
+    <Compile Include="Parsing\IConsole.Test.cs" />
+    <Compile Include="Parsing\_Contexts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Konsola\Konsola.csproj">

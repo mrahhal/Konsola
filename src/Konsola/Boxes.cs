@@ -2,7 +2,7 @@
 
 namespace Konsola
 {
-	public static class Boxes
+	internal static class Boxes
 	{
 		static Boxes()
 		{
