@@ -40,6 +40,29 @@
     <Compile Include="..\Konsola\Boxes.cs">
       <Link>Boxes.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Metadata\AttributeMetadata.cs">
+      <Link>Metadata\AttributeMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Metadata\IMetadataProvider.Cached.cs">
+      <Link>Metadata\IMetadataProvider.Cached.cs</Link>
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Konsola\Metadata\IMetadataProvider.cs">
+      <Link>Metadata\IMetadataProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Metadata\IMetadataProvider.Providers.cs">
+      <Link>Metadata\IMetadataProvider.Providers.cs</Link>
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Konsola\Metadata\ObjectMetadata.cs">
+      <Link>Metadata\ObjectMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Metadata\PropertyMetadata.cs">
+      <Link>Metadata\PropertyMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Metadata\_Exceptions.cs">
+      <Link>Metadata\_Exceptions.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Parsing\CommandAttribute.cs">
       <Link>Parsing\CommandAttribute.cs</Link>
     </Compile>

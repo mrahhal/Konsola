@@ -62,6 +62,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boxes.cs" />
+    <Compile Include="Metadata\AttributeMetadata.cs" />
+    <Compile Include="Metadata\IMetadataProvider.Cached.cs">
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Metadata\IMetadataProvider.cs" />
+    <Compile Include="Metadata\IMetadataProvider.Providers.cs">
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Metadata\PropertyMetadata.cs" />
+    <Compile Include="Metadata\_Exceptions.cs" />
+    <Compile Include="Metadata\ObjectMetadata.cs" />
     <Compile Include="Parsing\CommandAttribute.cs" />
     <Compile Include="Parsing\Constraints\RangeAttribute.cs" />
     <Compile Include="Parsing\DefaultCommandAttribute.cs" />
@@ -105,6 +116,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\build\MR.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Metadata\MetadataTests.cs" />
     <Compile Include="Parsing\CommandLineParserTests.cs" />
     <Compile Include="Parsing\ConstraintTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
