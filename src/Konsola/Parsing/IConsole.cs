@@ -8,11 +8,15 @@ namespace Konsola.Parsing
 	public interface IConsole
 	{
 		void Write(WriteKind kind, string value);
-		void WriteLine(WriteKind kind, string value);
 	}
 
 	public static class ConsoleExtensions
 	{
+		public static void WriteLine(this IConsole @this, WriteKind kind, string value)
+		{
+			@this.Write(kind, value + Environment.NewLine);
+		}
+
 		public static void WriteLine(this IConsole @this)
 		{
 			@this.WriteLine(WriteKind.Normal, string.Empty);

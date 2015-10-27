@@ -31,11 +31,6 @@ namespace Konsola.Parsing
 			}
 		}
 
-		public void WriteLine(WriteKind kind, string value)
-		{
-			Write(kind, value + Environment.NewLine);
-		}
-
 		private ConsoleColor _GetColorFromKind(WriteKind kind)
 		{
 			switch (kind)

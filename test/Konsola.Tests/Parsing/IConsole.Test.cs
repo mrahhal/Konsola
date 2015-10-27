@@ -13,10 +13,5 @@ namespace Konsola.Parsing.Tests
 		{
 			_sb.Append(value);
 		}
-
-		public void WriteLine(WriteKind kind, string value)
-		{
-			Write(kind, value + Environment.NewLine);
-		}
 	}
 }
