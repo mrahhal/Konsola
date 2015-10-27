@@ -17,11 +17,11 @@ namespace Konsola.Parsing
 		private Type _contextType;
 		private ContextOptionsAttribute _options;
 
-		private CommandLineParser(ContextBase context, IConsole console, string[] args)
+		private CommandLineParser(ContextBase context, string[] args, IConsole console)
 		{
 			_context = context;
-			_console = console;
 			_args = args;
+			_console = console;
 		}
 
 		/// <summary>
@@ -31,29 +31,16 @@ namespace Konsola.Parsing
 		/// <exception cref="ContextException">The context is invalid.</exception>
 		/// <exception cref="CommandLineException">The args did not correctly match the expectations of the context.</exception>
 		/// <returns>The new context containing the parsed options, or null if it has been handled.</returns>
-		public static T Parse<T>(string[] args)
-			where T : ContextBase, new()
-		{
-			return Parse<T>(args, null);
-		}
-
-		/// <summary>
-		/// Parses the provided args into a new context instance of <typeparamref name="T"/>.
-		/// </summary>
-		/// <exception cref="ArgumentNullException"><paramref name="args"/> is null.</exception>
-		/// <exception cref="ContextException">The context is invalid.</exception>
-		/// <exception cref="CommandLineException">The args did not correctly match the expectations of the context.</exception>
-		/// <returns>The new context containing the parsed options, or null if it has been handled.</returns>
-		public static T Parse<T>(string[] args, IConsole console)
+		public static T Parse<T>(string[] args, IConsole console = null)
 			where T : ContextBase, new()
 		{
 			if (args == null)
 				throw new ArgumentNullException("args");
-			if (console == null)
-				console = Consoles.Silent;
+
+			console = console ?? Consoles.Silent;
 
 			var context = new T();
-			return new CommandLineParser(context, console, args)._InternalParse<T>();
+			return new CommandLineParser(context, args, console)._InternalParse<T>();
 		}
 
 		private T _InternalParse<T>()
