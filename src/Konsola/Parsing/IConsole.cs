@@ -41,20 +41,5 @@ namespace Konsola.Parsing
 		{
 			@this.WriteLine(WriteKind.Normal, string.Format(format, args));
 		}
-
-		public static void WriteJustified(this IConsole @this, int padding, string format, params object[] args)
-		{
-			@this.WriteJustified(padding, string.Format(format, args));
-		}
-
-		public static void WriteJustified(this IConsole @this, int padding, string value)
-		{
-			@this.WriteJustified(WriteKind.Normal, padding, value);
-		}
-
-		public static void WriteJustified(this IConsole @this, WriteKind kind, int padding, string format, params object[] args)
-		{
-			@this.WriteJustified(kind, padding, string.Format(format, args));
-		}
 	}
 }
