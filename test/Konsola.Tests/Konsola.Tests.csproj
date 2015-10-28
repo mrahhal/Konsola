@@ -46,6 +46,7 @@
     <Compile Include="Parser\UtilTests.cs" />
     <Compile Include="Parser\IConsole.Test.cs" />
     <Compile Include="Parser\_Contexts.cs" />
+    <Compile Include="StateMachineTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Konsola\Konsola.csproj">

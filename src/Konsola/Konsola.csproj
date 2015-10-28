@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="Parser\WriteKind.cs" />
     <Compile Include="Parser\_Exceptions.cs" />
+    <Compile Include="StateMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
