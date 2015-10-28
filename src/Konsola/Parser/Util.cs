@@ -8,6 +8,11 @@ namespace Konsola.Parser
 	{
 		public static IEnumerable<string> SplitCommandLineArgs(string args)
 		{
+			if (args == null)
+			{
+				throw new ArgumentNullException("args");
+			}
+
 			var inQuotes = false;
 
 			return _Split(args, c =>
