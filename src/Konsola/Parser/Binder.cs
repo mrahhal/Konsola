@@ -179,6 +179,10 @@ namespace Konsola.Parser
 
 		private static PropertyTarget Match(DataSource source, PropertyTarget[] targets)
 		{
+			if (source.Kind == RawTokenKind.Raw)
+			{
+				throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.Value);
+			}
 			var name = source.Identifier;
 			for (int i = 0; i < targets.Length; i++)
 			{

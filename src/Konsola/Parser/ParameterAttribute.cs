@@ -16,6 +16,7 @@ namespace Konsola.Parser
 		public ParameterAttribute(string names)
 		{
 			Names = names;
+			Position = 1000;
 		}
 
 		/// <summary>

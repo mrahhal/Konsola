@@ -114,6 +114,7 @@ namespace Konsola.Parser
 				};
 			}
 			cw.Command = cw.Context.Command = commandMetadata.Type.CreateInstance<CommandBase>();
+			ValidateParameters(commandMetadata.Properties);
 
 			if (IsHelpRequested(machine))
 			{
@@ -141,6 +142,18 @@ namespace Konsola.Parser
 				Context = cw.Context,
 				Kind = ParsingResultKind.Success,
 			};
+		}
+
+		private void ValidateParameters(IEnumerable<PropertyMetadata> properties)
+		{
+			foreach (var prop in properties)
+			{
+				var attribute = prop.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>();
+				if (attribute != null)
+				{
+					ValidationHelper.ValidateParameterAttribute(attribute);
+				}
+			}
 		}
 
 		private void Bind(StateMachine<Token> machine, ObjectMetadata commandMetadata, ContextWrapper cw)
@@ -281,6 +294,7 @@ namespace Konsola.Parser
 					{
 						// A previous command exists.
 						// Replace all next command tokens with data tokens (to correctly handle positional args).
+						machine.Previous();
 						machine.VisitAllNext((i, t) =>
 							{
 								if (t.Kind == TokenKind.Command)
@@ -289,7 +303,6 @@ namespace Konsola.Parser
 								}
 								return t;
 							});
-						machine.Previous();
 						return currentMetadata;
 					}
 				}

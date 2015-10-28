@@ -35,7 +35,7 @@ namespace Konsola.Parser.Tests
 		}
 
 		[Fact]
-		public void Parse_WithNonExistentCommand()
+		public void Parse_WithInvalidCommand()
 		{
 			// Arrange
 			var args = "somecommand --sw".SplitCommandLineArgs();
@@ -46,6 +46,257 @@ namespace Konsola.Parser.Tests
 
 			// Assert
 			Assert.Equal(ParsingResultKind.Handled, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_Basic()
+		{
+			var args = "-my some -s2 something -int 3 --sw -set-something hello".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as DefaultCommand;
+
+			Assert.True(result.Kind == ParsingResultKind.Success);
+			Assert.True(command.SomeString == "some");
+			Assert.True(command.SomeString2 == "something");
+			Assert.True(command.SomeString3 == "hello");
+			Assert.True(command.SomeInt == 3);
+			Assert.True(command.SomeBool == true);
+		}
+
+		[Fact]
+		public void Parse_Command()
+		{
+			var args = "restore --an".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as RestoreCommand;
+
+			Assert.True(command != null);
+			Assert.True(command.Another == true);
+		}
+
+		[Fact]
+		public void Parse_WithInvalidIntValue_Throws()
+		{
+			var args = "-int some".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_Enum()
+		{
+			var args = "-my some -p windows -int 3".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as DefaultCommand;
+
+			Assert.True(command.Platform == Platform.Windows);
+		}
+
+		[Fact]
+		public void Parse_WithInvalidEnumValue_Throws()
+		{
+			var args = "-my some -p some -int 3".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithMultipleEnumValuesWithEnum_Throws()
+		{
+			var args = "-my some -p windows,unix -int 3".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_FlagsEnum()
+		{
+			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as DefaultCommand;
+
+			Assert.True((command.FlagsPlatform & FlagsPlatform.Windows) == FlagsPlatform.Windows
+				&& (command.FlagsPlatform & FlagsPlatform.Linux) == FlagsPlatform.Linux);
+		}
+
+		[Fact]
+		public void Parse_EnumInsideCommand()
+		{
+			var args = "restore -p linux".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as RestoreCommand;
+
+			Assert.True(command != null);
+			Assert.True(command.Plaform == Platform.Linux);
+		}
+
+		[Fact]
+		public void Parse_WithInvalidFlagsEnumValue_Throws()
+		{
+			var args = "-my some -fp windows,some -int 3".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithInvalidContext_Throws()
+		{
+			var args = "-my some".SplitCommandLineArgs();
+
+			Assert.Throws<ContextException>(() =>
+			{
+				var parser = new CommandLineParser<FaultyContext>();
+				parser.Parse(args);
+			});
+		}
+
+		[Fact]
+		public void Parse_WithMissingMandatoryParam_Throws()
+		{
+			var args = "-my some".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithMissingData_Throws()
+		{
+			var args = "-my -s2 something -int 3 --sw".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithContextWithInvalidCharsForParams_Throws()
+		{
+			var args = "-int 3".SplitCommandLineArgs();
+
+			Assert.Throws<ContextException>(() =>
+			{
+				var parser = new CommandLineParser<ContextWithInvalidCharsForParams>();
+				parser.Parse(args);
+			});
+		}
+
+		[Fact]
+		public void Parse_NestedCommand()
+		{
+			var args = "restore restore-sub --some".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as RestoreSubCommand;
+
+			Assert.True(command != null);
+			Assert.True(command.Some == true);
+		}
+
+		[Fact]
+		public void Parse_WithIncorrectNestedCommand_Throws()
+		{
+			var args = "restore --an restore-sub --some".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+			Assert.Equal(CommandLineExceptionKind.InvalidParameter, result.Exception.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithNoValuesForCommand_DoesNotThrow()
+		{
+			var args = "restore".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Success, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithHelp_TestConsole()
+		{
+			var args = "--h".SplitCommandLineArgs();
+
+			var console = new TestConsole();
+			var parser = new CommandLineParser<Context>(console: console);
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Handled, result.Kind);
+			Assert.True(!string.IsNullOrWhiteSpace(console.Text));
+		}
+
+		[Fact]
+		public void Parse_WithHelp_ReturnsNull()
+		{
+			var args = "restore --an --h".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+
+			Assert.Null(context);
+		}
+
+		[Fact]
+		public void Parse_WithPositionalParams()
+		{
+			var args = "position fstr sstr -some somestr".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as PositionCommand;
+
+			Assert.Equal("fstr", command.First);
+			Assert.Equal("sstr", command.Second);
+			Assert.Equal("somestr", command.Some);
+		}
+
+		[Fact]
+		public void Parse_WithInvalidPostionalParams_Throws()
+		{
+			var args = "position -some somestr asd fstr sstr".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
 		}
 	}
 

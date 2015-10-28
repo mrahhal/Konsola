@@ -44,9 +44,6 @@ namespace Konsola.Parser.Tests
 		[Parameter("set-something,s-s")]
 		public string SomeString3 { get; set; }
 
-		[Parameter("sa")]
-		public string[] StringArray { get; set; }
-
 		[Parameter("int", IsMandatory = true)]
 		public int SomeInt { get; set; }
 
