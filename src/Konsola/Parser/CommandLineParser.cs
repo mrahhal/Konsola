@@ -1,5 +1,6 @@
 ﻿using Konsola.Metadata;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -104,7 +105,6 @@ namespace Konsola.Parser
 			}
 
 			var commandMetadata = FindCommandMetadata(cw, machine);
-
 			if (commandMetadata == null)
 			{
 				PrintHelpForDefaultCommand();
@@ -113,6 +113,7 @@ namespace Konsola.Parser
 					Kind = ParsingResultKind.Handled,
 				};
 			}
+			cw.Command = cw.Context.Command = commandMetadata.Type.CreateInstance<CommandBase>();
 
 			if (IsHelpRequested(machine))
 			{
@@ -131,10 +132,103 @@ namespace Konsola.Parser
 				};
 			}
 
+			// Throws CommandLineException on errors.
+			Bind(machine, commandMetadata, cw);
+
+			// If we're here, binding worked and the cw.Context is now bound and ready. Success.
 			return new ParsingResult<T>()
 			{
+				Context = cw.Context,
 				Kind = ParsingResultKind.Success,
 			};
+		}
+
+		private void Bind(StateMachine<Token> machine, ObjectMetadata commandMetadata, ContextWrapper cw)
+		{
+			var sources = CreateSources(machine);
+			var targets = CreateTargets(commandMetadata.Properties, cw.Command);
+
+			var bindingContext = new BindingContext()
+			{
+				Sources = sources,
+				Targets = targets,
+			};
+			Binder.Bind(bindingContext);
+
+			ValidateTargets(targets);
+		}
+
+		private DataSource[] CreateSources(StateMachine<Token> machine)
+		{
+			var list = new List<DataSource>();
+			while (machine.PeekNext() != null)
+			{
+				var current = machine.Next();
+				Debug.Assert(current.Kind != TokenKind.Command);
+
+				var source = new DataSource();
+				var identifier = _tokenizer.ExtractIdentifier(current.Kind, current.Value);
+				switch (current.Kind)
+				{
+					case TokenKind.Option:
+						{
+							source.FullIdentifier = current.Value;
+							source.Identifier = identifier;
+							source.Kind = RawTokenKind.Option;
+							if (machine.HasNext && machine.PeekNext().Kind == TokenKind.Data)
+							{
+								var next = machine.Next();
+								source.Value = next.Value;
+							}
+						}
+						break;
+					case TokenKind.Switch:
+						{
+							source.FullIdentifier = current.Value;
+							source.Identifier = identifier;
+							source.Kind = RawTokenKind.Switch;
+						}
+						break;
+					case TokenKind.Data:
+						{
+							source.Value = current.Value;
+							source.Kind = RawTokenKind.Raw;
+						}
+						break;
+				}
+
+				list.Add(source);
+			}
+			return list.ToArray();
+		}
+
+		private PropertyTarget[] CreateTargets(IEnumerable<PropertyMetadata> properties, Object commandObject)
+		{
+			return
+				properties
+				.Select(p => new
+				{
+					Attribute = p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>(),
+					Property = p,
+				})
+				.Where(pa => pa.Attribute != null)
+				.Select(pa => new PropertyTarget(commandObject)
+				{
+					Attribute = pa.Attribute,
+					Metadata = pa.Property,
+				})
+				.ToArray();
+		}
+
+		private void ValidateTargets(PropertyTarget[] targets)
+		{
+			foreach (var target in targets)
+			{
+				if (target.Attribute.IsMandatory && !target.IsSet)
+				{
+					throw new CommandLineException(CommandLineExceptionKind.MissingParameter, target.Attribute.Names);
+				}
+			}
 		}
 
 		private void PrintHelpForDefaultCommand()
@@ -262,6 +356,7 @@ namespace Konsola.Parser
 		private class ContextWrapper
 		{
 			public T Context { get; set; }
+			public CommandBase Command { get; set; }
 			public ObjectMetadata Metadata { get; set; }
 			public ContextOptionsAttribute Options { get; set; }
 			public DefaultCommandAttribute DefaultCommand { get; set; }

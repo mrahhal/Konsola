@@ -24,7 +24,7 @@ namespace Konsola.Parser.Tests
 		public void Parse_Empty_WithHandleEmptyInvocationOptionNotSet_ShouldNotHandleHelp()
 		{
 			// Arrange
-			var args = "".SplitCommandLineArgs();
+			var args = "-int 42".SplitCommandLineArgs();
 			var parser = new CommandLineParser<Context>();
 
 			// Act
@@ -32,6 +32,21 @@ namespace Konsola.Parser.Tests
 
 			// Assert
 			Assert.Equal(ParsingResultKind.Success, result.Kind);
+		}
+
+		[Fact]
+		public void Parse_WithNonExistentCommand()
+		{
+			// Arrange
+			var args = "somecommand --sw".SplitCommandLineArgs();
+			var parser = new CommandLineParser<Context>();
+
+			// Act
+			var result = parser.Parse(args);
+
+			// Assert
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+			Assert.Equal(CommandLineExceptionKind.InvalidCommand, result.Exception.Kind);
 		}
 	}
 
