@@ -91,7 +91,7 @@ namespace Konsola
 			return Data[--Position];
 		}
 
-		public void VisitAllNext(Action<int, T> visit)
+		public void VisitAllNext(Func<int, T, T> visit)
 		{
 			if (visit == null)
 			{
@@ -103,11 +103,16 @@ namespace Konsola
 			}
 			for (int i = Position + 1; i < Data.Length; i++)
 			{
-				visit(i, Data[i]);
+				var currentT = Data[i];
+				var newT = visit(i, currentT);
+				if (newT != currentT)
+				{
+					Data[i] = newT;
+				}
 			}
 		}
 
-		public void VisitAllPrevious(Action<int, T> visit)
+		public void VisitAllPrevious(Func<int, T, T> visit)
 		{
 			if (visit == null)
 			{
@@ -119,7 +124,12 @@ namespace Konsola
 			}
 			for (int i = Position - 1; i >= 0; i--)
 			{
-				visit(i, Data[i]);
+				var currentT = Data[i];
+				var newT = visit(i, currentT);
+				if (newT != currentT)
+				{
+					Data[i] = newT;
+				}
 			}
 		}
 	}

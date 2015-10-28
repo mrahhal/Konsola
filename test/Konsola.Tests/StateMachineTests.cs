@@ -149,6 +149,7 @@ namespace Konsola
 			sm.VisitAllNext((i, t) =>
 				{
 					t.Deposit = string.Empty;
+					return t;
 				});
 
 			// Assert
@@ -167,6 +168,7 @@ namespace Konsola
 			sm.VisitAllPrevious((i, t) =>
 				{
 					t.Deposit = string.Empty;
+					return t;
 				});
 
 			// Assert
