@@ -64,6 +64,9 @@
 	<Target Name="RestorePackages" DependsOnTargets="Clean">
 		<Exec
 			WorkingDirectory="$(RootDir)"
+			Command="nuget restore" />
+		<Exec
+			WorkingDirectory="$(RootDir)"
 			Command="nuget restore src\%(Assemblies.Identity)\%(Assemblies.Identity).csproj -SolutionDirectory $(RootDir)" />
 	</Target>
 	<Target Name="Clean">
