@@ -2,14 +2,6 @@
 using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Konsola")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("MRH")]
-[assembly: AssemblyProduct("Konsola")]
-[assembly: AssemblyCopyright("Copyright © 2015")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.0.0")]
-[assembly: AssemblyInformationalVersion("0.0.0")]
+[assembly: AssemblyDescription("Contains services for command line tools.")]
 
 [assembly: InternalsVisibleTo("Konsola.Tests")]

@@ -5,7 +5,10 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_SolutionItems", "_SolutionItems", "{5F5DCC35-0E53-48DA-8E0F-E8F3E4D5BEBF}"
 	ProjectSection(SolutionItems) = preProject
-		build\Build.EP.props = build\Build.EP.props
+		build-release.ps1 = build-release.ps1
+		build\Build.proj = build\Build.proj
+		build.ps1 = build.ps1
+		build\Build.tasks = build\Build.tasks
 		README.md = README.md
 	EndProjectSection
 EndProject
