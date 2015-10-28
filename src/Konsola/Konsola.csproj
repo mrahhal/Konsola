@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Boxes.cs" />
     <Compile Include="Metadata\AttributeMetadata.cs" />
+    <Compile Include="Metadata\AttributeMetadataEnumerableExtensions.cs" />
     <Compile Include="Metadata\IMetadataProvider.Cached.cs">
       <DependentUpon>IMetadataProvider.cs</DependentUpon>
     </Compile>

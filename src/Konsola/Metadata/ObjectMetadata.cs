@@ -21,20 +21,5 @@ namespace Konsola.Metadata
 		public virtual IEnumerable<PropertyMetadata> Properties { get; private set; }
 
 		public virtual IEnumerable<AttributeMetadata> Attributes { get; private set; }
-
-		public IEnumerable<T> AttributesOfType<T>()
-		{
-			return
-				Attributes
-				.Select(a => a.Attribute)
-				.OfType<T>();
-		}
-
-		public T AttributeOfType<T>()
-		{
-			return
-				AttributesOfType<T>()
-				.FirstOrDefault();
-		}
 	}
 }

@@ -43,6 +43,9 @@
     <Compile Include="..\Konsola\Metadata\AttributeMetadata.cs">
       <Link>Metadata\AttributeMetadata.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Metadata\AttributeMetadataEnumerableExtensions.cs">
+      <Link>Metadata\AttributeMetadataEnumerableExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Metadata\IMetadataProvider.Cached.cs">
       <Link>Metadata\IMetadataProvider.Cached.cs</Link>
       <DependentUpon>IMetadataProvider.cs</DependentUpon>
