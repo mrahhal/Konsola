@@ -74,6 +74,7 @@
     <Compile Include="Metadata\PropertyMetadata.cs" />
     <Compile Include="Metadata\_Exceptions.cs" />
     <Compile Include="Metadata\ObjectMetadata.cs" />
+    <Compile Include="Parser\Binder.cs" />
     <Compile Include="Parser\CommandAttribute.cs" />
     <Compile Include="Parser\CommandLineParser.cs" />
     <Compile Include="Parser\DefaultCommandAttribute.cs" />

@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Metadata\MetadataTests.cs" />
+    <Compile Include="Parser\BinderTests.cs" />
     <Compile Include="Parser\CommandLineParserTests.cs" />
     <Compile Include="Parser\ConstraintTests.cs" />
     <Compile Include="Parser\HelpContextGeneratorTests.cs" />

@@ -66,6 +66,9 @@
     <Compile Include="..\Konsola\Metadata\_Exceptions.cs">
       <Link>Metadata\_Exceptions.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Parser\Binder.cs">
+      <Link>Parser\Binder.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Parser\CommandAttribute.cs">
       <Link>Parser\CommandAttribute.cs</Link>
     </Compile>

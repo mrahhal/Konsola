@@ -47,6 +47,12 @@ namespace Konsola.Parser
 			return (T)Activator.CreateInstance(@this);
 		}
 
+		public static bool IsAttributeDefined<T>(this MemberInfo @this)
+			where T : Attribute
+		{
+			return Attribute.IsDefined(@this, typeof(T));
+		}
+
 		public static bool IsCommandType(this Type @this)
 		{
 			return typeof(CommandBase).IsAssignableFrom(@this);

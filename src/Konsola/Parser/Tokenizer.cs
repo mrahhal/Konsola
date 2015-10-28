@@ -91,6 +91,19 @@ namespace Konsola.Parser
 			return _processor(value);
 		}
 
+		public string ExtractIdentifier(TokenKind kind, string value)
+		{
+			switch (kind)
+			{
+				case TokenKind.Option:
+					return value.Substring(OptionPre.Length);
+				case TokenKind.Switch:
+					return value.Substring(SwitchPre.Length);
+				default:
+					return value;
+			}
+		}
+
 		public abstract string OptionPre { get; }
 
 		public abstract string SwitchPre { get; }
