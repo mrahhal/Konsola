@@ -74,7 +74,7 @@
 	<Target Name="Test" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(RootDir)"
-			Command="C:/bin/xunit/xunit.console test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
+			Command="xunit.console test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
 	</Target>
 	<Target Name="TransformNuspecs" BeforeTargets="Package">
 		<Copy SourceFiles="$(RootDir)nuspecs/Konsola.nuspec" DestinationFolder="$(NuspecsDestination)" />
