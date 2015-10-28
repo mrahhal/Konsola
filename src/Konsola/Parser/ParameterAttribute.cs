@@ -24,6 +24,11 @@ namespace Konsola.Parser
 		public string Names { get; private set; }
 
 		/// <summary>
+		/// Gets or sets the parameter's description.
+		/// </summary>
+		public string Description { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether this parameter is mandatory.
 		/// </summary>
 		public bool IsMandatory { get; set; }

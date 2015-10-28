@@ -11,10 +11,5 @@ namespace Konsola.Parser
 		/// Gets the command.
 		/// </summary>
 		public CommandBase Command { get; internal set; }
-
-		/// <summary>
-		/// Gets or sets the program's description.
-		/// </summary>
-		public virtual string Description { get; set;  }
 	}
 }

@@ -77,6 +77,8 @@
     <Compile Include="Parser\CommandAttribute.cs" />
     <Compile Include="Parser\CommandLineParser.cs" />
     <Compile Include="Parser\DefaultCommandAttribute.cs" />
+    <Compile Include="Parser\HelpContext.cs" />
+    <Compile Include="Parser\HelpContextGenerator.cs" />
     <Compile Include="Parser\IErrorFormatter.cs" />
     <Compile Include="Parser\IErrorFormatter.Default.cs">
       <DependentUpon>IErrorFormatter.cs</DependentUpon>

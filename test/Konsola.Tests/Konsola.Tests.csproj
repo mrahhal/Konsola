@@ -41,6 +41,7 @@
     <Compile Include="Metadata\MetadataTests.cs" />
     <Compile Include="Parser\CommandLineParserTests.cs" />
     <Compile Include="Parser\ConstraintTests.cs" />
+    <Compile Include="Parser\HelpContextGeneratorTests.cs" />
     <Compile Include="Parser\TokenizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\UtilTests.cs" />

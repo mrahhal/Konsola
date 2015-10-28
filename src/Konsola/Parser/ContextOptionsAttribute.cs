@@ -9,11 +9,13 @@ namespace Konsola.Parser
 	public class ContextOptionsAttribute : Attribute
 	{
 		/// <summary>
+		/// Gets or sets the program's description.
+		/// </summary>
+		public string Description { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether to invoke the special methods after parsing.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> to invoke methods; otherwise, <c>false</c>.
-		/// </value>
 		public bool InvokeMethods { get; set; }
 	}
 }
