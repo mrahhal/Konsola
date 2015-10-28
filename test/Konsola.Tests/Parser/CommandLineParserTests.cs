@@ -45,8 +45,7 @@ namespace Konsola.Parser.Tests
 			var result = parser.Parse(args);
 
 			// Assert
-			Assert.Equal(ParsingResultKind.Failure, result.Kind);
-			Assert.Equal(CommandLineExceptionKind.InvalidCommand, result.Exception.Kind);
+			Assert.Equal(ParsingResultKind.Handled, result.Kind);
 		}
 	}
 
