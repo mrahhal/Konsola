@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Konsola.Parsing
+namespace Konsola.Parser
 {
 	public static class Util
 	{

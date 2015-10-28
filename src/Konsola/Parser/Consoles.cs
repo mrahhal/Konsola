@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Konsola.Parsing
+namespace Konsola.Parser
 {
 	public static class Consoles
 	{

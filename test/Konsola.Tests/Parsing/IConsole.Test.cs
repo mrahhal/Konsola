@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Konsola.Parsing.Tests
+namespace Konsola.Parser.Tests
 {
 	public class TestConsole : IConsole
 	{

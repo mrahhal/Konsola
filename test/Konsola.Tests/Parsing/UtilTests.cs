@@ -2,7 +2,7 @@
 using System.Linq;
 using Xunit;
 
-namespace Konsola.Parsing.Tests
+namespace Konsola.Parser.Tests
 {
 	public class UtilTests
 	{

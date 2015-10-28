@@ -1,5 +1,5 @@
 ﻿using Konsola.Metadata;
-using Konsola.Parsing;
+using Konsola.Parser;
 using System;
 using System.Linq;
 using Xunit;

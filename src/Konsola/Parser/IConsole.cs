@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Konsola.Parsing
+namespace Konsola.Parser
 {
 	public interface IConsole
 	{
