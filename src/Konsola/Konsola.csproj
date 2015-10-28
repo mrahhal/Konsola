@@ -83,6 +83,10 @@
     <Compile Include="Parser\IErrorFormatter.Default.cs">
       <DependentUpon>IErrorFormatter.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parser\IHelpFormatter.cs" />
+    <Compile Include="Parser\IHelpFormatter.Default.cs">
+      <DependentUpon>IHelpFormatter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Parser\IncludeCommandsAttribute.cs" />
     <Compile Include="Parser\CommandBase.cs" />
     <Compile Include="Parser\Consoles.cs" />
