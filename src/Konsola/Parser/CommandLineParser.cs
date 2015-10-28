@@ -14,20 +14,23 @@ namespace Konsola.Parser
 	{
 		private IConsole _console;
 		private IErrorFormatter _errorFormatter;
+		private IHelpFormatter _helpFormatter;
 		private Tokenizer _tokenizer;
 
 		public CommandLineParser()
-			//: this(null)
+			: this(null)
 		{
 		}
 
 		public CommandLineParser(
 			IConsole console = null,
 			IErrorFormatter errorFormatter = null,
+			IHelpFormatter helpFormatter = null,
 			Tokenizer tokenizer = null)
 		{
 			_console = console ?? Consoles.Silent;
 			_errorFormatter = errorFormatter ?? new DefaultErrorFormatter();
+			_helpFormatter = helpFormatter ?? new DefaultHelpFormatter();
 			_tokenizer = tokenizer ?? new DefaultTokenizer();
 		}
 
@@ -71,12 +74,134 @@ namespace Konsola.Parser
 			}
 		}
 
+		public HelpContext GenerateHelpContext()
+		{
+			return HelpContextGenerator.Generate(typeof(T), _tokenizer);
+		}
+
+		public CommandHelpContext GenerateCommandHelpContext(Type type)
+		{
+			return HelpContextGenerator.GenerateForCommand(type, _tokenizer);
+		}
+
 		private ParsingResult<T> ParseCore(ParsingContext c)
 		{
 			var cw = c.Wrapper;
 			var tokens = c.Tokens;
 
-			throw new NotImplementedException();
+			var machine = new StateMachine<Token>(tokens);
+			if (machine.PeekNext() == null)
+			{
+				// This is an empty invocation of the program.
+				if (cw.Options.HandleEmptyInvocationAsHelp)
+				{
+					PrintHelpForDefaultCommand();
+					return new ParsingResult<T>()
+					{
+						Kind = ParsingResultKind.Handled,
+					};
+				}
+			}
+
+			var commandMetadata = FindCommandMetadata(cw, machine);
+
+			if (commandMetadata == null)
+			{
+				PrintHelpForDefaultCommand();
+				return new ParsingResult<T>()
+				{
+					Kind = ParsingResultKind.Handled,
+				};
+			}
+
+			if (IsHelpRequested(machine))
+			{
+				if (commandMetadata.Type == cw.DefaultCommand.Command)
+				{
+					PrintHelpForDefaultCommand();
+				}
+				else
+				{
+					var commandHelpContext = GenerateCommandHelpContext(commandMetadata.Type);
+					_helpFormatter.FormatForCommand(commandHelpContext, _console);
+				}
+				return new ParsingResult<T>()
+				{
+					Kind = ParsingResultKind.Handled,
+				};
+			}
+
+			return new ParsingResult<T>()
+			{
+				Kind = ParsingResultKind.Success,
+			};
+		}
+
+		private void PrintHelpForDefaultCommand()
+		{
+			var helpContext = GenerateHelpContext();
+			_helpFormatter.Format(helpContext, _console);
+		}
+
+		private bool IsHelpRequested(StateMachine<Token> machine)
+		{
+			var helpRequested = false;
+			machine.VisitAllNext((i, t) =>
+				{
+					if (string.Equals(t.Value, "--help", StringComparison.OrdinalIgnoreCase) ||
+						string.Equals(t.Value, "--h", StringComparison.OrdinalIgnoreCase))
+					{
+						helpRequested = true;
+					}
+					return t;
+				});
+			return helpRequested;
+		}
+
+		private ObjectMetadata FindCommandMetadata(ContextWrapper cw, StateMachine<Token> machine)
+		{
+			if (machine.PeekNext() == null || machine.PeekNext().Kind != TokenKind.Command)
+			{
+				// Empty machine or first token is not a command token.
+				// We want the default command.
+				if (cw.DefaultCommand == null)
+				{
+					return null;
+				}
+				return MetadataProviders.Current.GetFor(cw.DefaultCommand.Command);
+			}
+			var currentMetadata = default(ObjectMetadata);
+			while (machine.PeekNext() != null && machine.PeekNext().Kind == TokenKind.Command)
+			{
+				var commandToken = machine.Next();
+				var metadata = (currentMetadata ?? cw.Metadata).FindCommandMetadataWithName(commandToken.Value);
+				if (metadata == null)
+				{
+					// Could not find a command by that name.
+					if (currentMetadata == null)
+					{
+						// Neither was a previous command found.
+						return null;
+					}
+					else
+					{
+						// A previous command exists.
+						// Replace all next command tokens with data tokens (to correctly handle positional args).
+						machine.VisitAllNext((i, t) =>
+							{
+								if (t.Kind == TokenKind.Command)
+								{
+									return new DataToken(t.Value);
+								}
+								return t;
+							});
+						machine.Previous();
+						return currentMetadata;
+					}
+				}
+				currentMetadata = metadata;
+			}
+			return currentMetadata;
 		}
 
 		private ContextWrapper CreateWrapper(ObjectMetadata metadata)

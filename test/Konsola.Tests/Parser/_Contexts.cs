@@ -19,9 +19,16 @@ namespace Konsola.Parser.Tests
 		Linux = 4,
 	}
 
-	[ContextOptions(Description = "This is some kind of a program description v1.0.123")]
-	[IncludeCommands(typeof(RestoreCommand), typeof(PositionCommand))]
+	[ContextOptions(HandleEmptyInvocationAsHelp = true)]
 	[DefaultCommand(typeof(DefaultCommand))]
+	[IncludeCommands(typeof(RestoreCommand), typeof(PositionCommand))]
+	public class ContextWithHandleInvocationOptionSet : ContextBase
+	{
+	}
+
+	[ContextOptions(Description = "This is some kind of a program description v1.0.123")]
+	[DefaultCommand(typeof(DefaultCommand))]
+	[IncludeCommands(typeof(RestoreCommand), typeof(PositionCommand))]
 	public class Context : ContextBase
 	{
 	}
