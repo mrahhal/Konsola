@@ -19,18 +19,18 @@ class Context : ContextBase
 
 class DefaultCommand : CommandBase
 {
-	[Parameter("m")]
-	public string SomeString { get; set; }
-	
-	[Parameter("s")]
-	public int SomeInt { get; set; }
-	
-	[Parameter("sw")]
-	public bool SomeBoolean { get; set; }
-	
-	public override void ExecuteCommand()
-	{
-	}
+    [Parameter("m")]
+    public string SomeString { get; set; }
+
+    [Parameter("s")]
+    public int SomeInt { get; set; }
+
+    [Parameter("sw")]
+    public bool SomeBoolean { get; set; }
+
+    public override void ExecuteCommand()
+    {
+    }
 }
 
 // Some other place... (in Main for example)
