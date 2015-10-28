@@ -8,7 +8,7 @@
     <ProjectGuid>{7AB5B18C-07FF-43C8-ABF0-5B4513C5ACF3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Konsola.Tests</RootNamespace>
+    <RootNamespace>Konsola</RootNamespace>
     <AssemblyName>Konsola.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
