@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\build\MR.Build.props" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,89 +36,136 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Konsola\CommandAttribute.cs">
-      <Link>CommandAttribute.cs</Link>
+    <Compile Include="..\Common\AssemblyInfo.Common.cs">
+      <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandBase.cs">
-      <Link>CommandBase.cs</Link>
+    <Compile Include="..\Konsola\Boxes.cs">
+      <Link>Boxes.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandContext.cs">
-      <Link>CommandContext.cs</Link>
+    <Compile Include="..\Konsola\Metadata\AttributeMetadata.cs">
+      <Link>Metadata\AttributeMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\CommandLineParser.cs">
-      <Link>CommandLineParser.cs</Link>
+    <Compile Include="..\Konsola\Metadata\AttributeMetadataEnumerableExtensions.cs">
+      <Link>Metadata\AttributeMetadataEnumerableExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\Consoles.cs">
-      <Link>Consoles.cs</Link>
+    <Compile Include="..\Konsola\Metadata\IMetadataProvider.Cached.cs">
+      <Link>Metadata\IMetadataProvider.Cached.cs</Link>
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\Konsola\Constraints\ConstraintBaseAttribute.cs">
-      <Link>Constraints\ConstraintBaseAttribute.cs</Link>
+    <Compile Include="..\Konsola\Metadata\IMetadataProvider.cs">
+      <Link>Metadata\IMetadataProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\Constraints\RangeAttribute.cs">
-      <Link>Constraints\RangeAttribute.cs</Link>
+    <Compile Include="..\Konsola\Metadata\IMetadataProvider.Providers.cs">
+      <Link>Metadata\IMetadataProvider.Providers.cs</Link>
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\Konsola\ContextBase.cs">
-      <Link>ContextBase.cs</Link>
+    <Compile Include="..\Konsola\Metadata\ObjectMetadata.cs">
+      <Link>Metadata\ObjectMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ContextOptionsAttribute.cs">
-      <Link>ContextOptionsAttribute.cs</Link>
+    <Compile Include="..\Konsola\Metadata\PropertyMetadata.cs">
+      <Link>Metadata\PropertyMetadata.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\DefaultCommandAttribute.cs">
-      <Link>DefaultCommandAttribute.cs</Link>
+    <Compile Include="..\Konsola\Metadata\_Exceptions.cs">
+      <Link>Metadata\_Exceptions.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\HelpInfo.cs">
-      <Link>HelpInfo.cs</Link>
+    <Compile Include="..\Konsola\Parser\Binder.cs">
+      <Link>Parser\Binder.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\IConsole.cs">
-      <Link>IConsole.cs</Link>
+    <Compile Include="..\Konsola\Parser\CommandAttribute.cs">
+      <Link>Parser\CommandAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\IncludeCommandsAttribute.cs">
-      <Link>IncludeCommandsAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parser\CommandBase.cs">
+      <Link>Parser\CommandBase.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\OnParsedAttribute.cs">
-      <Link>OnParsedAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parser\CommandLineParser.cs">
+      <Link>Parser\CommandLineParser.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ParameterAttribute.cs">
-      <Link>ParameterAttribute.cs</Link>
+    <Compile Include="..\Konsola\Parser\Consoles.cs">
+      <Link>Parser\Consoles.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ParameterContext.cs">
-      <Link>ParameterContext.cs</Link>
+    <Compile Include="..\Konsola\Parser\ContextBase.cs">
+      <Link>Parser\ContextBase.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ParameterKind.cs">
-      <Link>ParameterKind.cs</Link>
+    <Compile Include="..\Konsola\Parser\ContextOptionsAttribute.cs">
+      <Link>Parser\ContextOptionsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\DefaultCommandAttribute.cs">
+      <Link>Parser\DefaultCommandAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\HelpContext.cs">
+      <Link>Parser\HelpContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\HelpContextGenerator.cs">
+      <Link>Parser\HelpContextGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IConsole.cs">
+      <Link>Parser\IConsole.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IConsole.Silent.cs">
+      <Link>Parser\IConsole.Silent.cs</Link>
+      <DependentUpon>IConsole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IErrorFormatter.cs">
+      <Link>Parser\IErrorFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IErrorFormatter.Default.cs">
+      <Link>Parser\IErrorFormatter.Default.cs</Link>
+      <DependentUpon>IErrorFormatter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IHelpFormatter.cs">
+      <Link>Parser\IHelpFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IHelpFormatter.Default.cs">
+      <Link>Parser\IHelpFormatter.Default.cs</Link>
+      <DependentUpon>IHelpFormatter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\IncludeCommandsAttribute.cs">
+      <Link>Parser\IncludeCommandsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\OnParsedAttribute.cs">
+      <Link>Parser\OnParsedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ParameterAttribute.cs">
+      <Link>Parser\ParameterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ReflectionExtensions.cs">
+      <Link>Parser\ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\Token.cs">
+      <Link>Parser\Token.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\Tokenizer.cs">
+      <Link>Parser\Tokenizer.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\Tokenizer.Default.cs">
+      <Link>Parser\Tokenizer.Default.cs</Link>
+      <DependentUpon>Tokenizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\TokenKind.cs">
+      <Link>Parser\TokenKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\Util.cs">
+      <Link>Parser\Util.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ValidationHelper.cs">
+      <Link>Parser\ValidationHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\WriteKind.cs">
+      <Link>Parser\WriteKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\_Exceptions.cs">
+      <Link>Parser\_Exceptions.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\ReflectionExtensions.cs">
-      <Link>ReflectionExtensions.cs</Link>
+    <Compile Include="..\Konsola\StateMachine.cs">
+      <Link>StateMachine.cs</Link>
     </Compile>
-    <Compile Include="..\Konsola\SilentConsole.cs">
-      <Link>SilentConsole.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Token.cs">
-      <Link>Token.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\TokenKind.cs">
-      <Link>TokenKind.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\Util.cs">
-      <Link>Util.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\WriteKind.cs">
-      <Link>WriteKind.cs</Link>
-    </Compile>
-    <Compile Include="..\Konsola\_Exceptions.cs">
-      <Link>_Exceptions.cs</Link>
-    </Compile>
-    <Compile Include="DefaultConsole.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Parser\IConsole.Default.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\build\MR.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

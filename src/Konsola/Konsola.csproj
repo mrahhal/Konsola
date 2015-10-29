@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\build\MR.Build.props" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -61,31 +60,60 @@
     <DocumentationFile>bin\Release\Konsola.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandAttribute.cs" />
-    <Compile Include="Constraints\RangeAttribute.cs" />
-    <Compile Include="DefaultCommandAttribute.cs" />
-    <Compile Include="IncludeCommandsAttribute.cs" />
-    <Compile Include="Constraints\ConstraintBaseAttribute.cs" />
-    <Compile Include="CommandBase.cs" />
-    <Compile Include="Consoles.cs" />
-    <Compile Include="IConsole.cs" />
-    <Compile Include="CommandContext.cs" />
-    <Compile Include="ContextBase.cs" />
-    <Compile Include="HelpInfo.cs" />
-    <Compile Include="ParameterContext.cs" />
+    <Compile Include="..\Common\AssemblyInfo.Common.cs">
+      <Link>Properties\AssemblyInfo.Common.cs</Link>
+    </Compile>
+    <Compile Include="Boxes.cs" />
+    <Compile Include="Metadata\AttributeMetadata.cs" />
+    <Compile Include="Metadata\AttributeMetadataEnumerableExtensions.cs" />
+    <Compile Include="Metadata\IMetadataProvider.Cached.cs">
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Metadata\IMetadataProvider.cs" />
+    <Compile Include="Metadata\IMetadataProvider.Providers.cs">
+      <DependentUpon>IMetadataProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Metadata\PropertyMetadata.cs" />
+    <Compile Include="Metadata\_Exceptions.cs" />
+    <Compile Include="Metadata\ObjectMetadata.cs" />
+    <Compile Include="Parser\Binder.cs" />
+    <Compile Include="Parser\CommandAttribute.cs" />
+    <Compile Include="Parser\CommandLineParser.cs" />
+    <Compile Include="Parser\DefaultCommandAttribute.cs" />
+    <Compile Include="Parser\HelpContext.cs" />
+    <Compile Include="Parser\HelpContextGenerator.cs" />
+    <Compile Include="Parser\IErrorFormatter.cs" />
+    <Compile Include="Parser\IErrorFormatter.Default.cs">
+      <DependentUpon>IErrorFormatter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\IHelpFormatter.cs" />
+    <Compile Include="Parser\IHelpFormatter.Default.cs">
+      <DependentUpon>IHelpFormatter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\IncludeCommandsAttribute.cs" />
+    <Compile Include="Parser\CommandBase.cs" />
+    <Compile Include="Parser\Consoles.cs" />
+    <Compile Include="Parser\IConsole.cs" />
+    <Compile Include="Parser\ContextBase.cs" />
+    <Compile Include="Parser\Tokenizer.cs" />
+    <Compile Include="Parser\Tokenizer.Default.cs">
+      <DependentUpon>Tokenizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\ValidationHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ContextOptionsAttribute.cs" />
-    <Compile Include="ParameterAttribute.cs" />
-    <Compile Include="OnParsedAttribute.cs" />
-    <Compile Include="ParameterKind.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="TokenKind.cs" />
-    <Compile Include="CommandLineParser.cs" />
-    <Compile Include="ReflectionExtensions.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="SilentConsole.cs" />
-    <Compile Include="WriteKind.cs" />
-    <Compile Include="_Exceptions.cs" />
+    <Compile Include="Parser\ContextOptionsAttribute.cs" />
+    <Compile Include="Parser\ParameterAttribute.cs" />
+    <Compile Include="Parser\OnParsedAttribute.cs" />
+    <Compile Include="Parser\Token.cs" />
+    <Compile Include="Parser\TokenKind.cs" />
+    <Compile Include="Parser\ReflectionExtensions.cs" />
+    <Compile Include="Parser\Util.cs" />
+    <Compile Include="Parser\IConsole.Silent.cs">
+      <DependentUpon>IConsole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\WriteKind.cs" />
+    <Compile Include="Parser\_Exceptions.cs" />
+    <Compile Include="StateMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -99,11 +127,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\..\build\MR.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

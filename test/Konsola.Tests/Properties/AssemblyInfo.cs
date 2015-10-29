@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿//------------------------------------------------------------------------------
+// Copyright (c) 2015, Mohammad Rahhal @mrahhal
+//------------------------------------------------------------------------------
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -20,7 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8446ccc0-ea7e-4b66-98e0-81d4fe4f1852")]
+[assembly: Guid("668c3de9-a3e3-4e05-ba4a-dbfb8868a51e")]
 
 // Version information for an assembly consists of the following four values:
 //

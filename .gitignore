@@ -1,4 +1,5 @@
 artifacts/
+src/Common/AssemblyInfo.Common.cs
 
 #################
 ## Eclipse

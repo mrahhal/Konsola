@@ -1,38 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="BuildPackages" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="MR.Build.props" />
-	
-	<Target Name="CreateDirs">
-		<RemoveDir Directories="$(BinariesDir)" Condition="Exists('$(BinariesDir)')" ContinueOnError="true" />
-		<MakeDir Directories="$(ArtifactsDir)" Condition="!Exists('$(ArtifactsDir)')" />
-		<MakeDir Directories="$(BinariesDir)" Condition="!Exists('$(PackagesDestinationDir)')" />
-		<MakeDir Directories="$(NuspecsDestination)" Condition="!Exists('$(NuspecsDestination)')" />
-		<MakeDir Directories="$(PackagesDestinationDir)" Condition="!Exists('$(PackagesDestinationDir)')" />
+<Project DefaultTargets="Build;Test;Package" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Major>1</Major>
+		<Minor>0</Minor>
+		<Patch>0</Patch>
+		<Build>0</Build>
+		<Quality>pre1</Quality>
+		<AssemblyProduct>Konsola</AssemblyProduct>
+		<AssemblyDescription>Contains services for command line tools.</AssemblyDescription>
+		<AssemblyCompany>MRH</AssemblyCompany>
+		<AssemblyCopyright>Copyright (c) 2015</AssemblyCopyright>
+		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
+		<BuildType Condition="'$(APPVEYOR_REPO_TAG)' == 'true'">Release</BuildType>
+		<AppveyorConfigFile Condition="'$(CI)' != ''">/appveyor</AppveyorConfigFile>
+		<AppveyorClr4 Condition="'$(CI)' != ''">.clr4</AppveyorClr4>
+
+		<Version>$(Major).$(Minor).$(Patch)</Version>
+		<FullVersion>$(Version).$(Build)</FullVersion>
+		<QualityWithDash Condition="'$(Quality)' != ''">-$(Quality)</QualityWithDash>
+		<InformationalVersion>$(Version)$(QualityWithDash)</InformationalVersion>
+
+		<RootDir>$(MSBuildProjectDirectory)/../</RootDir>
+		<SolutionFile>$(RootDir)Konsola.sln</SolutionFile>
+		<PackageOutputDir>$(RootDir)artifacts/packages/</PackageOutputDir>
+		<ArtifactsDir>$(RootDir)artifacts/</ArtifactsDir>
+		<NuspecsDestination>$(ArtifactsDir)nuspecs/</NuspecsDestination>
+	</PropertyGroup>
+	<ItemGroup>
+		<Assemblies Include="Konsola">
+			<Platform>net40</Platform>
+		</Assemblies>
+		<Assemblies Include="Konsola.Net40">
+			<Platform>portable-net403+netcore45</Platform>
+		</Assemblies>
+	</ItemGroup>
+	<Import Project="Build.tasks" />
+
+	<Target Name="GenerateVersionInfo" BeforeTargets="Build">
+		<MakeDir Directories="$(RootDir)src/Common" ContinueOnError="true" />
+		<MakeDir Directories="$(PackageOutputDir)" ContinueOnError="true" />
+		<Time Format="HHmmyyyyMMdd">
+			<Output TaskParameter="FormattedTime" PropertyName="Date" />
+		</Time>
+		<PropertyGroup>
+			<InfoVersion Condition="'$(BuildType)' == 'Release'">$(InformationalVersion)</InfoVersion>
+			<InfoVersion Condition="'$(BuildType)' != 'Release'">$(InformationalVersion)-d-$(Date)</InfoVersion>
+		</PropertyGroup>
+		<AssemblyInfo OutputFile="$(RootDir)src/Common/AssemblyInfo.Common.cs"
+					  AssemblyProduct="$(AssemblyProduct)"
+					  AssemblyCompany="$(AssemblyCompany)"
+					  AssemblyCopyright="$(AssemblyCopyright)"
+					  AssemblyVersion="$(Version)"
+					  AssemblyFileVersion="$(FullVersion)"
+					  AssemblyInformationalVersion="$(InfoVersion)" />
 	</Target>
-	
-	<Target Name="Build" DependsOnTargets="CreateDirs">
-		<MSBuild Projects="@(Projects)" Condition="'%(Projects.SkipBuild)' == '' Or !%(Projects.SkipBuild)" Properties="Configuration=Release" />
+	<Target Name="Build" DependsOnTargets="RestorePackages">
+		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;NoWarn=CS1591,CS1573,CS1574" ToolsVersion="14.0" />
 	</Target>
-	
-	<Target Name="CopyNuspecs" DependsOnTargets="Build">
-		<ItemGroup>
-			<NuspecSources Include="$(NuspecsSrc)*.nuspec" />
-		</ItemGroup>
-		<Copy SourceFiles="@(NuspecSources)" DestinationFolder="$(NuspecsDestination)" />
+	<Target Name="CopyToBin" AfterTargets="Build">
+		<MakeDir Directories="$(ArtifactsDir)bin" />
+		<Copy SourceFiles="$(RootDir)src/%(Assemblies.Identity)/bin/Release/Konsola.dll" DestinationFolder="$(ArtifactsDir)bin/lib/%(Assemblies.Platform)" />
+		<Copy SourceFiles="$(RootDir)src/%(Assemblies.Identity)/bin/Release/Konsola.xml" DestinationFolder="$(ArtifactsDir)bin/lib/%(Assemblies.Platform)" />
 	</Target>
-	
-	<Target Name="TransformNuspecsPre">
-		<ItemGroup>
-			<Nuspecs Include="$(NuspecsDestination)*.nuspec" />
-		</ItemGroup>
-	</Target>
-	<Target Name="TransformNuspecs" DependsOnTargets="CopyNuspecs;TransformNuspecsPre;SpecifyNuspecTransforms">
-		<FileRegexTransform Items="@(NuspecTransform)" />
-	</Target>
-	
-	<Target Name="BuildPackages" DependsOnTargets="TransformNuspecs">
+	<Target Name="RestorePackages" DependsOnTargets="Clean">
 		<Exec
-			Command="nuget pack &quot;%(Nuspecs.Identity)&quot; -o &quot;$(PackagesDestinationDir)&quot; -BasePath &quot;$(BinariesDir)%(Nuspecs.Filename)&quot;"
-			LogStandardErrorAsError="true" />
+			WorkingDirectory="$(RootDir)"
+			Command="nuget restore" />
+		<Exec
+			WorkingDirectory="$(RootDir)"
+			Command="nuget restore src\%(Assemblies.Identity)\%(Assemblies.Identity).csproj -SolutionDirectory $(RootDir)" />
+	</Target>
+	<Target Name="Clean">
+		<Exec
+			WorkingDirectory="$(RootDir)"
+			Command="rmdir artifacts /s /q" ContinueOnError="true" />
+	</Target>
+	<Target Name="Test" DependsOnTargets="Build" Condition="'$(CI)' == ''">
+		<Exec
+			WorkingDirectory="$(RootDir)"
+			Command="xunit.console$(AppveyorClr4) test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
+	</Target>
+	<Target Name="TransformNuspecs" BeforeTargets="Package">
+		<Copy SourceFiles="$(RootDir)nuspecs/Konsola.nuspec" DestinationFolder="$(NuspecsDestination)" />
+		<PropertyGroup>
+			<Find>__VERSION__</Find>
+			<Replace>$(InfoVersion)</Replace>
+		</PropertyGroup>
+		<RegexTransform Files="$(NuspecsDestination)Konsola.nuspec"
+						Find="$(Find)"
+						Replace="$(Replace)" />
+		<PropertyGroup>
+			<Find>__DESCRIPTION__</Find>
+			<Replace>$(AssemblyDescription)</Replace>
+		</PropertyGroup>
+		<RegexTransform Files="$(NuspecsDestination)Konsola.nuspec"
+						Find="$(Find)"
+						Replace="$(Replace)" />
+	</Target>
+	<Target Name="Package" DependsOnTargets="Build;Test">
+		<MakeDir Directories="$(RootDir)artifacts/packages" />
+		<Exec
+			WorkingDirectory="$(RootDir)"
+			Command="nuget pack $(NuspecsDestination)Konsola.nuspec -Symbols -Prop Configuration=Release -OutputDirectory artifacts/packages -BasePath artifacts/bin" />
 	</Target>
 </Project>

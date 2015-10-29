@@ -1,1 +1,1 @@
-msbuild build\Build.proj /t:BuildPackages
+msbuild build/Build.proj
