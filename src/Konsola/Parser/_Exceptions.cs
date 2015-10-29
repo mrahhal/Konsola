@@ -48,6 +48,11 @@ namespace Konsola.Parser
 		/// A general exception kind.
 		/// </summary>
 		Invalid,
+
+		/// <summary>
+		/// A raw message.
+		/// </summary>
+		Message,
 	}
 
 	public class ContextException : Exception
@@ -64,6 +69,11 @@ namespace Konsola.Parser
 
 	public class CommandLineException : Exception
 	{
+		public CommandLineException(string message)
+			: base(message)
+		{
+		}
+
 		public CommandLineException(CommandLineExceptionKind kind, string name)
 		{
 			Kind = kind;

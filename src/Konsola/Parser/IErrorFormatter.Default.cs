@@ -38,6 +38,9 @@ namespace Konsola.Parser
 
 				case CommandLineExceptionKind.Invalid:
 					return "Invalid arguments";
+
+				case CommandLineExceptionKind.Message:
+					return ex.Message;
 			}
 			message += ex.Name;
 
