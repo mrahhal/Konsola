@@ -4,7 +4,7 @@ using System.IO;
 namespace Konsola.Parser
 {
 	/// <summary>
-	/// An IConsole implementation that writes to system console.
+	/// An <see cref="IConsole"/> implementation that writes to system console.
 	/// </summary>
 	public class DefaultConsole : IConsole
 	{
@@ -16,7 +16,7 @@ namespace Konsola.Parser
 
 		public void Write(WriteKind kind, string value)
 		{
-			var color = _GetColorFromKind(kind);
+			var color = GetColorFromKind(kind);
 			lock (_sync)
 			{
 				Console.ForegroundColor = color;
@@ -31,14 +31,14 @@ namespace Konsola.Parser
 			}
 		}
 
-		private ConsoleColor _GetColorFromKind(WriteKind kind)
+		protected virtual ConsoleColor GetColorFromKind(WriteKind kind)
 		{
 			switch (kind)
 			{
-				case WriteKind.Normal:
-					return ConsoleColor.Gray;
+				case WriteKind.Success:
+					return ConsoleColor.Green;
 				case WriteKind.Info:
-					return ConsoleColor.Blue;
+					return ConsoleColor.DarkGray;
 				case WriteKind.Warning:
 					return ConsoleColor.Yellow;
 				case WriteKind.Error:
