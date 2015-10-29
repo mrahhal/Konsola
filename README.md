@@ -50,6 +50,31 @@ if (result.Kind == ParsingResultKind.Success)
 }
 ```
 
+##### Manual validation or any other work after binding is done
+You can use `OnParsedAttribute` to decorate a method on your command. This method will then be called after the command is bound. You can then do manual validation or any other work and throw `CommandLineException` to allow the normal error flow to handle it.
+
+```c#
+[Command("some")]
+class SomeCommand : CommandBase
+{
+    [Parameter("m")]
+    public string SomeString { get; set; }
+
+    [OnParsed]
+    public void ValidateOrSomething()
+    {
+       if (SomeString.Contains('='))
+        {
+            throw new CommandLineException("m contains invalid characters.");
+        }
+    }
+
+    public override void ExecuteCommand()
+    {
+    }
+}
+```
+
 ### More details
 CommandLineParser knows about the following types:
 * string, string array (-[param name])

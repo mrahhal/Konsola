@@ -111,6 +111,17 @@ namespace Konsola.Parser.Tests
 		}
 
 		[Fact]
+		public void Parse_CommandLineExceptionsAreCorrectlyHandledWithinOnParsedMethods()
+		{
+			var args = "".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<ContextWithOnParsedMethodThatThrowsACommandLineException>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
 		public void Parse_OnParsedMethods_PlaysWellWithVirtual()
 		{
 			var args = "".SplitCommandLineArgs();

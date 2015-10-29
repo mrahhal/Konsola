@@ -143,6 +143,12 @@ namespace Konsola.Parser.Tests
 	{
 	}
 
+	[ContextOptions(InvokeMethods = true)]
+	[DefaultCommand(typeof(ContextWithOnParsedMethodThatThrowsACommandLineExceptionDefaultCommand))]
+	public class ContextWithOnParsedMethodThatThrowsACommandLineException : ContextBase
+	{
+	}
+
 	[ContextOptions]
 	[DefaultCommand(typeof(ContextWithOnParsedMethodDefaultCommand))]
 	public class ContextWithOnParsedMethod_NotSet : ContextBase
@@ -157,6 +163,19 @@ namespace Konsola.Parser.Tests
 		public virtual void OnParsed()
 		{
 			OnParsedCalled = true;
+		}
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
+
+	public class ContextWithOnParsedMethodThatThrowsACommandLineExceptionDefaultCommand : CommandBase
+	{
+		[OnParsed]
+		public virtual void OnParsed()
+		{
+			throw new CommandLineException("an exception");
 		}
 
 		public override void ExecuteCommand()

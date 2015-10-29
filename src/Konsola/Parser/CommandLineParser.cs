@@ -41,7 +41,6 @@ namespace Konsola.Parser
 #if NET40
 			return new DefaultConsole();
 #else
-
 			return Consoles.Silent;
 #endif
 		}
@@ -167,9 +166,21 @@ namespace Konsola.Parser
 				.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 				.Where(m => m.GetParameters().Length == 0 && m.IsAttributeDefined<OnParsedAttribute>());
 
-			foreach (var method in onParsedMethods)
+			try
 			{
-				method.Invoke(cw.Command, null);
+				foreach (var method in onParsedMethods)
+				{
+					method.Invoke(cw.Command, null);
+				}
+			}
+			catch (TargetInvocationException ex)
+			{
+				var inner = ex.InnerException as CommandLineException;
+				if (inner != null)
+				{
+					throw inner;
+				}
+				throw;
 			}
 		}
 
