@@ -17,4 +17,4 @@ deploy:
   api_key:
     secure: PWCeOQ12fgAhPiBjgkBAqHbvaPQArarsO2sI+8KCeXjBjE+AHaMIMW8b7efmDzQ6
   skip_symbols: true
-  artifact: artifacts/packages/*.nupkg
+  artifact: /artifacts\/packages\/.+\.nupkg/
