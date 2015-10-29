@@ -63,7 +63,7 @@ class SomeCommand : CommandBase
     [OnParsed]
     public void ValidateOrSomething()
     {
-       if (SomeString.Contains('='))
+        if (SomeString.Contains('='))
         {
             throw new CommandLineException("m contains invalid characters.");
         }
