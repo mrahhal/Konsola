@@ -6,7 +6,8 @@ install:
 build:
   project: build/Build.proj
   verbosity: normal
-test: off
+test:
+  assemblies: test/**/*.Tests.dll
 artifacts:
 - path: artifacts/packages/*.nupkg
 deploy:

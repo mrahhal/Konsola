@@ -76,7 +76,7 @@
 			WorkingDirectory="$(RootDir)"
 			Command="rmdir artifacts /s /q" ContinueOnError="true" />
 	</Target>
-	<Target Name="Test" DependsOnTargets="Build">
+	<Target Name="Test" DependsOnTargets="Build" Condition="'$(CI)' == ''">
 		<Exec
 			WorkingDirectory="$(RootDir)"
 			Command="$(LocalXunit)xunit.console$(AppveyorClr4) test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
