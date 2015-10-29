@@ -50,6 +50,9 @@ namespace Konsola.Parser.Tests
 		[Parameter("sw")]
 		public bool SomeBool { get; set; }
 
+		[Parameter("sa")]
+		public string[] StringArray { get; set; }
+
 		[Parameter("p")]
 		public Platform Platform { get; set; }
 

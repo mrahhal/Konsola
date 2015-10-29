@@ -119,6 +119,15 @@ namespace Konsola.Parser
 				}
 				target.SetValue(Boxes.True);
 			}
+			else if (propertyType == typeof(string[]))
+			{
+				if (source.Kind == RawTokenKind.Switch)
+				{
+					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
+				}
+				var values = source.Value.Split(',').Where(v => !string.IsNullOrWhiteSpace(v)).ToArray();
+				target.SetValue(values);
+			}
 		}
 
 		private static void BindEnum(DataSource source, PropertyTarget target)

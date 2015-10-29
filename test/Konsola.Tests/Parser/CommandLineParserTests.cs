@@ -51,7 +51,7 @@ namespace Konsola.Parser.Tests
 		[Fact]
 		public void Parse_Basic()
 		{
-			var args = "-my some -s2 something -int 3 --sw -set-something hello".SplitCommandLineArgs();
+			var args = "-my some -s2 something -int 3 -sa first,second --sw -set-something hello".SplitCommandLineArgs();
 
 			var parser = new CommandLineParser<Context>();
 			var result = parser.Parse(args);
@@ -64,6 +64,24 @@ namespace Konsola.Parser.Tests
 			Assert.True(command.SomeString3 == "hello");
 			Assert.True(command.SomeInt == 3);
 			Assert.True(command.SomeBool == true);
+			Assert.True(command.StringArray.Length == 2);
+			Assert.True(command.StringArray[0] == "first");
+			Assert.True(command.StringArray[1] == "second");
+		}
+
+		[Fact]
+		public void Parse_IgnoresWhiteSpaceForStringArrays()
+		{
+			var args = "-int 3 -sa ,first,,second,".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as DefaultCommand;
+
+			Assert.True(command.StringArray.Length == 2);
+			Assert.True(command.StringArray[0] == "first");
+			Assert.True(command.StringArray[1] == "second");
 		}
 
 		[Fact]
