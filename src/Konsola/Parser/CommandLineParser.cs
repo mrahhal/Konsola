@@ -29,10 +29,20 @@ namespace Konsola.Parser
 			IHelpFormatter helpFormatter = null,
 			Tokenizer tokenizer = null)
 		{
-			_console = console ?? Consoles.Silent;
+			_console = console ?? GetDefaultConsole();
 			_errorFormatter = errorFormatter ?? new DefaultErrorFormatter();
 			_helpFormatter = helpFormatter ?? new DefaultHelpFormatter();
 			_tokenizer = tokenizer ?? new DefaultTokenizer();
+		}
+
+		private IConsole GetDefaultConsole()
+		{
+#if NET40
+			return new DefaultConsole();
+#else
+
+			return Consoles.Silent;
+#endif
 		}
 
 		/// <summary>
