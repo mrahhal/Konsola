@@ -6,6 +6,7 @@ namespace Konsola.Parser
 	{
 		Normal,
 		Info,
+		Success,
 		Warning,
 		Error,
 	}
