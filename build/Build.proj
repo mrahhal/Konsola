@@ -13,6 +13,8 @@
 		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
 		<BuildType Condition="'$(APPVEYOR_REPO_TAG)' == 'true'">Release</BuildType>
 		<AppveyorConfigFile Condition="'$(CI)' != ''">/appveyor</AppveyorConfigFile>
+		<AppveyorClr4 Condition="'$(CI)' != ''">.clr4</AppveyorClr4>
+		<LocalXunit Condition="'$(CI)' == ''">C:/bin/xunit/</LocalXunit>
 
 		<Version>$(Major).$(Minor).$(Patch)</Version>
 		<FullVersion>$(Version).$(Build)</FullVersion>
@@ -77,7 +79,7 @@
 	<Target Name="Test" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(RootDir)"
-			Command="xunit.console test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
+			Command="$(LocalXunit)xunit.console$(AppveyorClr4) test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
 	</Target>
 	<Target Name="TransformNuspecs" BeforeTargets="Package">
 		<Copy SourceFiles="$(RootDir)nuspecs/Konsola.nuspec" DestinationFolder="$(NuspecsDestination)" />
