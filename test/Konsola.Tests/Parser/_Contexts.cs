@@ -136,4 +136,53 @@ namespace Konsola.Parser.Tests
 		{
 		}
 	}
+
+	[ContextOptions(InvokeMethods = true)]
+	[DefaultCommand(typeof(ContextWithOnParsedMethodDefaultCommand))]
+	public class ContextWithOnParsedMethod : ContextBase
+	{
+	}
+
+	[ContextOptions]
+	[DefaultCommand(typeof(ContextWithOnParsedMethodDefaultCommand))]
+	public class ContextWithOnParsedMethod_NotSet : ContextBase
+	{
+	}
+
+	public class ContextWithOnParsedMethodDefaultCommand : CommandBase
+	{
+		public bool OnParsedCalled { get; private set; }
+
+		[OnParsed]
+		public virtual void OnParsed()
+		{
+			OnParsedCalled = true;
+		}
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
+
+	[ContextOptions(InvokeMethods = true)]
+	[DefaultCommand(typeof(ContextWithOnParsedMethodSubDefaultCommand))]
+	public class ContextWithOnParsedMethodSub : ContextBase
+	{
+	}
+
+	public class ContextWithOnParsedMethodSubDefaultCommand : ContextWithOnParsedMethodDefaultCommand
+	{
+		public bool OnParsedOverrideCalled { get; private set; }
+
+		[OnParsed]
+		public override void OnParsed()
+		{
+			base.OnParsed();
+			OnParsedOverrideCalled = true;
+		}
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
 }

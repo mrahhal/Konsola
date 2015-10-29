@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace Konsola.Parser
 {
@@ -146,12 +147,30 @@ namespace Konsola.Parser
 			// Throws CommandLineException on errors.
 			Bind(machine, commandMetadata, cw);
 
+			if (cw.Options.InvokeMethods)
+			{
+				InvokeMethods(cw, commandMetadata);
+			}
+
 			// If we're here, binding worked and the cw.Context is now bound and ready. Success.
 			return new ParsingResult<T>()
 			{
 				Context = cw.Context,
 				Kind = ParsingResultKind.Success,
 			};
+		}
+
+		private void InvokeMethods(ContextWrapper cw, ObjectMetadata commandMetadata)
+		{
+			var onParsedMethods = commandMetadata
+				.Type
+				.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+				.Where(m => m.GetParameters().Length == 0 && m.IsAttributeDefined<OnParsedAttribute>());
+
+			foreach (var method in onParsedMethods)
+			{
+				method.Invoke(cw.Command, null);
+			}
 		}
 
 		private void ValidateParameters(IEnumerable<PropertyMetadata> properties)

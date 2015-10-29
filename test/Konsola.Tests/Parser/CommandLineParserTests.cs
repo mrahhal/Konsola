@@ -85,6 +85,46 @@ namespace Konsola.Parser.Tests
 		}
 
 		[Fact]
+		public void Parse_InvokesOnParsedMethods_WhenInvokeMethodsIsSet()
+		{
+			var args = "".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<ContextWithOnParsedMethod>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as ContextWithOnParsedMethodDefaultCommand;
+
+			Assert.True(command.OnParsedCalled);
+		}
+
+		[Fact]
+		public void Parse_DoesNotInvokeOnParsedMethods_WhenInvokeMethodsIsNotSet()
+		{
+			var args = "".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<ContextWithOnParsedMethod_NotSet>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as ContextWithOnParsedMethodDefaultCommand;
+
+			Assert.False(command.OnParsedCalled);
+		}
+
+		[Fact]
+		public void Parse_OnParsedMethods_PlaysWellWithVirtual()
+		{
+			var args = "".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<ContextWithOnParsedMethodSub>();
+			var result = parser.Parse(args);
+			var context = result.Context;
+			var command = context.Command as ContextWithOnParsedMethodSubDefaultCommand;
+
+			Assert.True(command.OnParsedCalled);
+			Assert.True(command.OnParsedOverrideCalled);
+		}
+
+		[Fact]
 		public void Parse_Command()
 		{
 			var args = "restore --an".SplitCommandLineArgs();
