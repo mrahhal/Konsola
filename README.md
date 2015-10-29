@@ -2,6 +2,8 @@
 Contains services for command line tools.
 
 [![Build status](https://img.shields.io/appveyor/ci/mrahhal/konsola/master.svg)](https://ci.appveyor.com/project/mrahhal/konsola)
+[![Nuget version](https://img.shields.io/nuget/v/Konsola.svg)](https://www.nuget.org/packages/Konsola)
+[![Nuget downloads](https://img.shields.io/nuget/dt/Konsola.svg)](https://www.nuget.org/packages/Konsola)
 
 Latest nuget package [here](https://www.nuget.org/packages/Konsola).
 
