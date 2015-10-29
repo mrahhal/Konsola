@@ -12,8 +12,8 @@
 		<AssemblyCopyright>Copyright (c) 2015</AssemblyCopyright>
 		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
 		<BuildType Condition="'$(APPVEYOR_REPO_TAG)' == 'true'">Release</BuildType>
-		<AppveyorConfigFile Condition="'$(CI)' != ''">/appveyor</AppveyorConfigFile>
-		<AppveyorClr4 Condition="'$(CI)' != ''">.clr4</AppveyorClr4>
+		<AppveyorXunitEnv Condition="'$(CI)' != ''">%xunit20%\</AppveyorXunitEnv>
+		<AppveyorConfig Condition="'$(CI)' != ''">-appveyor</AppveyorConfig>
 
 		<Version>$(Major).$(Minor).$(Patch)</Version>
 		<FullVersion>$(Version).$(Build)</FullVersion>
@@ -75,10 +75,10 @@
 			WorkingDirectory="$(RootDir)"
 			Command="rmdir artifacts /s /q" ContinueOnError="true" />
 	</Target>
-	<Target Name="Test" DependsOnTargets="Build" Condition="'$(CI)' == ''">
+	<Target Name="Test" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(RootDir)"
-			Command="xunit.console$(AppveyorClr4) test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfigFile)" />
+			Command="$(AppveyorXunitEnv)xunit.console test/Konsola.Tests/bin/Release/Konsola.Tests.dll $(AppveyorConfig)" />
 	</Target>
 	<Target Name="TransformNuspecs" BeforeTargets="Package">
 		<Copy SourceFiles="$(RootDir)nuspecs/Konsola.nuspec" DestinationFolder="$(NuspecsDestination)" />
