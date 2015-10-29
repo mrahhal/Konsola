@@ -37,14 +37,17 @@ class DefaultCommand : CommandBase
 
 // Some other place... (in Main for example)
 /* var args = "-m some -s 3 --sw"; */
-var context = CommandLineParser.Parse<Context>(args);
-var command = context.Command as DefaultCommand;
+var parser = new CommandLineParser<Context>();
+var result = parser.Parse(args);
+if (result.Kind == ParsingResultKind.Success)
+{
+    var command = result.Context.Command as DefaultCommand;
+    Assert.True(command.SomeString == "some");
+    Assert.True(command.SomeInt == 3);
+    Assert.True(command.SomeBool == true);
 
-Assert.True(command.SomeString == "some");
-Assert.True(command.SomeInt == 3);
-Assert.True(command.SomeBool == true);
-
-command.ExecuteCommand(); // Execute the command.
+    command.ExecuteCommand(); // Execute the command.
+}
 ```
 
 ### More details
@@ -57,11 +60,9 @@ CommandLineParser knows about the following types:
 string arrays and flag enums can have multiple values seperated by a comma.
 For example: `-fe linux,windows` where "fe" corresponds to a flags enum parameter.
 
-And it automatically detects and throws exceptions on command line errors. It also prints to an `IConsole` when generating help and error messages.
+Automatically detects and throws exceptions on command line errors. It also prints to an `IConsole` when generating help and error messages.
 
 A help message is automatically handled and printed when `--h` or `--help` is passed as an arg.
 
 #### A lot more stuff
 There's a lot more (default command, multiple and nested commands, context options, error detection, automatic printing to an extensible console, automatic help printing, constraints, positional params, ...).
-
-Check the unit tests project for more.
