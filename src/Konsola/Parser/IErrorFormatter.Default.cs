@@ -4,7 +4,12 @@ namespace Konsola.Parser
 {
 	public class DefaultErrorFormatter : IErrorFormatter
 	{
-		public string Format(CommandLineException ex)
+		public void Format(CommandLineException ex, IConsole console)
+		{
+			console.WriteLine(WriteKind.Error, GenerateMessage(ex));
+		}
+
+		private string GenerateMessage(CommandLineException ex)
 		{
 			var message = string.Empty;
 			switch (ex.Kind)

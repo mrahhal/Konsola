@@ -76,7 +76,7 @@ namespace Konsola.Parser
 			}
 			catch (CommandLineException ex)
 			{
-				_console.WriteLine(WriteKind.Error, _errorFormatter.Format(ex));
+				_errorFormatter.Format(ex, _console);
 				return new ParsingResult<T>()
 				{
 					Kind = ParsingResultKind.Failure,
