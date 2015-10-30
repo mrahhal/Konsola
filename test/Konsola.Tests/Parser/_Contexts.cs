@@ -204,4 +204,21 @@ namespace Konsola.Parser.Tests
 		{
 		}
 	}
+
+	public abstract class BaseCommand : CommandBase
+	{
+		[Parameter("bn")]
+		public string BaseName { get; set; }
+	}
+
+	public class SubCommand : BaseCommand
+	{
+		[Parameter("sn")]
+		public string SubName { get; set; }
+
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
 }

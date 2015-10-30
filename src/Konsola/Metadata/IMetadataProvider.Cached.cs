@@ -25,10 +25,22 @@ namespace Konsola.Metadata
 
 		private IEnumerable<PropertyMetadata> GenerateProperties(Type type)
 		{
-			return type
-				.GetMembers(BindingFlags.Public | BindingFlags.Instance)
-				.OfType<PropertyInfo>()
+			return GetDeclaredPropertiesInType(type)
 				.Select(pi => GenerateForProperty(pi));
+		}
+
+		private IEnumerable<PropertyInfo> GetDeclaredPropertiesInType(Type type)
+		{
+			if (type == null)
+				yield break;
+			foreach (var pi in GetDeclaredPropertiesInType(type.BaseType))
+			{
+				yield return pi;
+			}
+			foreach (var pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+			{
+				yield return pi;
+			}
 		}
 
 		private IEnumerable<AttributeMetadata> GenerateAttributes(Type type)

@@ -70,6 +70,15 @@ namespace Konsola.Tests.Metadata
 			Assert.Equal(3, metadata.Properties.Count());
 			Assert.Equal(1, metadata.Properties.Where(p => p.ClrInfo.Name == "Baz").First().Attributes.Count());
 		}
+
+		[Fact]
+		public void GetFor_GetsPropertiesInOrderFromBaseTypeFirst()
+		{
+			var provider = new CachedMetadataProvider();
+			var metadata = provider.GetFor<SubCommand>();
+
+			Assert.Equal("Baz", metadata.Properties.ElementAt(2).ClrInfo.Name);
+		}
 	}
 
 	[Command("Foo", Description = "Bar")]
