@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Konsola.Metadata;
+using System.Reflection;
 
 namespace Konsola.Parser
 {
@@ -6,6 +7,7 @@ namespace Konsola.Parser
 	{
 		public ParameterKind Kind { get; set; }
 		public PropertyInfo PropertyInfo { get; set; }
+		public PropertyMetadata Metadata { get; set; }
 		public ParameterAttribute Attribute { get; set; }
 		public string FullName { get; set; }
 	}

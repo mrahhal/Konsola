@@ -4,15 +4,18 @@ namespace Konsola.Parser
 {
 	public class PropertyTarget
 	{
-		public PropertyTarget(object obj)
+		public PropertyTarget(object obj, ParameterContext parameterContext)
 		{
 			Object = obj;
+			ParameterContext = parameterContext;
 		}
 
 		public object Object { get; private set; }
-		public PropertyMetadata Metadata { get; set; }
-		public ParameterAttribute Attribute { get; set; }
+		public ParameterContext ParameterContext { get; private set; }
 		public bool IsSet { get; private set; }
+
+		public PropertyMetadata Metadata { get { return ParameterContext.Metadata; } }
+		public ParameterAttribute Attribute { get { return ParameterContext.Attribute; } }
 
 		public void SetValue(object value)
 		{

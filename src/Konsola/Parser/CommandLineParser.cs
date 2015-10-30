@@ -205,7 +205,7 @@ namespace Konsola.Parser
 		private void Bind(StateMachine<Token> machine, ObjectMetadata commandMetadata, ContextWrapper cw)
 		{
 			var sources = CreateSources(machine);
-			var targets = CreateTargets(commandMetadata.Properties, cw.Command);
+			var targets = CreateTargets(cw.Command, cw.Parameters);
 
 			var bindingContext = new BindingContext()
 			{
@@ -261,21 +261,11 @@ namespace Konsola.Parser
 			return list.ToArray();
 		}
 
-		private PropertyTarget[] CreateTargets(IEnumerable<PropertyMetadata> properties, Object commandObject)
+		private PropertyTarget[] CreateTargets(object commandObject, ParameterContext[] parameters)
 		{
 			return
-				properties
-				.Select(p => new
-				{
-					Attribute = p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>(),
-					Property = p,
-				})
-				.Where(pa => pa.Attribute != null)
-				.Select(pa => new PropertyTarget(commandObject)
-				{
-					Attribute = pa.Attribute,
-					Metadata = pa.Property,
-				})
+				parameters
+				.Select(p => new PropertyTarget(commandObject, p))
 				.ToArray();
 		}
 
@@ -283,9 +273,9 @@ namespace Konsola.Parser
 		{
 			foreach (var target in targets)
 			{
-				if (target.Attribute.IsMandatory && !target.IsSet)
+				if (target.ParameterContext.Attribute.IsMandatory && !target.IsSet)
 				{
-					throw new CommandLineException(CommandLineExceptionKind.MissingParameter, target.Attribute.Names);
+					throw new CommandLineException(CommandLineExceptionKind.MissingParameter, target.ParameterContext.Attribute.Names);
 				}
 			}
 		}

@@ -35,6 +35,7 @@ namespace Konsola.Parser
 				{
 					PropertyInfo = p.ClrInfo,
 					Attribute = p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>(),
+					Metadata = p,
 					Kind = GetKindForProperty(p),
 					FullName = GetFullName(p, GetKindForProperty(p))
 				})
