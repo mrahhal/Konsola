@@ -1,9 +1,7 @@
-﻿using Konsola.Metadata;
-using System;
+﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
+using System.Text;
 
 namespace Konsola.Parser
 {
@@ -41,10 +39,9 @@ namespace Konsola.Parser
 			}
 			else
 			{
-				var orderedTargets =
-				targets
-				.OrderBy(t => t.Attribute.Position)
-				.ToArray();
+				var orderedTargets = targets
+					.OrderBy(t => t.Attribute.Position)
+					.ToArray();
 				BindWithPositionalArguments(sources, orderedTargets);
 			}
 
@@ -108,52 +105,59 @@ namespace Konsola.Parser
 
 		private static void BindTargetFromSource(DataSource source, PropertyTarget target)
 		{
-			var propertyType = target.Metadata.Type;
-			if (propertyType == typeof(int))
+			switch (target.ParameterContext.Kind)
 			{
-				if (source.Kind == RawTokenKind.Switch)
-				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
-				}
-				int parsed;
-				if (!int.TryParse(source.Value, out parsed))
-				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidValue, source.FullIdentifier);
-				}
-				target.SetValue(parsed);
+				case ParameterKind.String:
+					{
+						ThrowIf(source.Kind == RawTokenKind.Switch, source);
+						target.SetValue(source.Value);
+					}
+					break;
+
+				case ParameterKind.StringArray:
+					{
+						ThrowIf(source.Kind == RawTokenKind.Switch, source);
+						var values = source.Value.Split(',').Where(v => !string.IsNullOrWhiteSpace(v)).ToArray();
+						target.SetValue(values);
+					}
+					break;
+
+				case ParameterKind.Int:
+					{
+						ThrowIf(source.Kind == RawTokenKind.Switch, source);
+						int parsed;
+						if (!int.TryParse(source.Value, out parsed))
+						{
+							throw new CommandLineException(CommandLineExceptionKind.InvalidValue, source.FullIdentifier);
+						}
+						target.SetValue(parsed);
+					}
+					break;
+
+				case ParameterKind.Enum:
+					{
+						ThrowIf(source.Kind == RawTokenKind.Switch, source);
+						BindEnum(source, target);
+					}
+					break;
+
+				case ParameterKind.Bool:
+					{
+						ThrowIf(source.Kind != RawTokenKind.Switch, source);
+						target.SetValue(Boxes.True);
+					}
+					break;
+
+				default:
+					break;
 			}
-			else if (propertyType == typeof(string))
+		}
+
+		private static void ThrowIf(bool value, DataSource source)
+		{
+			if (value)
 			{
-				if (source.Kind == RawTokenKind.Switch)
-				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
-				}
-				target.SetValue(source.Value);
-			}
-			else if (propertyType.IsEnum)
-			{
-				if (source.Kind == RawTokenKind.Switch)
-				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
-				}
-				BindEnum(source, target);
-			}
-			else if (propertyType == typeof(bool))
-			{
-				if (source.Kind != RawTokenKind.Switch)
-				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
-				}
-				target.SetValue(Boxes.True);
-			}
-			else if (propertyType == typeof(string[]))
-			{
-				if (source.Kind == RawTokenKind.Switch)
-				{
-					throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
-				}
-				var values = source.Value.Split(',').Where(v => !string.IsNullOrWhiteSpace(v)).ToArray();
-				target.SetValue(values);
+				throw new CommandLineException(CommandLineExceptionKind.InvalidParameter, source.FullIdentifier);
 			}
 		}
 
