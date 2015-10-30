@@ -5,7 +5,7 @@
 		<Minor>0</Minor>
 		<Patch>0</Patch>
 		<Build>0</Build>
-		<Quality>pre1</Quality>
+		<Quality></Quality>
 		<AssemblyProduct>Konsola</AssemblyProduct>
 		<AssemblyDescription>Contains services for command line tools.</AssemblyDescription>
 		<AssemblyCompany>MRH</AssemblyCompany>
