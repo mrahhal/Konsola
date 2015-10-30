@@ -4,6 +4,7 @@
 	{
 		None,
 		String,
+		StringArray,
 		Int,
 		Enum,
 		Bool,

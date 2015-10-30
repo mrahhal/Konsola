@@ -18,6 +18,8 @@ namespace Konsola.Parser
 		private IErrorFormatter _errorFormatter;
 		private IHelpFormatter _helpFormatter;
 		private Tokenizer _tokenizer;
+		private ParameterContextProvider _parameterContextProvider;
+		private HelpContextGenerator _helpContextGenerator;
 
 		public CommandLineParser()
 			: this(null)
@@ -34,6 +36,9 @@ namespace Konsola.Parser
 			_errorFormatter = errorFormatter ?? new DefaultErrorFormatter();
 			_helpFormatter = helpFormatter ?? new DefaultHelpFormatter();
 			_tokenizer = tokenizer ?? new DefaultTokenizer();
+
+			_parameterContextProvider = new ParameterContextProvider(_tokenizer);
+			_helpContextGenerator = new HelpContextGenerator(_parameterContextProvider);
 		}
 
 		private IConsole GetDefaultConsole()
@@ -87,12 +92,12 @@ namespace Konsola.Parser
 
 		public HelpContext GenerateHelpContext()
 		{
-			return HelpContextGenerator.Generate(typeof(T), _tokenizer);
+			return _helpContextGenerator.Generate(typeof(T));
 		}
 
 		public CommandHelpContext GenerateCommandHelpContext(Type type)
 		{
-			return HelpContextGenerator.GenerateForCommand(type, _tokenizer);
+			return _helpContextGenerator.GenerateForCommand(type);
 		}
 
 		private ParsingResult<T> ParseCore(ParsingContext c)
@@ -125,6 +130,7 @@ namespace Konsola.Parser
 			}
 			cw.Command = cw.Context.Command = commandMetadata.Type.CreateInstance<CommandBase>();
 			ValidateParameters(commandMetadata.Properties);
+			cw.Parameters = _parameterContextProvider.GetFor(commandMetadata.Type);
 
 			if (IsHelpRequested(machine))
 			{
@@ -410,6 +416,7 @@ namespace Konsola.Parser
 		{
 			public T Context { get; set; }
 			public CommandBase Command { get; set; }
+			public ParameterContext[] Parameters { get; set; }
 			public ObjectMetadata Metadata { get; set; }
 			public ContextOptionsAttribute Options { get; set; }
 			public DefaultCommandAttribute DefaultCommand { get; set; }

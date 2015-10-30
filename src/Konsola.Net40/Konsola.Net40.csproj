@@ -140,6 +140,9 @@
     <Compile Include="..\Konsola\Parser\ParameterContext.cs">
       <Link>Parser\ParameterContext.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Parser\ParameterContextProvider.cs">
+      <Link>Parser\ParameterContextProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Parser\ParameterKind.cs">
       <Link>Parser\ParameterKind.cs</Link>
     </Compile>

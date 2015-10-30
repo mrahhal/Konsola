@@ -99,6 +99,7 @@
     <Compile Include="Parser\IConsole.cs" />
     <Compile Include="Parser\ContextBase.cs" />
     <Compile Include="Parser\ParameterContext.cs" />
+    <Compile Include="Parser\ParameterContextProvider.cs" />
     <Compile Include="Parser\ParameterKind.cs" />
     <Compile Include="Parser\PropertyTarget.cs" />
     <Compile Include="Parser\Tokenizer.cs" />

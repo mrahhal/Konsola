@@ -6,14 +6,21 @@ using System.Reflection;
 
 namespace Konsola.Parser
 {
-	public static class HelpContextGenerator
+	public class HelpContextGenerator
 	{
+		private ParameterContextProvider _provider;
+
+		public HelpContextGenerator(ParameterContextProvider provider)
+		{
+			_provider = provider;
+		}
+
 		/// <summary>
 		/// Generates the <see cref="HelpContext"/> for the specified context type.
 		/// </summary>
 		/// <param name="type">This is expected to be a ContextBase.</param>
 		/// <exception cref="InvalidOperationException">The type is not a ContextBase.</exception>
-		public static HelpContext Generate(Type type, Tokenizer tokenizer)
+		public HelpContext Generate(Type type)
 		{
 			if (!typeof(ContextBase).IsAssignableFrom(type))
 			{
@@ -32,7 +39,7 @@ namespace Konsola.Parser
 
 			if (defaultCommand != null)
 			{
-				parameters = GenerateParameters(defaultCommand.Command, tokenizer);
+				parameters = _provider.GetFor(defaultCommand.Command);
 			}
 
 			if (nestedCommands != null)
@@ -53,7 +60,7 @@ namespace Konsola.Parser
 		/// </summary>
 		/// <param name="type">This is expected to be a CommandBase.</param>
 		/// <exception cref="InvalidOperationException">The type is not a CommandBase.</exception>
-		public static CommandHelpContext GenerateForCommand(Type type, Tokenizer tokenizer)
+		public CommandHelpContext GenerateForCommand(Type type)
 		{
 			if (!typeof(CommandBase).IsAssignableFrom(type))
 			{
@@ -67,7 +74,7 @@ namespace Konsola.Parser
 			var parameters = default(IEnumerable<ParameterContext>);
 			var commands = default(IEnumerable<CommandAttribute>);
 
-			parameters = GenerateParameters(type, tokenizer);
+			parameters = _provider.GetFor(type);
 
 			if (nestedCommands != null)
 			{
@@ -82,23 +89,6 @@ namespace Konsola.Parser
 			};
 		}
 
-		private static IEnumerable<ParameterContext> GenerateParameters(Type type, Tokenizer tokenizer)
-		{
-			var metadata = MetadataProviders.Current.GetFor(type);
-			return
-				metadata
-				.Properties
-				.Where(p => p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>() != null)
-				.Select(p => new ParameterContext()
-				{
-					PropertyInfo = p.ClrInfo,
-					Attribute = p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>(),
-					Kind = GetKindForProperty(p),
-					FullName = GetFullName(p, GetKindForProperty(p), tokenizer)
-				})
-				.ToArray();
-		}
-
 		private static IEnumerable<CommandAttribute> GenerateCommands(IncludeCommandsAttribute nestedCommands)
 		{
 			return
@@ -107,43 +97,6 @@ namespace Konsola.Parser
 				.Select(c => c.GetCustomAttributes(typeof(CommandAttribute), false)[0])
 				.OfType<CommandAttribute>()
 				.ToArray();
-		}
-
-		private static string GetFullName(PropertyMetadata propertyMetadata, ParameterKind parameterKind, Tokenizer tokenizer)
-		{
-			var del = string.Empty;
-			switch (parameterKind)
-			{
-				case ParameterKind.String:
-				case ParameterKind.Int:
-				case ParameterKind.Enum:
-					del = tokenizer.OptionPre;
-					break;
-				case ParameterKind.Bool:
-					del = tokenizer.SwitchPre;
-					break;
-				default:
-					break;
-			}
-			var names = propertyMetadata.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>().Names;
-			return names
-				.Split(',')
-				.Select(n => del + n)
-				.Aggregate((s1, s2) => s1 + "," + s2);
-		}
-
-		private static ParameterKind GetKindForProperty(PropertyMetadata p)
-		{
-			if (p.Type == typeof(string))
-				return ParameterKind.String;
-			else if (p.Type == typeof(int))
-				return ParameterKind.Int;
-			else if (p.Type == typeof(bool))
-				return ParameterKind.Bool;
-			else if (p.Type.IsEnum)
-				return ParameterKind.Enum;
-			else
-				return ParameterKind.None;
 		}
 	}
 }
