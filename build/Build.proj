@@ -28,10 +28,10 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Assemblies Include="Konsola">
-			<Platform>net40</Platform>
+			<Platform>portable-net403+netcore45</Platform>
 		</Assemblies>
 		<Assemblies Include="Konsola.Net40">
-			<Platform>portable-net403+netcore45</Platform>
+			<Platform>net40</Platform>
 		</Assemblies>
 	</ItemGroup>
 	<Import Project="Build.tasks" />
