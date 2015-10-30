@@ -2,9 +2,9 @@
 
 namespace Konsola.Parser
 {
-	public class HelpContext
+	public class CommandHelpContext
 	{
-		public ContextOptionsAttribute Options { get; set; }
+		public CommandAttribute Attribute { get; set; }
 		public IEnumerable<ParameterContext> Parameters { get; set; }
 		public IEnumerable<CommandAttribute> NestedCommands { get; set; }
 	}

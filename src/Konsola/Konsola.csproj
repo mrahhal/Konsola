@@ -77,8 +77,11 @@
     <Compile Include="Metadata\_Exceptions.cs" />
     <Compile Include="Metadata\ObjectMetadata.cs" />
     <Compile Include="Parser\Binder.cs" />
+    <Compile Include="Parser\BindingContext.cs" />
     <Compile Include="Parser\CommandAttribute.cs" />
+    <Compile Include="Parser\CommandHelpContext.cs" />
     <Compile Include="Parser\CommandLineParser.cs" />
+    <Compile Include="Parser\DataSource.cs" />
     <Compile Include="Parser\DefaultCommandAttribute.cs" />
     <Compile Include="Parser\HelpContext.cs" />
     <Compile Include="Parser\HelpContextGenerator.cs" />
@@ -95,6 +98,9 @@
     <Compile Include="Parser\Consoles.cs" />
     <Compile Include="Parser\IConsole.cs" />
     <Compile Include="Parser\ContextBase.cs" />
+    <Compile Include="Parser\ParameterContext.cs" />
+    <Compile Include="Parser\ParameterKind.cs" />
+    <Compile Include="Parser\PropertyTarget.cs" />
     <Compile Include="Parser\Tokenizer.cs" />
     <Compile Include="Parser\Tokenizer.Default.cs">
       <DependentUpon>Tokenizer.cs</DependentUpon>
@@ -127,7 +133,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Parser\ParsingResultKind.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Parser\ParsingResult.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

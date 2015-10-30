@@ -71,11 +71,17 @@
     <Compile Include="..\Konsola\Parser\Binder.cs">
       <Link>Parser\Binder.cs</Link>
     </Compile>
+    <Compile Include="..\Konsola\Parser\BindingContext.cs">
+      <Link>Parser\BindingContext.cs</Link>
+    </Compile>
     <Compile Include="..\Konsola\Parser\CommandAttribute.cs">
       <Link>Parser\CommandAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Parser\CommandBase.cs">
       <Link>Parser\CommandBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\CommandHelpContext.cs">
+      <Link>Parser\CommandHelpContext.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Parser\CommandLineParser.cs">
       <Link>Parser\CommandLineParser.cs</Link>
@@ -88,6 +94,9 @@
     </Compile>
     <Compile Include="..\Konsola\Parser\ContextOptionsAttribute.cs">
       <Link>Parser\ContextOptionsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\DataSource.cs">
+      <Link>Parser\DataSource.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Parser\DefaultCommandAttribute.cs">
       <Link>Parser\DefaultCommandAttribute.cs</Link>
@@ -127,6 +136,21 @@
     </Compile>
     <Compile Include="..\Konsola\Parser\ParameterAttribute.cs">
       <Link>Parser\ParameterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ParameterContext.cs">
+      <Link>Parser\ParameterContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ParameterKind.cs">
+      <Link>Parser\ParameterKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ParsingResult.cs">
+      <Link>Parser\ParsingResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\ParsingResultKind.cs">
+      <Link>Parser\ParsingResultKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Konsola\Parser\PropertyTarget.cs">
+      <Link>Parser\PropertyTarget.cs</Link>
     </Compile>
     <Compile Include="..\Konsola\Parser\ReflectionExtensions.cs">
       <Link>Parser\ReflectionExtensions.cs</Link>

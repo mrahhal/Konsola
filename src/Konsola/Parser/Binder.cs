@@ -201,37 +201,4 @@ namespace Konsola.Parser
 			return null;
 		}
 	}
-
-	public class BindingContext
-	{
-		public DataSource[] Sources { get; set; }
-		public PropertyTarget[] Targets { get; set; }
-	}
-
-	public class DataSource
-	{
-		public RawTokenKind Kind { get; set; }
-		public string Identifier { get; set; }
-		public string FullIdentifier { get; set; }
-		public string Value { get; set; }
-	}
-
-	public class PropertyTarget
-	{
-		public PropertyTarget(Object obj)
-		{
-			Object = obj;
-		}
-
-		public object Object { get; private set; }
-		public PropertyMetadata Metadata { get; set; }
-		public ParameterAttribute Attribute { get; set; }
-		public bool IsSet { get; private set; }
-
-		public void SetValue(object value)
-		{
-			IsSet = true;
-			Metadata.ClrInfo.SetValue(Object, value, null);
-		}
-	}
 }
