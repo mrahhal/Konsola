@@ -38,5 +38,10 @@ namespace Konsola.Parser
 		/// Gets or sets the position.
 		/// </summary>
 		public int Position { get; set; }
+
+		/// <summary>
+		/// Gets or sets the default value.
+		/// </summary>
+		public object Default { get; set; }
 	}
 }

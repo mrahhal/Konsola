@@ -23,8 +23,13 @@ namespace Konsola.Parser
 			var sources = c.Sources;
 			var targets = c.Targets;
 
-			if (sources.Length == 0 || targets.Length == 0)
+			if (targets.Length == 0)
 			{
+				return;
+			}
+			if (sources.Length == 0)
+			{
+				BindDefaultValues(targets);
 				return;
 			}
 			ValidateSources(sources);
@@ -33,14 +38,36 @@ namespace Konsola.Parser
 			{
 				// The first source is not raw so no need to think about positional arguments
 				BindNormal(sources, targets);
-				return;
 			}
-
-			var orderedTargets =
+			else
+			{
+				var orderedTargets =
 				targets
 				.OrderBy(t => t.Attribute.Position)
 				.ToArray();
-			BindWithPositionalArguments(sources, orderedTargets);
+				BindWithPositionalArguments(sources, orderedTargets);
+			}
+
+			BindDefaultValues(targets);
+		}
+
+		private static void BindDefaultValues(PropertyTarget[] targets)
+		{
+			try
+			{
+				foreach (var target in targets)
+				{
+					if (target.Attribute.Default != null && !target.IsSet)
+					{
+						target.SetValue(target.Attribute.Default);
+					}
+				}
+			}
+			catch (ArgumentException ex)
+			{
+				// A type could not be converted, this is a developer error.
+				throw new ContextException("A type could not be bound from a default value. Check the inner exception.", ex);
+			}
 		}
 
 		private static void BindNormal(DataSource[] sources, PropertyTarget[] targets)

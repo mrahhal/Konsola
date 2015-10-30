@@ -65,6 +65,11 @@ namespace Konsola.Parser
 			: base(message)
 		{
 		}
+
+		public ContextException(string message, Exception innerException)
+			: base(message, innerException)
+		{
+		}
 	}
 
 	public class CommandLineException : Exception

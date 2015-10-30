@@ -221,4 +221,30 @@ namespace Konsola.Parser.Tests
 		{
 		}
 	}
+
+	public class CommandWithDefaultValues : CommandBase
+	{
+		[Parameter("p1")]
+		public int Prop1 { get; set; }
+
+		[Parameter("p2", Default = "foo")]
+		public string Prop2 { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
+
+	public class CommandWithInvalidDefaultValues : CommandBase
+	{
+		[Parameter("p1", Default = "foo")]
+		public int Prop1 { get; set; }
+
+		[Parameter("p2", Default = "foo")]
+		public string Prop2 { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
 }
