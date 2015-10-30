@@ -134,7 +134,7 @@ namespace Konsola.Parser
 
 			if (IsHelpRequested(machine))
 			{
-				if (commandMetadata.Type == cw.DefaultCommand.Command)
+				if (cw.DefaultCommand != null && commandMetadata.Type == cw.DefaultCommand.Command)
 				{
 					PrintHelpForDefaultCommand();
 				}
