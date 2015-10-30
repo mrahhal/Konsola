@@ -90,4 +90,4 @@ Automatically detects and throws exceptions on command line errors. It also prin
 A help message is automatically handled and printed when `--h` or `--help` is passed as an arg.
 
 #### A lot more stuff
-There's a lot more (default command, multiple and nested commands, context options, error detection, automatic printing to an extensible console, automatic help printing, constraints, positional params, ...).
+There's a lot more (default command, multiple and nested commands, context options, error detection, automatic printing to an extensible console, automatic help printing, positional params, ...).
