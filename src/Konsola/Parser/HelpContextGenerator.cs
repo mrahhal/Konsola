@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Konsola.Parser
 {
@@ -87,19 +88,13 @@ namespace Konsola.Parser
 			return
 				metadata
 				.Properties
-				.Select(p => new
+				.Where(p => p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>() != null)
+				.Select(p => new ParameterContext()
 				{
-					Property = p,
+					PropertyInfo = p.ClrInfo,
 					Attribute = p.Attributes.FirstOrDefaultOfRealType<ParameterAttribute>(),
-					Kind = GetKindForProperty(p)
-				})
-				.Where(pa => pa.Attribute != null)
-				.Select(pa => new ParameterContext()
-				{
-					PropertyInfo = pa.Property.ClrInfo,
-					Attribute = pa.Attribute,
-					Kind = pa.Kind,
-					FullName = GetFullName(pa.Property, pa.Kind, tokenizer)
+					Kind = GetKindForProperty(p),
+					FullName = GetFullName(p, GetKindForProperty(p), tokenizer)
 				})
 				.ToArray();
 		}
