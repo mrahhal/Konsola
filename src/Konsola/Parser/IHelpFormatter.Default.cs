@@ -47,6 +47,10 @@ namespace Konsola.Parser
 			foreach (var parameter in parameters)
 			{
 				console.Write("* " + parameter.FullName);
+				if (parameter.Attribute.IsMandatory)
+				{
+					console.Write(WriteKind.Info, " [Required]");
+				}
 				if (!string.IsNullOrWhiteSpace(parameter.Attribute.Description))
 				{
 					console.WriteLine(" - " + parameter.Attribute.Description);
