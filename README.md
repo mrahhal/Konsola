@@ -7,8 +7,6 @@ Contains services for command line tools.
 
 Latest nuget package [here](https://www.nuget.org/packages/Konsola).
 
-*Use cases and samples are coming for `v1.0`*
-
 ### CommandLineParser
 Dynamically parses command line args based on strong typed objects.
 
