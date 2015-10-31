@@ -77,6 +77,7 @@ namespace Konsola.Parser
 		public CommandLineException(string message)
 			: base(message)
 		{
+			Kind = CommandLineExceptionKind.Message;
 		}
 
 		public CommandLineException(CommandLineExceptionKind kind, string name)
