@@ -2,7 +2,7 @@ using System;
 
 namespace Konsola
 {
-	public class StateMachine<T>
+	internal class StateMachine<T>
 		where T : class
 	{
 		public StateMachine(T[] data)
