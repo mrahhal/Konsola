@@ -196,6 +196,17 @@ namespace Konsola.Parser.Tests
 		}
 
 		[Fact]
+		public void Parse_MixedValuesBug_WorkItem15()
+		{
+			var args = "wi15 -e u -data foo".SplitCommandLineArgs();
+
+			var parser = new CommandLineParser<Context>();
+			var result = parser.Parse(args);
+
+			Assert.Equal(ParsingResultKind.Failure, result.Kind);
+		}
+
+		[Fact]
 		public void Parse_FlagsEnum()
 		{
 			var args = "-my some -fp windows,linux -int 3".SplitCommandLineArgs();

@@ -28,9 +28,35 @@ namespace Konsola.Parser.Tests
 
 	[ContextOptions(Description = "This is some kind of a program description v1.0.123")]
 	[DefaultCommand(typeof(DefaultCommand))]
-	[IncludeCommands(typeof(RestoreCommand), typeof(PositionCommand))]
+	[IncludeCommands(typeof(RestoreCommand), typeof(PositionCommand), typeof(CommandForWorkItem15))]
 	public class Context : ContextBase
 	{
+	}
+
+	public abstract class CommandForWorkItem15Base : CommandBase<Context>
+	{
+		[Parameter("name")]
+		public string FileName { get; set; }
+
+		[Parameter("encoding,e", Default = EncodingKind.Unicode)]
+		public EncodingKind EncodingKind { get; set; }
+	}
+
+	[Command("wi15")]
+	public class CommandForWorkItem15 : CommandForWorkItem15Base
+	{
+		[Parameter("data")]
+		public string Data { get; set; }
+
+		public override void ExecuteCommand()
+		{
+		}
+	}
+
+	public enum EncodingKind
+	{
+		UTF8,
+		Unicode,
 	}
 
 	public class DefaultCommand : CommandBase<Context>

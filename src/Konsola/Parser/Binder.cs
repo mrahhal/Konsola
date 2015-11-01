@@ -226,7 +226,8 @@ namespace Konsola.Parser
 			var name = source.Identifier;
 			for (int i = 0; i < targets.Length; i++)
 			{
-				if (targets[i].Attribute.Names.Contains(name))
+				var names = targets[i].Attribute.Names.Split(',');
+				if (names.Any(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase)))
 					return targets[i];
 			}
 			return null;
