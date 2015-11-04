@@ -14,9 +14,9 @@ Dynamically parses command line args based on strong typed objects.
 - Complex dynamic parsing
 - Nested commands to support complex parsing requirements
 - Automatic help generation
-- Automatic erorr handling
+- Automatic error handling
 - Positional parameters
-- Customizable (eror handling, help printing, ...)
+- Customizable (error handling, help printing, ...)
 - Portable (there are some use cases in android apps)
 
 #### Simplest example:
