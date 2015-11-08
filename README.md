@@ -156,3 +156,6 @@ class SomeCommand : CommandBase
     }
 }
 ```
+
+## License
+**MIT**
