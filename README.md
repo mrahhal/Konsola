@@ -3,6 +3,7 @@
 [![Build status](https://img.shields.io/appveyor/ci/mrahhal/konsola/master.svg)](https://ci.appveyor.com/project/mrahhal/konsola)
 [![Nuget version](https://img.shields.io/nuget/v/Konsola.svg)](https://www.nuget.org/packages/Konsola)
 [![Nuget downloads](https://img.shields.io/nuget/dt/Konsola.svg)](https://www.nuget.org/packages/Konsola)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Contains services for command line tools.
 
@@ -156,6 +157,3 @@ class SomeCommand : CommandBase
     }
 }
 ```
-
-## License
-**MIT**
