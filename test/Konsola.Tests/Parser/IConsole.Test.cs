@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Konsola.Parser.Tests
 {
@@ -7,7 +6,7 @@ namespace Konsola.Parser.Tests
 	{
 		private StringBuilder _sb = new StringBuilder();
 
-		public string Text { get { return _sb.ToString(); } }
+		public string Text => _sb.ToString();
 
 		public void Write(WriteKind kind, string value)
 		{

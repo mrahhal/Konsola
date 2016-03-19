@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace Konsola.Parser
 {
@@ -37,12 +36,16 @@ namespace Konsola.Parser
 			{
 				case WriteKind.Success:
 					return ConsoleColor.Green;
+
 				case WriteKind.Info:
 					return ConsoleColor.DarkGray;
+
 				case WriteKind.Warning:
 					return ConsoleColor.Yellow;
+
 				case WriteKind.Error:
 					return ConsoleColor.Red;
+
 				default:
 					return ConsoleColor.Gray;
 			}

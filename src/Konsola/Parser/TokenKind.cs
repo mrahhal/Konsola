@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Konsola.Parser
+﻿namespace Konsola.Parser
 {
 	public enum TokenKind
 	{

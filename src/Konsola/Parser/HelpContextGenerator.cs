@@ -1,8 +1,7 @@
-﻿using Konsola.Metadata;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Konsola.Metadata;
 
 namespace Konsola.Parser
 {
@@ -90,13 +89,10 @@ namespace Konsola.Parser
 		}
 
 		private static IEnumerable<CommandAttribute> GenerateCommands(IncludeCommandsAttribute nestedCommands)
-		{
-			return
-				nestedCommands
-				.Commands
-				.Select(c => c.GetCustomAttributes(typeof(CommandAttribute), false)[0])
-				.OfType<CommandAttribute>()
-				.ToArray();
-		}
+			=> nestedCommands
+			.Commands
+			.Select(c => c.GetCustomAttributes(typeof(CommandAttribute), false)[0])
+			.OfType<CommandAttribute>()
+			.ToArray();
 	}
 }

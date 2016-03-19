@@ -1,7 +1,7 @@
-﻿using Konsola.Metadata;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using Konsola.Metadata;
 
 namespace Konsola.Parser
 {
@@ -52,9 +52,11 @@ namespace Konsola.Parser
 				case ParameterKind.Enum:
 					del = _tokenizer.OptionPre;
 					break;
+
 				case ParameterKind.Bool:
 					del = _tokenizer.SwitchPre;
 					break;
+
 				default:
 					break;
 			}

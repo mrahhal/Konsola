@@ -10,8 +10,8 @@ namespace Konsola.Metadata
 			Attribute = attribute;
 		}
 
-		public Type Type { get; private set; }
+		public Type Type { get; }
 
-		public Attribute Attribute { get; private set; }
+		public Attribute Attribute { get; }
 	}
 }

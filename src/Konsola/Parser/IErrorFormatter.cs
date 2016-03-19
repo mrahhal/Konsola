@@ -1,7 +1,4 @@
-﻿using Konsola.Parser;
-using System;
-
-namespace Konsola.Parser
+﻿namespace Konsola.Parser
 {
 	public interface IErrorFormatter
 	{

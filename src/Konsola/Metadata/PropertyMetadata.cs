@@ -15,11 +15,11 @@ namespace Konsola.Metadata
 			Attributes = attributes;
 		}
 
-		public Type Type { get; private set; }
+		public Type Type { get; }
 
-		public PropertyInfo ClrInfo { get; private set; }
+		public PropertyInfo ClrInfo { get; }
 
-		public IEnumerable<AttributeMetadata> Attributes { get; private set; }
+		public IEnumerable<AttributeMetadata> Attributes { get; }
 
 		public T GetValue<T>(object obj)
 		{

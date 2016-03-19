@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Konsola.Parser
 {
@@ -22,7 +21,7 @@ namespace Konsola.Parser
 		/// <summary>
 		/// Gets the names of the parameter.
 		/// </summary>
-		public string Names { get; private set; }
+		public string Names { get; }
 
 		/// <summary>
 		/// Gets or sets the parameter's description.

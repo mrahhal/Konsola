@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Konsola.Parser
+﻿namespace Konsola.Parser
 {
 	/// <summary>
 	/// Represents the context of parsed arguments.

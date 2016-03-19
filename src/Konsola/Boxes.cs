@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Konsola
+﻿namespace Konsola
 {
 	internal static class Boxes
 	{

@@ -9,32 +9,20 @@ namespace Konsola
 		{
 			if (data == null)
 			{
-				throw new ArgumentNullException("data");
+				throw new ArgumentNullException(nameof(data));
 			}
 
 			Data = data;
 			Position = -1;
 		}
 
-		public T[] Data { get; private set; }
+		public T[] Data { get; }
 
 		public int Position { get; set; }
 
-		public bool HasNext
-		{
-			get
-			{
-				return Position + 1 < Data.Length;
-			}
-		}
+		public bool HasNext => Position + 1 < Data.Length;
 
-		public bool HasPrevious
-		{
-			get
-			{
-				return Position - 1 >= 0;
-			}
-		}
+		public bool HasPrevious => Position - 1 >= 0;
 
 		public T Current
 		{
@@ -95,7 +83,7 @@ namespace Konsola
 		{
 			if (visit == null)
 			{
-				throw new ArgumentNullException("visit");
+				throw new ArgumentNullException(nameof(visit));
 			}
 			if (!HasNext)
 			{
@@ -116,7 +104,7 @@ namespace Konsola
 		{
 			if (visit == null)
 			{
-				throw new ArgumentNullException("visit");
+				throw new ArgumentNullException(nameof(visit));
 			}
 			if (!HasPrevious)
 			{

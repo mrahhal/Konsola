@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Konsola.Parser
 {
@@ -12,9 +11,9 @@ namespace Konsola.Parser
 			Value = value;
 		}
 
-		public TokenKind Kind { get; private set; }
+		public TokenKind Kind { get; }
 
-		public string Value { get; private set; }
+		public string Value { get; }
 	}
 
 	public class CommandToken : Token

@@ -1,5 +1,5 @@
-﻿using Konsola.Metadata;
-using System.Reflection;
+﻿using System.Reflection;
+using Konsola.Metadata;
 
 namespace Konsola.Parser
 {

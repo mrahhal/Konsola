@@ -20,7 +20,7 @@ namespace Konsola.Parser
 		/// <summary>
 		/// Gets or sets the name of the command which will be used when binding arguments.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; }
 
 		/// <summary>
 		/// Gets or sets the command's description.

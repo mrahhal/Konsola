@@ -10,7 +10,7 @@ namespace Konsola.Parser
 		{
 			if (args == null)
 			{
-				throw new ArgumentNullException("args");
+				throw new ArgumentNullException(nameof(args));
 			}
 
 			var inQuotes = false;

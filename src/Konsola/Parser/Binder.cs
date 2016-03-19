@@ -11,7 +11,7 @@ namespace Konsola.Parser
 		{
 			if (c == null)
 			{
-				throw new ArgumentNullException("c");
+				throw new ArgumentNullException(nameof(c));
 			}
 			if (c.Sources == null || c.Targets == null)
 			{

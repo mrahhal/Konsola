@@ -1,8 +1,6 @@
-﻿using Konsola.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
+using Konsola.Metadata;
 
 namespace Konsola.Parser
 {
@@ -43,19 +41,12 @@ namespace Konsola.Parser
 		}
 
 		public static T CreateInstance<T>(this Type @this)
-		{
-			return (T)Activator.CreateInstance(@this);
-		}
+			=> (T)Activator.CreateInstance(@this);
 
-		public static bool IsAttributeDefined<T>(this MemberInfo @this)
-			where T : Attribute
-		{
-			return Attribute.IsDefined(@this, typeof(T));
-		}
+		public static bool IsAttributeDefined<T>(this MemberInfo @this) where T : Attribute
+			=> Attribute.IsDefined(@this, typeof(T));
 
 		public static bool IsCommandType(this Type @this)
-		{
-			return typeof(CommandBase).IsAssignableFrom(@this);
-		}
+			=> typeof(CommandBase).IsAssignableFrom(@this);
 	}
 }

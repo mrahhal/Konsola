@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Konsola.Parser
 {
@@ -21,6 +20,6 @@ namespace Konsola.Parser
 		/// <summary>
 		/// Gets the commands.
 		/// </summary>
-		public Type[] Commands { get; private set; }
+		public Type[] Commands { get; }
 	}
 }

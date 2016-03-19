@@ -242,7 +242,6 @@ namespace Konsola.Parser.Tests
 		[Parameter("sn")]
 		public string SubName { get; set; }
 
-
 		public override void ExecuteCommand()
 		{
 		}

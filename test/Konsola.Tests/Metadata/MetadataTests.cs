@@ -1,7 +1,6 @@
-﻿using Konsola.Metadata;
+﻿using System.Linq;
+using Konsola.Metadata;
 using Konsola.Parser;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace Konsola.Tests.Metadata

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Konsola.Parser
+﻿namespace Konsola.Parser
 {
 	/// <summary>
 	/// Represents a command.
@@ -30,9 +28,6 @@ namespace Konsola.Parser
 		{
 		}
 
-		public T Context
-		{
-			get { return (T)ContextBase; }
-		}
+		public T Context => (T)ContextBase;
 	}
 }

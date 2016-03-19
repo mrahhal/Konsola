@@ -10,9 +10,9 @@ namespace Konsola
 		{
 			// Arrange + Act + Assert
 			Assert.Throws<ArgumentNullException>(() =>
-				{
-					var sm = new StateMachine<Test>(null);
-				});
+			{
+				var sm = new StateMachine<Test>(null);
+			});
 		}
 
 		[Fact]
@@ -147,10 +147,10 @@ namespace Konsola
 
 			// Act
 			sm.VisitAllNext((i, t) =>
-				{
-					t.Deposit = string.Empty;
-					return t;
-				});
+			{
+				t.Deposit = string.Empty;
+				return t;
+			});
 
 			// Assert
 			Assert.Null(sm.Data[0].Deposit);
@@ -166,10 +166,10 @@ namespace Konsola
 
 			// Act
 			sm.VisitAllPrevious((i, t) =>
-				{
-					t.Deposit = string.Empty;
-					return t;
-				});
+			{
+				t.Deposit = string.Empty;
+				return t;
+			});
 
 			// Assert
 			Assert.NotNull(sm.Data[0].Deposit);

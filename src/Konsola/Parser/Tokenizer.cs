@@ -10,7 +10,7 @@ namespace Konsola.Parser
 		{
 			if (args == null)
 			{
-				throw new ArgumentNullException("args");
+				throw new ArgumentNullException(nameof(args));
 			}
 
 			var tokens = new Token[args.Length];
@@ -97,8 +97,10 @@ namespace Konsola.Parser
 			{
 				case TokenKind.Option:
 					return value.Substring(OptionPre.Length);
+
 				case TokenKind.Switch:
 					return value.Substring(SwitchPre.Length);
+
 				default:
 					return value;
 			}
